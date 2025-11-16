@@ -1,26 +1,102 @@
-# ✅ API DistroWiki - PRONTA PARA USO!
+# 🚀 Guia Passo-a-Passo - Windows
 
-## 🎉 STATUS: INSTALADA E FUNCIONANDO
+## ✅ Configuração Concluída
 
-Todas as dependências foram instaladas com sucesso e a API está rodando!
+```
+✅ Python venv criado
+✅ Dependências instaladas
+✅ ID da planilha atualizado: 19rI-zXcpenXXNjEE10PHU6_5z4ldNFy5
+✅ Scripts criados (start_api.bat, test_sheets.bat)
+```
+
+## 🎯 Agora Execute Os Passos Abaixo
+
+### Opção 1: Usando Scripts (.bat) - RECOMENDADO ⭐
+
+#### Terminal 1: Iniciar API
+```
+Duplo clique em: start_api.bat
+```
+
+Espere ver:
+```
+INFO:     Application startup complete
+INFO:     Uvicorn running on http://127.0.0.1:8000
+```
+
+**Deixe aberto!**
+
+#### Terminal 2: Testar Google Sheets
+```
+Duplo clique em: test_sheets.bat
+```
+
+Espere ver:
+```
+✅ Sucesso! X distribuições encontradas
+```
+
+#### Terminal 3: Testar Frontend
+```powershell
+npm run dev
+```
+
+Acesse: `http://localhost:8080/distros`
 
 ---
 
-## 🚀 INICIANDO A API
+### Opção 2: Usando Comandos Manuais
 
-### Opção 1: Script Automático (Recomendado)
+#### Terminal 1: Iniciar API
 ```powershell
-.\start_api.ps1
+cd C:\Users\karol\Documents\GitHub\DistroWiki
+.\venv\Scripts\activate
+python -m uvicorn api.main:app --reload --port 8000
 ```
-Este script:
-- Inicia o servidor automaticamente
-- Abre a documentação no navegador
-- Mostra informações úteis
 
-### Opção 2: Manualmente
+#### Terminal 2: Testar Google Sheets
 ```powershell
-.\venv\Scripts\python.exe -m uvicorn api.main:app --reload --host 127.0.0.1 --port 8000
+cd C:\Users\karol\Documents\GitHub\DistroWiki
+.\venv\Scripts\activate
+python test_sheets.py
 ```
+
+#### Terminal 3: Testar Frontend
+```powershell
+npm run dev
+```
+
+---
+
+## 📊 Informações da Planilha
+
+```
+ID:    19rI-zXcpenXXNjEE10PHU6_5z4ldNFy5
+Nome:  distrowiki_complete
+Link:  https://docs.google.com/spreadsheets/d/19rI-zXcpenXXNjEE10PHU6_5z4ldNFy5/
+```
+
+## 🎬 Próximos Passos (Após Testes Locais)
+
+1. Fazer commit:
+```powershell
+git add .
+git commit -m "feat: migrate to google sheets api"
+git push origin main
+```
+
+2. Vercel fará redeploy automaticamente
+
+3. Testar em produção:
+```
+https://distrowiki.vercel.app/distros
+https://distrowiki.vercel.app/api/distros
+```
+
+---
+
+**Status**: ✅ Tudo configurado  
+**Próxima ação**: Execute `start_api.bat`
 
 ---
 

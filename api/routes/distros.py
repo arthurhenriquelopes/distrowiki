@@ -7,9 +7,7 @@ Implementa o endpoint GET /distros conforme especificação do Módulo 1.
 import logging
 from typing import Optional, List
 from fastapi import APIRouter, Query, HTTPException, BackgroundTasks
-from fastapi.responses import StreamingResponse
 from datetime import datetime
-import httpx
 
 from ..models.distro import (
     DistroListResponse, 
@@ -17,7 +15,7 @@ from ..models.distro import (
     DistroFamily,
     DesktopEnvironment
 )
-from ..services.distrowatch_service import DistroWatchService
+from ..services.google_sheets_service import GoogleSheetsService
 from ..cache.cache_manager import get_cache_manager
 
 logger = logging.getLogger(__name__)
@@ -28,17 +26,17 @@ logo_router = APIRouter(tags=["Logos"])
 
 async def fetch_and_cache_distros() -> List[DistroMetadata]:
     """
-    Busca distribuições do ranking do DistroWatch (top 290) e atualiza cache.
+    Busca distribuições do Google Sheets e atualiza cache.
     
     Returns:
         Lista de distribuições.
     """
-    distrowatch_service = DistroWatchService()
+    sheets_service = GoogleSheetsService()
     
     try:
-        # Buscar as top 290 distribuições do ranking do DistroWatch
-        logger.info("Buscando top 290 distribuições do ranking do DistroWatch...")
-        distros = await distrowatch_service.fetch_all_from_ranking(limit=290)
+        # Buscar distribuições do Google Sheets
+        logger.info("Buscando distribuições do Google Sheets...")
+        distros = await sheets_service.fetch_all_distros()
         
         # Salvar no cache
         cache_manager = get_cache_manager()
@@ -48,7 +46,7 @@ async def fetch_and_cache_distros() -> List[DistroMetadata]:
         return distros
         
     finally:
-        await distrowatch_service.close()
+        await sheets_service.close()
 
 
 @router.get(
@@ -294,42 +292,34 @@ async def get_cache_info():
 @logo_router.get("/logo/{distro_id}")
 async def get_distro_logo(distro_id: str):
     """
-    Proxy para buscar logo de uma distribuição do DistroWatch.
+    Retorna logo de uma distribuição.
     
     Args:
         distro_id: ID da distribuição
         
     Returns:
-        StreamingResponse com a imagem da logo
+        Informações do logo ou erro
     """
     try:
-        # URL padrão das logos no DistroWatch
-        logo_url = f"http://distrowatch.com/images/yvzhuwbpy/{distro_id}.png"
+        cache_manager = get_cache_manager()
+        distros = cache_manager.get_distros_cache()
         
-        # Headers para evitar bloqueio
-        headers = {
-            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            "Referer": "http://distrowatch.com/",
-            "Accept": "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
+        if not distros:
+            raise HTTPException(status_code=404, detail="Distribuição não encontrada")
+        
+        distro = next((d for d in distros if d.id == distro_id), None)
+        
+        if not distro or not distro.logo_url:
+            raise HTTPException(status_code=404, detail="Logo não encontrada")
+        
+        return {
+            "id": distro_id,
+            "name": distro.name,
+            "logo_url": distro.logo_url
         }
-        
-        async with httpx.AsyncClient(timeout=10.0, follow_redirects=True) as client:
-            response = await client.get(logo_url, headers=headers)
-            
-            if response.status_code == 200:
-                return StreamingResponse(
-                    iter([response.content]),
-                    media_type="image/png",
-                    headers={
-                        "Cache-Control": "public, max-age=86400",  # Cache por 24h
-                    }
-                )
-            else:
-                raise HTTPException(status_code=404, detail="Logo não encontrada")
                 
-    except httpx.HTTPError as e:
+    except HTTPException:
+        raise
+    except Exception as e:
         logger.error(f"Erro ao buscar logo de {distro_id}: {e}")
         raise HTTPException(status_code=500, detail=f"Erro ao buscar logo: {str(e)}")
-    except Exception as e:
-        logger.error(f"Erro interno ao buscar logo de {distro_id}: {e}")
-        raise HTTPException(status_code=500, detail=f"Erro interno: {str(e)}")

@@ -35,7 +35,7 @@ const DistroCard = ({
         {/* Logo and Name */}
         <div className="flex items-center space-x-4 mb-4">
           <img
-            src={`/api/logo/${distro.id}`}
+            src={`/logos/${distro.id}.svg`}
             alt={`${distro.name} logo`}
             className="w-16 h-16 object-contain"
             onError={(e) => {

@@ -40,7 +40,7 @@ const Catalog = () => {
           desktopEnvironments: d.desktop_environments || [],
           lastRelease: d.latest_release_date || new Date().toISOString(),
           score: d.rating || 0,
-          logo: d.logo_url || `/api/distros/${d.id}/logo`,
+          logo: `/logos/${d.id}.svg`,
           website: d.homepage,
           description: d.summary || d.description,
           // Adicionar campos necessários para compatibilidade

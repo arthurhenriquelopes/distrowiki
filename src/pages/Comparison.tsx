@@ -90,7 +90,7 @@ const Comparison = () => {
                   <X className="w-5 h-5" />
                 </button>
                 <img
-                  src={distro.logo}
+                  src={`/logos/${distro.id}.svg`}
                   alt={`${distro.name} logo`}
                   className="w-20 h-20 object-contain mx-auto mb-4"
                 />
