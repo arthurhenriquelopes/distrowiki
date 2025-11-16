@@ -143,13 +143,21 @@ async def global_exception_handler(request, exc):
     
     Evita exposição de stack traces em produção.
     """
+    import traceback
     logger.error(f"Erro não tratado: {exc}", exc_info=True)
+    
+    # Em desenvolvimento, mostrar stack trace
+    error_detail = str(exc)
+    if hasattr(exc, '__traceback__'):
+        error_detail = ''.join(traceback.format_exception(type(exc), exc, exc.__traceback__))
     
     return JSONResponse(
         status_code=500,
         content={
             "detail": "Erro interno do servidor",
-            "type": type(exc).__name__
+            "type": type(exc).__name__,
+            "message": str(exc),
+            "traceback": error_detail if True else None  # Mostrar traceback temporariamente
         }
     )
 
