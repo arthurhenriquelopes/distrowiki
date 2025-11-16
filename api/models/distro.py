@@ -154,6 +154,12 @@ class DistroMetadata(BaseModel):
         example="https://cachyos.org/"
     )
     
+    logo: Optional[str] = Field(
+        None,
+        description="URL da logo da distribuição no DistroWatch",
+        example="https://distrowatch.com/images/yvzhuwbpy/cachyos.png"
+    )
+    
     # Metadados para compatibilidade (deprecated)
     summary: Optional[str] = Field(
         None,

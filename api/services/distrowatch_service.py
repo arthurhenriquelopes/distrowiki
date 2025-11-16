@@ -10,6 +10,7 @@ import logging
 import re
 from typing import List, Optional, Dict, Any
 from datetime import datetime
+from pathlib import Path
 import httpx
 from bs4 import BeautifulSoup
 
@@ -21,7 +22,7 @@ logger = logging.getLogger(__name__)
 class DistroWatchService:
     """Serviço para buscar dados do DistroWatch via scraping."""
     
-    BASE_URL = "https://distrowatch.com"
+    BASE_URL = "http://distrowatch.com"
     USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
     TIMEOUT = 30.0
     
@@ -62,7 +63,8 @@ class DistroWatchService:
         self.client = httpx.AsyncClient(
             timeout=self.TIMEOUT,
             headers={"User-Agent": self.USER_AGENT},
-            follow_redirects=True
+            follow_redirects=True,
+            http2=False  # Desabilitar HTTP/2 para evitar problemas de conexão
         )
     
     async def close(self):
@@ -183,7 +185,7 @@ class DistroWatchService:
             soup = BeautifulSoup(response.text, 'html.parser')
             
             # Extrair dados estruturados
-            data = self._parse_distro_page(soup)
+            data = await self._parse_distro_page(soup)
             
             if not data:
                 logger.warning(f"Não foi possível extrair dados de {identifier}")
@@ -191,6 +193,9 @@ class DistroWatchService:
             
             # Criar ID slug
             distro_id = identifier if '/' not in identifier else self._create_slug(identifier)
+            
+            # Construir URL padrão da logo
+            logo_url = f"https://distrowatch.com/images/yvzhuwbpy/{distro_id}.png"
             
             return DistroMetadata(
                 id=distro_id,
@@ -208,6 +213,7 @@ class DistroWatchService:
                 ranking=data.get('ranking'),
                 rating=data.get('rating'),
                 homepage=data.get('homepage'),
+                logo=logo_url,
                 last_updated=datetime.utcnow()
             )
             
@@ -265,7 +271,7 @@ class DistroWatchService:
         logger.info(f"Busca concluída: {len(distros)}/{total} distribuições obtidas")
         return distros
     
-    def _parse_distro_page(self, soup: BeautifulSoup) -> Dict[str, Any]:
+    async def _parse_distro_page(self, soup: BeautifulSoup) -> Dict[str, Any]:
         """
         Faz parsing completo da página de uma distribuição.
         
@@ -506,6 +512,29 @@ class DistroWatchService:
             return None
             
         except Exception:
+            return None
+    
+    def _extract_logo(self, soup: BeautifulSoup) -> Optional[str]:
+        """
+        Extrai URL da logo da distribuição.
+        No DistroWatch, a logo está em uma tag <img> com src começando com 'images/'.
+        """
+        try:
+            # Procurar pela imagem da logo (geralmente está no topo da página)
+            # A logo tem src que começa com "images/yvzhuwbpy/" ou similar
+            for img in soup.find_all('img'):
+                src = img.get('src', '')
+                # Logos das distros ficam em /images/yvzhuwbpy/
+                if 'images/yvzhuwbpy/' in src or (src.startswith('images/') and not src.endswith('.gif')):
+                    # Se for URL relativa, converter para absoluta
+                    if not src.startswith('http'):
+                        src = f"{self.BASE_URL}/{src}"
+                    return src
+            
+            return None
+            
+        except Exception as e:
+            logger.error(f"Erro ao extrair logo: {e}")
             return None
     
     def _create_slug(self, name: str) -> str:

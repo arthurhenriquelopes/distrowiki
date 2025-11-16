@@ -1,94 +1,73 @@
-<p align="center">
-  <img width="1536" height="397" src="https://github.com/user-attachments/assets/494c7be5-8455-42da-9c1e-8b1486a892b8" />
-</p>
+# Welcome to your Lovable project
 
+## Project info
 
-<p align="center"><em>Descubra a melhor Distro Linux para a sua maior necessidade.</em></p>
+**URL**: https://lovable.dev/projects/873052a4-7efe-4292-b972-3e92f201123a
 
-<p align="center">
-  <img src="https://img.shields.io/badge/status-work%20in%20progress-blue" />
-  <img src="https://img.shields.io/badge/license-MIT-green" />
-  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen" />
-</p>
+## How can I edit this code?
 
----
+There are several ways of editing your application.
 
-### O que é
-O DistroWiki é um projeto open source que facilita a comparação entre distribuições Linux focadas em desktop. A proposta é oferecer um ponto único e confiável para explorar distros, visualizar informações essenciais e comparar métricas de forma clara e imparcial.
+**Use Lovable**
 
-### Por que isso é útil
-- **Decisão informada**: compare rapidamente distros por critérios que importam no uso real do dia a dia.
-- **Transparência**: metodologia de coleta e critérios de pontuação documentados e abertos.
-- **Atualização contínua**: informações evoluem com ajuda da comunidade.
+Simply visit the [Lovable Project](https://lovable.dev/projects/873052a4-7efe-4292-b972-3e92f201123a) and start prompting.
 
-<p align="center">
-  <img width="451" height="72" src="https://github.com/user-attachments/assets/95acb707-8bdf-42d0-bed2-5de6eae32687" />
-</p>
+Changes made via Lovable will be committed automatically to this repo.
 
----
+**Use your preferred IDE**
 
-### Principais funcionalidades
-- **Catálogo de distros** com dados essenciais (nome, base/família, site oficial, ambientes gráficos, data do último lançamento).
-- **Comparação lado a lado** de 2 a 4 distros, com filtros e ordenação.
-- **Métricas de uso** (ex.: uso médio de RAM em idle) apresentadas de forma padronizada e legível.
-- **Benchmarks resumidos** (ex.: CPU/IO) para uma visão rápida de desempenho.
-- **Pontuação geral** clara e explicada, para leitura rápida sem perder a transparência.
-- **Interface em PT-BR**, moderna e acessível.
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 
----
+The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-### O que medimos (escopo atual)
-- **Atributos informativos**: nome, base/família (Debian/Ubuntu/Fedora/Arch/independente), ambientes gráficos, data do último lançamento.
-- **Indicadores práticos**: uso médio de RAM em idle (medição padronizada), resultados resumidos de benchmarks.
-- **Visão consolidada**: pontuação geral com pesos explicitados publicamente.
+Follow these steps:
 
-Observação: métricas e pesos são públicos e podem evoluir com feedback da comunidade.
+```sh
+# Step 1: Clone the repository using the project's Git URL.
+git clone <YOUR_GIT_URL>
 
----
+# Step 2: Navigate to the project directory.
+cd <YOUR_PROJECT_NAME>
 
-### Limitações e notas de transparência
-- **Benchmarks variam** conforme hardware e versões. Exibimos contexto e datas para leitura responsável.
-- **Uso de RAM** depende de ambiente gráfico e serviços habilitados. Indicamos condições de teste.
-- **Foco em desktop**: servidor e embarcados estão fora do escopo neste momento.
+# Step 3: Install the necessary dependencies.
+npm i
 
----
+# Step 4: Start the development server with auto-reloading and an instant preview.
+npm run dev
+```
 
-### Como usar
-1. Acesse o catálogo de distros e aplique filtros de interesse (base, DE, data, etc.).
-2. Selecione 2–4 distros e abra a **Comparação** para analisar métricas lado a lado.
-3. Abra a página de **Detalhes** de cada distro para gráficos, notas e links oficiais.
+**Edit a file directly in GitHub**
 
-Quando disponível, os resultados incluem links de referência para que você possa verificar os dados na fonte.
+- Navigate to the desired file(s).
+- Click the "Edit" button (pencil icon) at the top right of the file view.
+- Make your changes and commit the changes.
 
----
+**Use GitHub Codespaces**
 
-### Roadmap (alto nível)
-- Expandir cobertura de distros e ambientes gráficos
-- Ampliar conjunto de benchmarks curtos e multiplataforma
-- Histórico de versões e evolução de métricas ao longo do tempo
-- Suporte a outros idiomas além de PT-BR
+- Navigate to the main page of your repository.
+- Click on the "Code" button (green button) near the top right.
+- Select the "Codespaces" tab.
+- Click on "New codespace" to launch a new Codespace environment.
+- Edit files directly within the Codespace and commit and push your changes once you're done.
 
----
+## What technologies are used for this project?
 
-### Como contribuir
-- **Feedback de usabilidade**: relate o que ajudou você a decidir ou o que sentiu falta.
-- **Sugestões de métricas**: proponha indicadores que agreguem valor para escolha de distros.
-- **Correções de informação**: encontrou um dado desatualizado? Abra uma issue com a fonte.
+This project is built with:
 
-Para contribuições técnicas, consulte o guia de contribuição no repositório (CONTRIBUTING). Mantemos este README focado no público externo.
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
 
----
+## How can I deploy this project?
 
-### Privacidade
-Não coletamos dados pessoais identificáveis. Podemos medir uso anônimo do site (ex.: páginas visitadas e comparações realizadas) para melhorar a experiência. Detalhes serão descritos na política de privacidade do site.
+Simply open [Lovable](https://lovable.dev/projects/873052a4-7efe-4292-b972-3e92f201123a) and click on Share -> Publish.
 
----
+## Can I connect a custom domain to my Lovable project?
 
-### Licença
-Este projeto é open source. Consulte o arquivo LICENSE para detalhes sobre permissões e limitações.
+Yes, you can!
 
----
+To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
-### Contato
-- Abra uma issue neste repositório para dúvidas, sugestões e correções.
-- Para parcerias e imprensa, utilize o canal de contato descrito no meu README pessoal.
+Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
