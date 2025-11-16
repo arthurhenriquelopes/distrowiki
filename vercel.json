@@ -16,19 +16,11 @@
       "dest": "app.py"
     },
     {
-      "src": "/assets/(.*)",
-      "dest": "dist/assets/$1"
+      "src": "/logos/(.*)",
+      "dest": "public/logos/$1"
     },
     {
-      "src": "/robots.txt",
-      "dest": "dist/robots.txt"
-    },
-    {
-      "src": "/.*\\..*",
-      "dest": "dist/$0"
-    },
-    {
-      "src": "/(.*)",
+      "src": "/.*",
       "dest": "dist/index.html"
     }
   ],

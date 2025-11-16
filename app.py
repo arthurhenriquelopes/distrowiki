@@ -8,6 +8,7 @@ Vercel will automatically discover the 'app' variable and use it as the applicat
 import sys
 import os
 import logging
+from pathlib import Path
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
@@ -19,7 +20,23 @@ sys.path.insert(0, os.path.dirname(__file__))
 try:
     logger.info("Importando api.main...")
     from api.main import app
+    
+    # Montar arquivos estáticos
+    from fastapi.staticfiles import StaticFiles
+    
+    dist_path = Path(__file__).parent / "dist"
+    public_path = Path(__file__).parent / "public"
+    
+    if dist_path.exists():
+        app.mount("/assets", StaticFiles(directory=dist_path / "assets"), name="dist-assets")
+        logger.info(f"✅ Arquivos estáticos de dist montados: {dist_path / 'assets'}")
+    
+    if public_path.exists():
+        app.mount("/public", StaticFiles(directory=public_path), name="public")
+        logger.info(f"✅ Arquivos públicos montados: {public_path}")
+    
     logger.info("✅ Aplicação FastAPI importada com sucesso!")
+    
 except Exception as e:
     logger.error(f"❌ Erro ao importar api.main: {e}", exc_info=True)
     
@@ -49,3 +66,4 @@ except Exception as e:
         )
 
 __all__ = ["app"]
+
