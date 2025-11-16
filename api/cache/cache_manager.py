@@ -41,9 +41,16 @@ class CacheManager:
         """
         self.use_redis = use_redis
         self.redis_client = None
+        self._memory_cache = {}  # Sempre inicializar com cache em memória como fallback
+        self._use_file_cache = True  # Flag para saber se pode usar arquivo
         
-        # Criar diretório de cache se não existir
-        self.CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        # Tentar criar diretório de cache
+        try:
+            self.CACHE_DIR.mkdir(parents=True, exist_ok=True)
+            logger.info(f"Cache directory ready: {self.CACHE_DIR}")
+        except Exception as e:
+            logger.warning(f"Não é possível usar cache em arquivo ({e}). Usando apenas cache em memória.")
+            self._use_file_cache = False
         
         if use_redis:
             self._init_redis()
@@ -89,8 +96,25 @@ class CacheManager:
             Lista de DistroMetadata ou None se cache inválido/inexistente.
         """
         try:
+            # Sempre tentar cache em memória primeiro
+            if "distros" in self._memory_cache:
+                cache_data = self._memory_cache["distros"]
+                if self._is_cache_valid(cache_data):
+                    distros_data = cache_data.get("distros", [])
+                    distros = [
+                        DistroMetadata(**distro_dict) 
+                        for distro_dict in distros_data
+                    ]
+                    logger.info(f"Cache em memória recuperado: {len(distros)} distribuições")
+                    return distros
+            
+            # Se não há cache em memória, tentar arquivo
+            if not self._use_file_cache:
+                logger.info("Nenhum cache disponível")
+                return None
+            
             if not self.cache_file_path.exists():
-                logger.info("Cache não encontrado")
+                logger.info("Cache em arquivo não encontrado")
                 return None
             
             with open(self.cache_file_path, 'r', encoding='utf-8') as f:
@@ -98,7 +122,7 @@ class CacheManager:
             
             # Verificar validade do cache
             if not self._is_cache_valid(cache_data):
-                logger.info("Cache expirado")
+                logger.info("Cache em arquivo expirado")
                 return None
             
             # Converter dicionários para objetos DistroMetadata
@@ -108,7 +132,10 @@ class CacheManager:
                 for distro_dict in distros_data
             ]
             
-            logger.info(f"Cache válido recuperado: {len(distros)} distribuições")
+            # Salvar em memória também
+            self._memory_cache["distros"] = cache_data
+            
+            logger.info(f"Cache em arquivo recuperado: {len(distros)} distribuições")
             return distros
             
         except Exception as e:
@@ -136,11 +163,19 @@ class CacheManager:
                 ]
             }
             
-            # Salvar com pretty-print para debug
-            with open(self.cache_file_path, 'w', encoding='utf-8') as f:
-                json.dump(cache_data, f, indent=2, ensure_ascii=False, default=str)
+            # Sempre salvar em memória
+            self._memory_cache["distros"] = cache_data
+            logger.info(f"Cache em memória atualizado: {len(distros)} distribuições")
             
-            logger.info(f"Cache atualizado: {len(distros)} distribuições")
+            # Tentar salvar em arquivo também
+            if self._use_file_cache:
+                try:
+                    with open(self.cache_file_path, 'w', encoding='utf-8') as f:
+                        json.dump(cache_data, f, indent=2, ensure_ascii=False, default=str)
+                    logger.info(f"Cache em arquivo atualizado: {len(distros)} distribuições")
+                except Exception as e:
+                    logger.warning(f"Não foi possível salvar cache em arquivo: {e}. Cache em memória OK.")
+            
             return True
             
         except Exception as e:
@@ -190,6 +225,12 @@ class CacheManager:
             True se invalidou com sucesso.
         """
         try:
+            # Se usando cache em memória
+            if self._memory_cache is not None:
+                self._memory_cache.clear()
+                logger.info("Cache em memória invalidado")
+                return True
+            
             if self.cache_file_path.exists():
                 self.cache_file_path.unlink()
                 logger.info("Cache invalidado")

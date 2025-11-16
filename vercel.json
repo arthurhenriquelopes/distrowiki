@@ -10,7 +10,7 @@
       }
     },
     {
-      "src": "api/main.py",
+      "src": "api.py",
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "50mb"
@@ -20,7 +20,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "api/main.py"
+      "dest": "api.py"
     },
     {
       "src": "/assets/(.*)",
