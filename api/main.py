@@ -85,8 +85,10 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",  # Next.js dev
+        "http://localhost:8080",  # Vite dev
         "http://localhost:8000",  # FastAPI dev
-        "https://distrowiki.vercel.app",  # Produção (exemplo)
+        "https://distrowiki.vercel.app",  # Produção (ajuste com seu domínio)
+        "https://*.vercel.app",  # Todos os previews do Vercel
     ],
     allow_credentials=True,
     allow_methods=["*"],
