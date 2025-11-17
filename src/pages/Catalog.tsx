@@ -24,7 +24,8 @@ const Catalog = () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch('/api/distros?page_size=100');
+        const apiBase = import.meta.env.VITE_API_BASE || '';
+        const response = await fetch(`${apiBase}/distros?page_size=100`);
         
         if (!response.ok) {
           throw new Error(`Erro ao buscar distribuições: ${response.status}`);

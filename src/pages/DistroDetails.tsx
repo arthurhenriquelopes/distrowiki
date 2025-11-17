@@ -20,7 +20,8 @@ const DistroDetails = () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch(`/api/distros/${id}`);
+        const apiBase = import.meta.env.VITE_API_BASE || '';
+        const response = await fetch(`${apiBase}/distros/${id}`);
         
         if (!response.ok) {
           throw new Error(`Distribuição não encontrada`);

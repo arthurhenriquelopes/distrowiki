@@ -1,48 +1,8 @@
 {
   "version": 2,
+  "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    },
-    {
-      "src": "api.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "50mb"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "api.py"
-    },
-    {
-      "src": "/assets/(.*)",
-      "dest": "dist/assets/$1"
-    },
-    {
-      "src": "/robots.txt",
-      "dest": "dist/robots.txt"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "dist/index.html"
-    }
-  ],
   "env": {
-    "ENVIRONMENT": "production",
-    "USE_REDIS_CACHE": "false"
-  },
-  "crons": [
-    {
-      "path": "/api/distros/refresh",
-      "schedule": "0 3 * * *"
-    }
-  ]
+    "VITE_API_BASE": "https://distrowiki-api.vercel.app"
+  }
 }
