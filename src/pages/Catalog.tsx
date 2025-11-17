@@ -24,8 +24,10 @@ const Catalog = () => {
       try {
         setLoading(true);
         setError(null);
-        const apiBase = import.meta.env.VITE_API_BASE || '';
-        const response = await fetch(`${apiBase}/distros?page_size=100`);
+        const apiBase = import.meta.env.VITE_API_BASE || 'https://distrowiki-api.vercel.app';
+        const url = `${apiBase}/distros?page=1&page_size=100&sort_by=name&order=asc&force_refresh=false`;
+        console.log('Fetching from:', url);
+        const response = await fetch(url);
         
         if (!response.ok) {
           throw new Error(`Erro ao buscar distribuições: ${response.status}`);
