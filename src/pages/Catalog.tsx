@@ -74,31 +74,37 @@ const Catalog = () => {
   ).sort();
 
   const filteredAndSortedDistros = useMemo(() => {
-    let filtered = [...distros];
+  let filtered = [...distros];
 
-    if (filterFamily !== "all") {
-      filtered = filtered.filter((d) => d.family === filterFamily);
+  if (filterFamily !== "all") {
+    filtered = filtered.filter((d) => d.family === filterFamily);
+  }
+
+  if (filterDE !== "all") {
+    filtered = filtered.filter((d) => d.desktopEnvironments.includes(filterDE));
+  }
+
+  filtered.sort((a, b) => {
+    switch (sortBy) {
+      case "score":
+        return b.score - a.score;
+      case "name":
+        return a.name.localeCompare(b.name);
+      case "release":
+        return new Date(b.lastRelease).getTime() - new Date(a.lastRelease).getTime();
+      default:
+        return 0;
     }
+  });
 
-    if (filterDE !== "all") {
-      filtered = filtered.filter((d) => d.desktopEnvironments.includes(filterDE));
-    }
+  // Separar selecionadas das não selecionadas
+  const selected = filtered.filter((d) => isSelected(d.id));
+  const unselected = filtered.filter((d) => !isSelected(d.id));
 
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case "score":
-          return b.score - a.score;
-        case "name":
-          return a.name.localeCompare(b.name);
-        case "release":
-          return new Date(b.lastRelease).getTime() - new Date(a.lastRelease).getTime();
-        default:
-          return 0;
-      }
-    });
+  // Retornar com selecionadas no topo
+  return [...selected, ...unselected];
+}, [distros, sortBy, filterFamily, filterDE, selectedDistros]);
 
-    return filtered;
-  }, [distros, sortBy, filterFamily, filterDE]);
 
   const handleSelectToggle = (distro: any) => {
     if (isSelected(distro.id)) {

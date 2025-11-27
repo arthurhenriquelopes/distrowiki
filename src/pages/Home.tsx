@@ -1,30 +1,92 @@
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, TrendingUp, Globe, Search, GitCompare, CheckCircle2, Users, Package, BarChart3 } from "lucide-react";
-import { getTopDistros, distros } from "@/data/distros";
 import ScoreBadge from "@/components/ScoreBadge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useComparison } from "@/contexts/ComparisonContext";
-import { useState } from "react";
 
 const Home = () => {
-  const topDistros = getTopDistros(3);
   const navigate = useNavigate();
-  const { clearSelection, addDistro } = useComparison();
+  const { replaceSelection } = useComparison();
   const [distro1, setDistro1] = useState<string>("");
   const [distro2, setDistro2] = useState<string>("");
 
+  // Estado para distros vindas da API
+  const [distros, setDistros] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Buscar distros da API
+  useEffect(() => {
+    const fetchDistros = async () => {
+      try {
+        setLoading(true);
+        const apiBase = import.meta.env.VITE_API_BASE_ || "https://distrowiki-api.vercel.app";
+        const url = `${apiBase}/distros?page=1&page_size=100&sort_by=name&order=asc&force_refresh=false`;
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+          throw new Error("Erro ao buscar distribuições");
+        }
+        
+        const data = await response.json();
+
+        const transformedDistros = (data.distros || []).map((d: any) => ({
+          id: d.id,
+          name: d.name,
+          family: d.family || "Independent",
+          desktopEnvironments: d.desktop_environments || [],
+          lastRelease: d.latest_release_date || new Date().toISOString(),
+          score: d.rating || 0,
+          logo: `/logos/${d.id}.svg`,
+          website: d.homepage,
+          description: d.summary || d.description,
+          baseSystem: d.based_on || d.family,
+          packageManager: d.package_manager,
+          architecture: d.architecture,
+          origin: d.origin,
+          category: d.category,
+          status: d.status,
+          ranking: d.ranking,
+          ramIdle: d.ram_idle || 0,
+          cpuScore: d.cpu_score || 0,
+          ioScore: d.io_score || 0,
+          releaseModel: d.release_model || "Unknown",
+          ltsSupport: d.lts_support || false,
+        }));
+
+        setDistros(transformedDistros);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDistros();
+  }, []);
+
+  // Calcula top 3 pelo score
+  const topDistros = [...distros]
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
+
   const handleCompare = () => {
-    if (distro1 && distro2) {
-      clearSelection();
-      const d1 = distros.find(d => d.id === distro1);
-      const d2 = distros.find(d => d.id === distro2);
-      if (d1) addDistro(d1);
-      if (d2) addDistro(d2);
-      navigate("/comparacao");
+    if (!distro1 || !distro2) return;
+
+    const d1 = distros.find((d) => d.id === distro1);
+    const d2 = distros.find((d) => d.id === distro2);
+
+    // Substitui toda a seleção de uma vez (resolve o bug de acúmulo)
+    if (d1 && d2) {
+      replaceSelection([d1, d2]);
     }
+
+    setTimeout(() => {
+      navigate("/comparacao");
+    }, 0);
   };
 
   const fadeIn = {

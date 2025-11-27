@@ -6,6 +6,7 @@ interface ComparisonContextType {
   addDistro: (distro: Distro) => void;
   removeDistro: (distroId: string) => void;
   clearSelection: () => void;
+  replaceSelection: (distros: Distro[]) => void;
   isSelected: (distroId: string) => boolean;
 }
 
@@ -28,7 +29,7 @@ export const ComparisonProvider: React.FC<ComparisonProviderProps> = ({ children
 
   const addDistro = (distro: Distro) => {
     if (selectedDistros.length >= 4) {
-      return; // Máximo 4 distros
+      return; 
     }
     if (!selectedDistros.find((d) => d.id === distro.id)) {
       setSelectedDistros([...selectedDistros, distro]);
@@ -43,13 +44,24 @@ export const ComparisonProvider: React.FC<ComparisonProviderProps> = ({ children
     setSelectedDistros([]);
   };
 
+  const replaceSelection = (distros: Distro[]) => {
+    setSelectedDistros(distros.slice(0, 4)); // garante máximo 4
+  };
+
   const isSelected = (distroId: string) => {
     return selectedDistros.some((d) => d.id === distroId);
   };
 
   return (
     <ComparisonContext.Provider
-      value={{ selectedDistros, addDistro, removeDistro, clearSelection, isSelected }}
+      value={{ 
+        selectedDistros, 
+        addDistro, 
+        removeDistro, 
+        clearSelection, 
+        replaceSelection,
+        isSelected 
+      }}
     >
       {children}
     </ComparisonContext.Provider>
