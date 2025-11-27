@@ -21,7 +21,7 @@ const DistroDetails = () => {
         setLoading(true);
         setError(null);
    
-        const apiBase = import.meta.env.VITE_API_BASE || 'https://distrowiki-api.vercel.app';
+        const apiBase = import.meta.env.VITE_API_BASE_ || 'https://distrowiki-api.vercel.app';
         const response = await fetch(`${apiBase}/distros/${id}`);
         
         if (!response.ok) {
