@@ -1,17 +1,19 @@
 import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import DistroCard from "@/components/distro/DistroCard";
+import DistroCardSkeleton from "@/components/DistroCardSkeleton"; // ✅ ADICIONAR
 import CatalogFilters from "@/components/catalog/CatalogFilters";
 import CatalogSearch from "../../components/catalog/CatalogSearch";
 import ActiveFilterChips from "@/components/catalog/ActiveFilterChips";
 import { useComparison } from "@/contexts/ComparisonContext";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { GitCompare, Loader2, AlertCircle } from "lucide-react";
+import { GitCompare, AlertCircle } from "lucide-react"; // ✅ REMOVER Loader2
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const Catalog = () => {
-  const { selectedDistros, addDistro, removeDistro, isSelected } = useComparison();
+  const { selectedDistros, addDistro, removeDistro, isSelected } =
+    useComparison();
   const [sortBy, setSortBy] = useState<string>("score");
   const [filterFamily, setFilterFamily] = useState<string>("all");
   const [filterDE, setFilterDE] = useState<string>("all");
@@ -27,7 +29,8 @@ const Catalog = () => {
       try {
         setLoading(true);
         setError(null);
-        const apiBase = import.meta.env.VITE_API_BASE_ || "https://distrowiki-api.vercel.app";
+        const apiBase =
+          import.meta.env.VITE_API_BASE_ || "https://distrowiki-api.vercel.app";
         const url = `${apiBase}/distros?page=1&page_size=100&sort_by=name&order=asc`;
         const response = await fetch(url);
 
@@ -72,9 +75,10 @@ const Catalog = () => {
   }, []);
 
   const families = Array.from(new Set(distros.map((d) => d.family)));
-  const allDEs = Array.from(new Set(distros.flatMap((d) => d.desktopEnvironments))).sort();
+  const allDEs = Array.from(
+    new Set(distros.flatMap((d) => d.desktopEnvironments))
+  ).sort();
 
-  // Filtros ativos para chips
   const activeFilters = useMemo(() => {
     const filters = [];
     if (filterFamily !== "all") {
@@ -100,18 +104,6 @@ const Catalog = () => {
   const filteredAndSortedDistros = useMemo(() => {
     let filtered = [...distros];
 
-    // Filtro de busca
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (d) =>
-          d.name.toLowerCase().includes(query) ||
-          d.family.toLowerCase().includes(query) ||
-          d.description?.toLowerCase().includes(query) ||
-          d.desktopEnvironments.some((de: string) => de.toLowerCase().includes(query))
-      );
-    }
-
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
@@ -124,18 +116,17 @@ const Catalog = () => {
           )
       );
     }
-    
-    // Filtro de família
+
     if (filterFamily !== "all") {
       filtered = filtered.filter((d) => d.family === filterFamily);
     }
 
-    // Filtro de DE
     if (filterDE !== "all") {
-      filtered = filtered.filter((d) => d.desktopEnvironments.includes(filterDE));
+      filtered = filtered.filter((d) =>
+        d.desktopEnvironments.includes(filterDE)
+      );
     }
 
-    // Ordenação
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "score":
@@ -152,7 +143,6 @@ const Catalog = () => {
       }
     });
 
-    // Mover selecionados para o topo
     const selected = filtered.filter((d) => isSelected(d.id));
     const unselected = filtered.filter((d) => !isSelected(d.id));
     return [...selected, ...unselected];
@@ -168,17 +158,33 @@ const Catalog = () => {
 
   return (
     <div className="container mx-auto px-4 py-12 min-h-screen">
-      <motion.div className="mb-12" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">Catálogo de Distribuições</h1>
+      <motion.div
+        className="mb-12"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          Catálogo de Distribuições
+        </h1>
         <p className="text-lg text-muted-foreground">
-          {loading ? "Carregando..." : `Explore ${distros.length} distribuições Linux`}
+          {loading
+            ? "Carregando..."
+            : `Explore ${distros.length} distribuições Linux`}
         </p>
       </motion.div>
 
+      {/* ✅ NOVO: Skeleton Loading */}
       {loading && (
-        <div className="flex flex-col items-center justify-center py-20">
-          <Loader2 className="w-12 h-12 animate-spin text-primary mb-4" />
-          <p className="text-lg text-muted-foreground">Carregando distribuições...</p>
+        <div
+          className={`grid gap-6 mb-12 ${
+            viewMode === "grid"
+              ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+              : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+          }`}
+        >
+          {Array.from({ length: 12 }).map((_, i) => (
+            <DistroCardSkeleton key={i} viewMode={viewMode} />
+          ))}
         </div>
       )}
 
@@ -192,7 +198,6 @@ const Catalog = () => {
 
       {!loading && !error && (
         <>
-          {/* Search Bar */}
           <div className="mb-6">
             <CatalogSearch
               value={searchQuery}
@@ -202,7 +207,6 @@ const Catalog = () => {
             />
           </div>
 
-          {/* Filtros */}
           <CatalogFilters
             sortBy={sortBy}
             setSortBy={setSortBy}
@@ -218,7 +222,6 @@ const Catalog = () => {
             setViewMode={setViewMode}
           />
 
-          {/* Filter Chips */}
           {(activeFilters.length > 0 || searchQuery) && (
             <div className="mb-6">
               <ActiveFilterChips
@@ -229,7 +232,6 @@ const Catalog = () => {
             </div>
           )}
 
-          {/* Grid de Distros */}
           <motion.div
             className={`grid gap-6 mb-12 ${
               viewMode === "grid"
@@ -251,7 +253,6 @@ const Catalog = () => {
             ))}
           </motion.div>
 
-          {/* Botão de Comparação */}
           {selectedDistros.length >= 2 && (
             <motion.div className="fixed bottom-8 right-8 z-50">
               <Link to="/comparacao">
