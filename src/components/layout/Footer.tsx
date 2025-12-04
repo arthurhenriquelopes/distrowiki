@@ -52,7 +52,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Resources */}
           <div>
             <h3 className="text-sm font-semibold text-foreground mb-4">Recursos</h3>
             <ul className="space-y-2">

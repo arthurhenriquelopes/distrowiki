@@ -1,13 +1,67 @@
 import { useComparison } from "@/contexts/ComparisonContext";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink, X } from "lucide-react";
 import ScoreBadge from "@/components/ScoreBadge";
 import { Badge } from "@/components/ui/badge";
+import { useEffect, useState } from "react";
+import {
+  fetchDistrosByIds,
+  getBestValue,
+  isBestValue,
+  hasPerformanceData,
+} from "@/utils/comparisonHelpers";
 
 const Comparison = () => {
-  const { selectedDistros, removeDistro } = useComparison();
+  const { selectedDistros, removeDistro, replaceSelection } = useComparison();
+  const { distroIds } = useParams<{ distroIds?: string }>();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  // Carregar distros da URL se houver parâmetros
+  useEffect(() => {
+    if (!distroIds || selectedDistros.length >= 2) return;
+
+    const loadDistrosFromUrl = async () => {
+      setLoading(true);
+      try {
+        const ids = distroIds.split('+');
+        const loadedDistros = await fetchDistrosByIds(ids);
+        
+        if (loadedDistros.length >= 2) {
+          replaceSelection(loadedDistros);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar distros da URL:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDistrosFromUrl();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [distroIds]);
+
+  // Atualizar URL quando distros mudarem (sem distroIds inicial)
+  useEffect(() => {
+    if (selectedDistros.length >= 2 && !distroIds) {
+      const ids = selectedDistros.map(d => d.id).join('+');
+      navigate(`/comparacao/${ids}`, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDistros.length]);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-20 min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Carregando comparação...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (selectedDistros.length < 2) {
     return (
@@ -28,26 +82,11 @@ const Comparison = () => {
     );
   }
 
-  // Helper para destacar melhor valor
-  const getBestValue = (key: string, reverse = false) => {
-    const values = selectedDistros
-      .map((d) => d[key])
-      .filter((v) => v != null && v !== 0);
-    if (values.length === 0) return null;
-    return reverse ? Math.min(...values) : Math.max(...values);
-  };
-
-  const isBest = (value: any, bestValue: any) => 
-    value != null && value !== 0 && value === bestValue;
-
-  // Verificar se ALGUMA distro tem dados de performance
-  const hasPerformanceData = selectedDistros.some(
-    (d) => d.idle_ram_usage || d.cpu_score || d.io_score
-  );
+  // Usar helpers utilitários
+  const performanceAvailable = hasPerformanceData(selectedDistros);
 
   return (
     <div className="container mx-auto px-4 py-12 min-h-screen">
-      {/* Header */}
       <motion.div 
         className="mb-8"
         initial={{ opacity: 0, y: -20 }}
@@ -66,7 +105,6 @@ const Comparison = () => {
         </p>
       </motion.div>
 
-      {/* Comparison Grid */}
       <div className="overflow-x-auto">
         <motion.div 
           className="grid gap-6" 
@@ -90,12 +128,20 @@ const Comparison = () => {
                 animate: { opacity: 1, scale: 1 }
               }}
             >
-              {/* Header */}
               <div className="p-6 border-b border-border relative">
                 <button
-                  onClick={() => removeDistro(distro.id)}
+                  onClick={() => {
+                    removeDistro(distro.id);
+                    const remaining = selectedDistros.filter(d => d.id !== distro.id);
+                    if (remaining.length >= 2) {
+                      const ids = remaining.map(d => d.id).join('+');
+                      navigate(`/comparacao/${ids}`, { replace: true });
+                    } else {
+                      navigate('/comparacao', { replace: true });
+                    }
+                  }}
                   className="absolute top-4 right-4 text-muted-foreground hover:text-destructive smooth-transition"
-                  aria-label="Remover"
+                  aria-label={`Remover ${distro.name} da comparação`}
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -116,9 +162,7 @@ const Comparison = () => {
                 </div>
               </div>
 
-              {/* Info Sections */}
               <div className="p-6 space-y-6">
-                {/* Basic Info */}
                 <div>
                   <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-3">
                     Informações Básicas
@@ -162,7 +206,6 @@ const Comparison = () => {
                   </div>
                 </div>
 
-                {/* Desktop Environments */}
                 {(distro.desktopEnvironments || distro.desktop_environments)?.length > 0 && (
                   <div>
                     <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-3">
@@ -178,21 +221,19 @@ const Comparison = () => {
                   </div>
                 )}
 
-                {/* Performance Section - ATIVA quando backend tiver dados */}
-                {hasPerformanceData ? (
+                {performanceAvailable ? (
                   <div>
                     <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-3">
                       Desempenho
                     </h3>
                     <div className="space-y-3">
-                      {/* RAM Idle */}
                       {distro.idle_ram_usage ? (
                         <div>
                           <div className="flex justify-between items-center mb-1">
                             <p className="text-xs text-muted-foreground">RAM Idle</p>
                             <p
                               className={`text-sm font-semibold ${
-                                isBest(distro.idle_ram_usage, getBestValue("idle_ram_usage", true))
+                                isBestValue(distro.idle_ram_usage, getBestValue(selectedDistros, "idle_ram_usage", true))
                                   ? "text-success"
                                   : ""
                               }`}
@@ -209,14 +250,13 @@ const Comparison = () => {
                         </div>
                       ) : null}
 
-                      {/* CPU Score */}
                       {distro.cpu_score ? (
                         <div>
                           <div className="flex justify-between items-center mb-1">
                             <p className="text-xs text-muted-foreground">CPU Score</p>
                             <p
                               className={`text-sm font-semibold ${
-                                isBest(distro.cpu_score, getBestValue("cpu_score"))
+                                isBestValue(distro.cpu_score, getBestValue(selectedDistros, "cpu_score"))
                                   ? "text-success"
                                   : ""
                               }`}
@@ -233,14 +273,13 @@ const Comparison = () => {
                         </div>
                       ) : null}
 
-                      {/* I/O Score */}
                       {distro.io_score ? (
                         <div>
                           <div className="flex justify-between items-center mb-1">
                             <p className="text-xs text-muted-foreground">I/O Score</p>
                             <p
                               className={`text-sm font-semibold ${
-                                isBest(distro.io_score, getBestValue("io_score"))
+                                isBestValue(distro.io_score, getBestValue(selectedDistros, "io_score"))
                                   ? "text-success"
                                   : ""
                               }`}

@@ -5,7 +5,6 @@ interface LogoProps {
 const Logo = ({ className = "" }: LogoProps) => {
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      {/* Quadrado azul com ícone Linux */}
       <div className="bg-[#4169E1] rounded-lg p-2 flex items-center justify-center w-10 h-10">
         <svg 
           role="img" 
@@ -17,7 +16,6 @@ const Logo = ({ className = "" }: LogoProps) => {
         </svg>
       </div>
       
-      {/* Texto DistroWiki */}
       <div className="text-2xl leading-none">
         <span className="font-bold text-foreground">Distro</span>
         <span className="font-extralight text-foreground">Wiki</span>

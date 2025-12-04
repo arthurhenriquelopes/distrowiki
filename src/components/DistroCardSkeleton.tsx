@@ -5,7 +5,6 @@ interface DistroCardSkeletonProps {
 }
 
 const DistroCardSkeleton = ({ viewMode = "list" }: DistroCardSkeletonProps) => {
-  // Modo Grid Compacto
   if (viewMode === "grid") {
     return (
       <div className="bg-card border border-border rounded-xl p-4 h-full flex flex-col items-center">
@@ -17,10 +16,8 @@ const DistroCardSkeleton = ({ viewMode = "list" }: DistroCardSkeletonProps) => {
     );
   }
 
-  // Modo List (Padrão)
   return (
-    <div className="bg-card border border-border rounded-xl p-5 h-full flex flex-col">
-      {/* Header: Logo + Nome */}
+    <div className="bg-card border border-border rounded-lg p-6 animate-pulse">
       <div className="flex items-start gap-4 mb-4">
         <Skeleton className="w-16 h-16 rounded-lg flex-shrink-0" />
         <div className="flex-1 space-y-2">
@@ -71,8 +68,7 @@ const DistroCardSkeleton = ({ viewMode = "list" }: DistroCardSkeletonProps) => {
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="flex items-center justify-between gap-3 mt-auto pt-3 border-t border-border">
+      <div className="flex items-center justify-between pt-4 border-t border-border">
         <Skeleton className="h-3 w-24" />
         <Skeleton className="h-6 w-12 rounded-full" />
       </div>

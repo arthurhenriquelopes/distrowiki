@@ -48,7 +48,6 @@ const DistroDetails = () => {
     fetchDistro();
   }, [id]);
 
-  // Buscar todas as distros para o select
   useEffect(() => {
     const fetchAllDistros = async () => {
       try {

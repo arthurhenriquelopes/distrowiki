@@ -15,8 +15,7 @@ const CatalogViewControls = ({
   setViewMode,
 }: CatalogViewControlsProps) => {
   return (
-    <div className="flex items-center gap-2">
-      {/* Toggle Specs - Agora com outline style */}
+    <div className="flex items-center gap-3">
       <Button
         variant="outline"
         size="sm"

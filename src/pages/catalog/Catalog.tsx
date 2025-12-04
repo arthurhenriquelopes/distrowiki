@@ -1,78 +1,28 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import DistroCard from "@/components/distro/DistroCard";
-import DistroCardSkeleton from "@/components/DistroCardSkeleton"; // ✅ ADICIONAR
+import DistroCardSkeleton from "@/components/DistroCardSkeleton";
 import CatalogFilters from "@/components/catalog/CatalogFilters";
 import CatalogSearch from "../../components/catalog/CatalogSearch";
 import ActiveFilterChips from "@/components/catalog/ActiveFilterChips";
 import { useComparison } from "@/contexts/ComparisonContext";
+import { useDistros } from "@/hooks/useDistros";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { GitCompare, AlertCircle } from "lucide-react"; // ✅ REMOVER Loader2
+import { GitCompare, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const Catalog = () => {
-  const { selectedDistros, addDistro, removeDistro, isSelected } =
-    useComparison();
+  const { selectedDistros, addDistro, removeDistro, isSelected } = useComparison();
   const [sortBy, setSortBy] = useState<string>("score");
   const [filterFamily, setFilterFamily] = useState<string>("all");
   const [filterDE, setFilterDE] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [distros, setDistros] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [showSpecs, setShowSpecs] = useState(false);
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
 
-  useEffect(() => {
-    const fetchDistros = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const apiBase =
-          import.meta.env.VITE_API_BASE_ || "https://distrowiki-api.vercel.app";
-        const url = `${apiBase}/distros?page=1&page_size=100&sort_by=name&order=asc`;
-        const response = await fetch(url);
-
-        if (!response.ok) {
-          throw new Error(`Erro: ${response.status}`);
-        }
-
-        const data = await response.json();
-        const transformedDistros = (data.distros || []).map((d: any) => ({
-          id: d.id,
-          name: d.name,
-          family: d.family || "Independent",
-          desktopEnvironments: (() => {
-            const des = d.desktop_environments || [];
-            if (des.length === 0 || des.some((de) => de.includes("None"))) {
-              return ["None"];
-            }
-            return des;
-          })(),
-          score: d.rating || 0,
-          logo: `/logos/${d.id}.svg`,
-          website: d.homepage,
-          description: d.summary || d.description,
-          category: d.category,
-          latest_release_date: d.latest_release_date || null,
-          release_year: d.release_year ?? null,
-          idle_ram_usage: d.idle_ram_usage ?? null,
-          cpu_score: d.cpu_score ?? null,
-          io_score: d.io_score ?? null,
-          requirements: d.requirements || null,
-        }));
-
-        setDistros(transformedDistros);
-      } catch (err: any) {
-        setError(err.message || "Erro ao carregar");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDistros();
-  }, []);
+  // Usar hook customizado para buscar distros
+  const { distros, loading, error } = useDistros();
 
   const families = Array.from(new Set(distros.map((d) => d.family)));
   const allDEs = Array.from(
@@ -173,7 +123,6 @@ const Catalog = () => {
         </p>
       </motion.div>
 
-      {/* ✅ NOVO: Skeleton Loading */}
       {loading && (
         <div
           className={`grid gap-6 mb-12 ${
@@ -255,7 +204,7 @@ const Catalog = () => {
 
           {selectedDistros.length >= 2 && (
             <motion.div className="fixed bottom-8 right-8 z-50">
-              <Link to="/comparacao">
+              <Link to={`/comparacao/${selectedDistros.map(d => d.id).join('+')}`}>
                 <Button size="lg" className="shadow-2xl gap-2">
                   <GitCompare className="w-5 h-5" />
                   Comparar {selectedDistros.length} distros

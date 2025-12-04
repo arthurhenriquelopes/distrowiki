@@ -19,7 +19,6 @@ const About = () => {
 
   return (
     <div className="container mx-auto px-4 py-12 min-h-screen">
-      {/* Hero */}
       <motion.div 
         className="text-center mb-16"
         initial={{ opacity: 0, y: -20 }}
@@ -32,7 +31,6 @@ const About = () => {
         </p>
       </motion.div>
 
-      {/* Mission */}
       <motion.section 
         className="mb-16"
         initial={{ opacity: 0, y: 20 }}
