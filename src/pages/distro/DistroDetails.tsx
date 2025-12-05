@@ -38,7 +38,16 @@ const DistroDetails = () => {
         }
         
         const data = await response.json();
-        setDistro(data);
+        
+        // Mapear campos da API para formato esperado
+        const mappedData = {
+          ...data,
+          package_manager: data['Package Management'] || data.package_management || data.package_manager || data.packageManager,
+          office_manager: data['Office Suite'] || data.office_suite || data.office_manager || data.officeManager,
+          rating: calculatePerformanceScore(data),
+        };
+        
+        setDistro(mappedData);
       } catch (err: any) {
         console.error('Erro ao buscar distro:', err);
         setError(err.message || 'Erro ao carregar distribuição');
@@ -281,8 +290,8 @@ const DistroDetails = () => {
                   <p className="text-lg font-medium">{distro.category || 'N/A'}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Arquitetura</p>
-                  <p className="text-lg font-medium">{distro.architecture || 'N/A'}</p>
+                  <p className="text-sm text-muted-foreground mb-1">Package Manager</p>
+                  <p className="text-lg font-medium">{distro.package_manager || 'N/A'}</p>
                 </div>
               </div>
 
@@ -292,12 +301,12 @@ const DistroDetails = () => {
                   <p className="text-lg font-medium">{distro.os_type || 'N/A'}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Ranking DistroWatch</p>
-                  <p className="text-lg font-medium">{distro.ranking || 'N/A'}</p>
+                  <p className="text-sm text-muted-foreground mb-1">Requirements</p>
+                  <p className="text-lg font-medium">{distro.requirements || 'N/A'}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Rating</p>
-                  <p className="text-lg font-medium">{distro.rating?.toFixed(1) || '0'} / 10</p>
+                  <p className="text-sm text-muted-foreground mb-1">Office Manager</p>
+                  <p className="text-lg font-medium">{distro.office_manager || 'N/A'}</p>
                 </div>
               </div>
             </div>

@@ -8,6 +8,7 @@ import ActiveFilterChips from "@/components/catalog/ActiveFilterChips";
 import { useComparison } from "@/contexts/ComparisonContext";
 import { useDistros } from "@/hooks/useDistros";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { calculatePerformanceScore } from "@/utils/scoreCalculation";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { GitCompare, AlertCircle } from "lucide-react";
@@ -99,7 +100,9 @@ const Catalog = () => {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "score":
-          return b.score - a.score;
+          const scoreA = calculatePerformanceScore(a);
+          const scoreB = calculatePerformanceScore(b);
+          return scoreB - scoreA;
         case "name":
           return a.name.localeCompare(b.name);
         case "release":

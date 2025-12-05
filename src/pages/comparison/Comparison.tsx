@@ -199,6 +199,18 @@ const Comparison = () => {
               </div>
 
               <div className="p-6 space-y-6">
+                {/* Descrição */}
+                {distro.description && (
+                  <div>
+                    <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-2">
+                      Descrição
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {distro.description}
+                    </p>
+                  </div>
+                )}
+
                 <div>
                   <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-3">
                     Informações Básicas
@@ -375,8 +387,14 @@ const Comparison = () => {
                     </div>
                     {(distro.packageManager || distro.package_management) && (
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Gerenciador</span>
+                        <span className="text-muted-foreground">Pacotes</span>
                         <span className="font-medium">{distro.packageManager || distro.package_management}</span>
+                      </div>
+                    )}
+                    {distro.officeManager && (
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Office</span>
+                        <span className="font-medium">{distro.officeManager}</span>
                       </div>
                     )}
                   </div>
