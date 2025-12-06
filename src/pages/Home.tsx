@@ -75,7 +75,7 @@ const Home = () => {
           <motion.h1 className="text-5xl md:text-7xl font-bold gradient-text flex items-center justify-center gap-2" variants={fadeIn}>
             DistroWiki
             <img 
-              src="/logo/logoProjeto.png" 
+              src="/logo/logo.svg" 
               alt="DistroWiki Logo" 
               className="h-32 w-32 md:h-30 md:w-30 inline-block"
             />
