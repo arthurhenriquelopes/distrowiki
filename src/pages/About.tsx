@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Shield, TrendingUp, Target, Code, Users, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SEO } from "@/components/SEO";
 
 const About = () => {
   const fadeIn = {
@@ -17,8 +18,34 @@ const About = () => {
     }
   };
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "Sobre o DistroWiki",
+    "description": "Conheça o DistroWiki, plataforma open source para comparação objetiva e transparente de distribuições Linux",
+    "url": "https://distrowiki.site/sobre",
+    "inLanguage": "pt-BR",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "DistroWiki",
+      "url": "https://distrowiki.site",
+      "logo": "https://distrowiki.site/logo/logo.svg",
+      "sameAs": [
+        "https://github.com/arthurhenrique/DistroWiki"
+      ],
+      "description": "Plataforma open source para comparar distribuições Linux de forma objetiva, transparente e em português"
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-12 min-h-screen">
+      <SEO
+        title="Sobre o DistroWiki"
+        description="Conheça o DistroWiki, plataforma open source para comparação objetiva e transparente de distribuições Linux. Nossa missão, metodologia e roadmap público."
+        canonical="https://distrowiki.site/sobre"
+        keywords="sobre, distrowiki, open source, linux, missão, metodologia"
+        structuredData={structuredData}
+      />
       <motion.div 
         className="text-center mb-16"
         initial={{ opacity: 0, y: -20 }}

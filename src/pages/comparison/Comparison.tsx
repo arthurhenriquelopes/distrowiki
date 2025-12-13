@@ -14,6 +14,7 @@ import {
   isBestValue,
   hasPerformanceData,
 } from "@/utils/comparisonHelpers";
+import { SEO } from "@/components/SEO";
 
 const Comparison = () => {
   const { selectedDistros, removeDistro, replaceSelection } = useComparison();
@@ -69,6 +70,11 @@ const Comparison = () => {
   if (selectedDistros.length < 2) {
     return (
       <div className="container mx-auto px-4 py-20 min-h-screen">
+        <SEO
+          title="Comparar Distribuições Linux"
+          description="Compare até 4 distribuições Linux lado a lado. Analise desempenho, uso de recursos e especificações técnicas."
+          canonical="https://distrowiki.site/comparacao"
+        />
         <div className="text-center space-y-6 max-w-2xl mx-auto animate-fade-in">
           <h1 className="text-4xl font-bold">Nenhuma Distro Selecionada</h1>
           <p className="text-lg text-muted-foreground">
@@ -88,6 +94,31 @@ const Comparison = () => {
   // Usar helpers utilitários
   const performanceAvailable = hasPerformanceData(selectedDistros);
 
+  const comparisonTitle = `Comparar ${selectedDistros.map(d => d.name).join(' vs ')}`;
+  const comparisonDescription = `Comparação detalhada entre ${selectedDistros.map(d => d.name).join(', ')}. Analise métricas de desempenho, uso de RAM, benchmarks e especificações técnicas.`;
+  const comparisonUrl = `https://distrowiki.site/comparacao/${selectedDistros.map(d => d.id).join('+')}`;
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "ComparisonTable",
+    "name": comparisonTitle,
+    "description": comparisonDescription,
+    "url": comparisonUrl,
+    "inLanguage": "pt-BR",
+    "about": selectedDistros.map(distro => ({
+      "@type": "SoftwareApplication",
+      "name": distro.name,
+      "applicationCategory": "Operating System",
+      "operatingSystem": "Linux",
+      "url": `https://distrowiki.site/distro/${distro.id}`,
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": calculatePerformanceScore(distro).toFixed(1),
+        "bestRating": "10"
+      }
+    }))
+  };
+
   const handleShare = async () => {
     const url = window.location.href;
     try {
@@ -101,6 +132,13 @@ const Comparison = () => {
 
   return (
     <div className="container mx-auto px-4 py-12 min-h-screen">
+      <SEO
+        title={comparisonTitle}
+        description={comparisonDescription}
+        canonical={comparisonUrl}
+        keywords={`comparação, ${selectedDistros.map(d => d.name).join(', ')}, linux, benchmark`}
+        structuredData={structuredData}
+      />
       <motion.div 
         className="mb-8"
         initial={{ opacity: 0, y: -20 }}

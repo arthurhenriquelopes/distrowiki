@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useComparison } from "@/contexts/ComparisonContext";
+import { SEO } from "@/components/SEO";
 
 const DistroDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -129,6 +130,11 @@ const DistroDetails = () => {
   if (error || !distro) {
     return (
       <div className="container mx-auto px-4 py-12 min-h-screen">
+        <SEO
+          title="Distribuição não encontrada"
+          description="A distribuição Linux solicitada não foi encontrada no catálogo."
+          canonical={`https://distrowiki.site/distro/${id}`}
+        />
         <Link to="/catalogo">
           <Button variant="ghost" className="mb-6">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -146,8 +152,49 @@ const DistroDetails = () => {
     );
   }
 
+  const distroDescription = distro.summary || distro.description || `${distro.name} é uma distribuição Linux ${distro.family ? `baseada em ${distro.family}` : 'independente'}. Explore características técnicas, métricas de desempenho e mais informações.`;
+  const distroScore = calculatePerformanceScore(distro);
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": distro.name,
+    "applicationCategory": "Operating System",
+    "operatingSystem": "Linux",
+    "description": distroDescription,
+    "url": `https://distrowiki.site/distro/${distro.id}`,
+    "image": `https://distrowiki.site/logos/${distro.id}.svg`,
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "aggregateRating": distroScore > 0 ? {
+      "@type": "AggregateRating",
+      "ratingValue": distroScore.toFixed(1),
+      "bestRating": "10",
+      "worstRating": "0"
+    } : undefined,
+    "datePublished": distro.latest_release_date || distro.lastRelease,
+    "publisher": {
+      "@type": "Organization",
+      "name": distro.name
+    },
+    "softwareVersion": distro.latest_release_date ? new Date(distro.latest_release_date).getFullYear().toString() : undefined,
+    "releaseNotes": distro.homepage || distro.website,
+    "softwareRequirements": distro.requirements ? JSON.stringify(distro.requirements) : undefined
+  };
+
   return (
     <div className="container mx-auto px-4 py-12 min-h-screen">
+      <SEO
+        title={`${distro.name} - Análise Completa`}
+        description={distroDescription}
+        canonical={`https://distrowiki.site/distro/${distro.id}`}
+        keywords={`${distro.name}, ${distro.family}, linux, distro, ${(distro.desktop_environments || []).join(', ')}`}
+        ogImage={`https://distrowiki.site/logos/${distro.id}.svg`}
+        structuredData={structuredData}
+      />
       {/* Back Button */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}

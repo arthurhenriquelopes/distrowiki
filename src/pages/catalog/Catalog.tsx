@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { GitCompare, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { SEO } from "@/components/SEO";
 
 const Catalog = () => {
   const { selectedDistros, addDistro, removeDistro, isSelected } = useComparison();
@@ -128,8 +129,40 @@ const Catalog = () => {
     }
   };
 
+  const catalogDescription = filteredAndSortedDistros.length > 0 
+    ? `Explore ${filteredAndSortedDistros.length} distribuições Linux. Compare características, desempenho e encontre a distro ideal para suas necessidades.`
+    : "Explore o catálogo completo de distribuições Linux. Compare características, desempenho e encontre a distro ideal.";
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Catálogo de Distribuições Linux",
+    "description": catalogDescription,
+    "url": "https://distrowiki.site/catalogo",
+    "inLanguage": "pt-BR",
+    "numberOfItems": distros.length,
+    "itemListElement": filteredAndSortedDistros.slice(0, 10).map((distro, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "SoftwareApplication",
+        "name": distro.name,
+        "applicationCategory": "Operating System",
+        "operatingSystem": "Linux",
+        "url": `https://distrowiki.site/distro/${distro.id}`
+      }
+    }))
+  };
+
   return (
     <div className={`container mx-auto px-4 py-12 min-h-screen ${viewMode === "terminal" ? "terminal-scanlines" : ""}`}>
+      <SEO
+        title="Catálogo de Distribuições Linux"
+        description={catalogDescription}
+        canonical="https://distrowiki.site/catalogo"
+        keywords="linux, distribuições, catálogo, ubuntu, fedora, arch, debian, opensuse, manjaro"
+        structuredData={structuredData}
+      />
       <motion.div
         className="mb-12"
         initial={{ opacity: 0, y: -20 }}

@@ -13,6 +13,7 @@ import { StatCard } from "@/components/home/StatCard";
 import { BenefitCard } from "@/components/home/BenefitCard";
 import { HowItWorksStep } from "@/components/home/HowItWorksStep";
 import { STATS, BENEFITS, HOW_IT_WORKS_STEPS } from "@/constants/homeContent";
+import { SEO } from "@/components/SEO";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -53,8 +54,33 @@ const Home = () => {
     }
   };
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "DistroWiki",
+    "url": "https://distrowiki.site",
+    "description": "Plataforma open source para comparar distribuições Linux de forma objetiva e transparente",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://distrowiki.site/catalogo?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    },
+    "inLanguage": "pt-BR",
+    "publisher": {
+      "@type": "Organization",
+      "name": "DistroWiki",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://distrowiki.site/logo/logo.svg"
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen relative">
+      <SEO 
+        structuredData={structuredData}
+      />
       <div className="absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none"></div>
       
       <section className="container mx-auto px-4 py-20 md:py-32 relative">

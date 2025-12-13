@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
+import { SEO } from "@/components/SEO";
 
 const NotFound = () => {
   const location = useLocation();
@@ -13,6 +14,11 @@ const NotFound = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      <SEO
+        title="Página Não Encontrada - 404"
+        description="A página que você procura não existe. Volte para a página inicial e explore o catálogo de distribuições Linux."
+        canonical={`https://distrowiki.site${location.pathname}`}
+      />
       <div className="absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none"></div>
       
       <motion.div 
