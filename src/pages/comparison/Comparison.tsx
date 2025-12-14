@@ -2,7 +2,7 @@ import { useComparison } from "@/contexts/ComparisonContext";
 import { motion } from "framer-motion";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ExternalLink, X, Share2, Check } from "lucide-react";
+import { ArrowLeft, ExternalLink, X, Share2, Check, Info } from "lucide-react";
 import { getDesktopEnvColor } from "@/utils/desktopEnvColors";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
 import ScoreBadge from "@/components/ScoreBadge";
@@ -15,6 +15,7 @@ import {
   hasPerformanceData,
 } from "@/utils/comparisonHelpers";
 import { SEO } from "@/components/SEO";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const Comparison = () => {
   const { selectedDistros, removeDistro, replaceSelection } = useComparison();
@@ -131,7 +132,7 @@ const Comparison = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12 min-h-screen">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 lg:py-16 min-h-screen">
       <SEO
         title={comparisonTitle}
         description={comparisonDescription}
@@ -140,12 +141,12 @@ const Comparison = () => {
         structuredData={structuredData}
       />
       <motion.div 
-        className="mb-8"
+        className="mb-8 md:mb-12"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
           <Link to="/catalogo">
             <Button variant="ghost">
               <ArrowLeft className="mr-2 h-4 w-4" />
@@ -173,16 +174,20 @@ const Comparison = () => {
           </Button>
         </div>
         
-        <h1 className="text-4xl md:text-5xl font-bold mb-2">Comparação de Distros</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 tracking-tight">Comparação de Distros</h1>
+        <p className="text-base md:text-lg text-muted-foreground">
           Comparando {selectedDistros.length} distribuições lado a lado
         </p>
       </motion.div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
         <motion.div 
-          className="grid gap-6" 
-          style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, minmax(280px, 1fr))` }}
+          className="grid gap-4 md:gap-6 lg:gap-8 pb-4" 
+          style={{ 
+            gridTemplateColumns: selectedDistros.length === 2 
+              ? 'repeat(auto-fit, minmax(300px, 1fr))'
+              : `repeat(${selectedDistros.length}, minmax(280px, 1fr))` 
+          }}
           initial="initial"
           animate="animate"
           variants={{
@@ -196,13 +201,13 @@ const Comparison = () => {
           {selectedDistros.map((distro) => (
             <motion.div 
               key={distro.id} 
-              className="bg-card border border-border rounded-xl overflow-hidden"
+              className="bg-card border border-border rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
               variants={{
                 initial: { opacity: 0, scale: 0.9 },
                 animate: { opacity: 1, scale: 1 }
               }}
             >
-              <div className="p-6 border-b border-border relative">
+              <div className="p-6 md:p-8 border-b border-border relative bg-gradient-to-br from-card to-muted/20">
                 <button
                   onClick={() => {
                     removeDistro(distro.id);
@@ -214,21 +219,21 @@ const Comparison = () => {
                       navigate('/comparacao', { replace: true });
                     }
                   }}
-                  className="absolute top-4 right-4 text-muted-foreground hover:text-destructive smooth-transition"
+                  className="absolute top-4 right-4 p-1.5 rounded-lg bg-background/80 backdrop-blur-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 smooth-transition"
                   aria-label={`Remover ${distro.name} da comparação`}
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-4 h-4" />
                 </button>
                 <img
                   src={distro.logo || `/logos/${distro.id}.svg`}
                   alt={`${distro.name} logo`}
-                  className="w-20 h-20 object-contain mx-auto mb-4"
+                  className="w-24 h-24 object-contain mx-auto mb-5"
                   onError={(e) => {
                     e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(distro.name)}&background=random&size=80`;
                   }}
                 />
-                <h2 className="text-2xl font-bold text-center mb-2">{distro.name}</h2>
-                <p className="text-sm text-muted-foreground text-center mb-4">
+                <h2 className="text-2xl md:text-3xl font-bold text-center mb-2 tracking-tight">{distro.name}</h2>
+                <p className="text-sm text-muted-foreground text-center mb-5">
                   {distro.family || distro.based_on || 'Independente'}
                 </p>
                 <div className="flex justify-center">
@@ -236,26 +241,26 @@ const Comparison = () => {
                 </div>
               </div>
 
-              <div className="p-6 space-y-6">
+              <div className="p-6 md:p-8 space-y-8">
                 {/* Descrição */}
                 {distro.description && (
-                  <div>
-                    <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-2">
+                  <div className="pb-6 -mx-6 md:-mx-8 px-6 md:px-8 border-b border-border">
+                    <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">
                       Descrição
                     </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
+                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-4 min-h-[5.6rem]">
                       {distro.description}
                     </p>
                   </div>
                 )}
 
                 <div>
-                  <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-3">
+                  <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4">
                     Informações Básicas
                   </h3>
-                  <div className="space-y-2">
-                    <div>
-                      <p className="text-xs text-muted-foreground">Site Oficial</p>
+                  <div className="space-y-0 -mx-6 md:-mx-8">
+                    <div className="px-6 md:px-8 py-3 hover:bg-muted/40 transition-colors">
+                      <p className="text-xs text-muted-foreground mb-1.5">Site Oficial</p>
                       {distro.website || distro.homepage ? (
                         <a
                           href={distro.website || distro.homepage}
@@ -270,19 +275,19 @@ const Comparison = () => {
                       )}
                     </div>
                     {distro.lastRelease || distro.latest_release_date ? (
-                      <div>
-                        <p className="text-xs text-muted-foreground">Último Lançamento</p>
-                        <p className="text-sm">
+                      <div className="px-6 md:px-8 py-3 bg-accent/30 hover:bg-accent/40 transition-colors">
+                        <p className="text-xs text-muted-foreground mb-1.5">Último Lançamento</p>
+                        <p className="text-sm font-medium">
                           {new Date(distro.lastRelease || distro.latest_release_date).toLocaleDateString("pt-BR")}
                         </p>
                       </div>
                     ) : null}
-                    <div>
-                      <p className="text-xs text-muted-foreground">Categoria</p>
-                      <p className="text-sm">{distro.category || 'N/A'}</p>
+                    <div className="px-6 md:px-8 py-3 hover:bg-muted/40 transition-colors">
+                      <p className="text-xs text-muted-foreground mb-1.5">Categoria</p>
+                      <p className="text-sm font-medium">{distro.category || 'N/A'}</p>
                     </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Status</p>
+                    <div className="px-6 md:px-8 py-3 bg-accent/30 hover:bg-accent/40 transition-colors">
+                      <p className="text-xs text-muted-foreground mb-1.5">Status</p>
                       <p className="text-sm">
                         <span className={distro.status === 'Active' ? 'text-success' : ''}>
                           {distro.status || 'N/A'}
@@ -293,8 +298,8 @@ const Comparison = () => {
                 </div>
 
                 {(distro.desktopEnvironments || distro.desktop_environments)?.length > 0 && (
-                  <div>
-                    <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-3">
+                  <div className="pt-6 -mx-6 md:-mx-8 px-6 md:px-8 border-t border-border">
+                    <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4">
                       Ambientes Gráficos
                     </h3>
                     <div className="flex flex-wrap gap-2">
@@ -311,15 +316,25 @@ const Comparison = () => {
                 )}
 
                 {performanceAvailable ? (
-                  <div>
-                    <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-3">
+                  <div className="pt-6 -mx-6 md:-mx-8 px-6 md:px-8 border-t border-border">
+                    <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4">
                       Desempenho
                     </h3>
-                    <div className="space-y-3">
+                    <div className="space-y-0 -mx-6 md:-mx-8">
                       {distro.idle_ram_usage ? (
-                        <div>
+                        <div className="px-6 md:px-8 py-3 hover:bg-muted/40 transition-colors">
                           <div className="flex justify-between items-center mb-1">
-                            <p className="text-xs text-muted-foreground">RAM Idle</p>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <p className="text-xs text-muted-foreground flex items-center gap-1 cursor-help">
+                                  RAM Idle
+                                  <Info className="w-3 h-3" />
+                                </p>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Quantidade de memória RAM usada após a inicialização. Menos é melhor para liberar recursos para seus aplicativos.</p>
+                              </TooltipContent>
+                            </Tooltip>
                             <p
                               className={`text-sm font-semibold ${
                                 isBestValue(distro.idle_ram_usage, getBestValue(selectedDistros, "idle_ram_usage", true))
@@ -330,9 +345,9 @@ const Comparison = () => {
                               {distro.idle_ram_usage} MB
                             </p>
                           </div>
-                          <div className="w-full bg-muted rounded-full h-2">
+                          <div className="w-full bg-muted/50 rounded-full h-2.5 overflow-hidden">
                             <div
-                              className="bg-primary rounded-full h-2 smooth-transition"
+                              className="bg-gradient-to-r from-primary to-primary/80 rounded-full h-2.5 smooth-transition shadow-sm"
                               style={{ width: `${Math.min((distro.idle_ram_usage / 2000) * 100, 100)}%` }}
                             />
                           </div>
@@ -340,9 +355,19 @@ const Comparison = () => {
                       ) : null}
 
                       {distro.cpu_score ? (
-                        <div>
+                        <div className="px-6 md:px-8 py-3 bg-accent/30 hover:bg-accent/40 transition-colors">
                           <div className="flex justify-between items-center mb-1">
-                            <p className="text-xs text-muted-foreground">CPU Score</p>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <p className="text-xs text-muted-foreground flex items-center gap-1 cursor-help">
+                                  CPU Score
+                                  <Info className="w-3 h-3 opacity-50" />
+                                </p>
+                              </TooltipTrigger>
+                              <TooltipContent className="max-w-xs">
+                                <p className="text-xs">Desempenho do processador medido por benchmark. Quanto maior, melhor para tarefas intensivas.</p>
+                              </TooltipContent>
+                            </Tooltip>
                             <p
                               className={`text-sm font-semibold ${
                                 isBestValue(distro.cpu_score, getBestValue(selectedDistros, "cpu_score"))
@@ -353,9 +378,9 @@ const Comparison = () => {
                               {distro.cpu_score}/10
                             </p>
                           </div>
-                          <div className="w-full bg-muted rounded-full h-2">
+                          <div className="w-full bg-muted/50 rounded-full h-2.5 overflow-hidden">
                             <div
-                              className="bg-primary rounded-full h-2 smooth-transition"
+                              className="bg-gradient-to-r from-primary to-primary/80 rounded-full h-2.5 smooth-transition shadow-sm"
                               style={{ width: `${(distro.cpu_score / 10) * 100}%` }}
                             />
                           </div>
@@ -363,9 +388,19 @@ const Comparison = () => {
                       ) : null}
 
                       {distro.io_score ? (
-                        <div>
+                        <div className="px-6 md:px-8 py-3 hover:bg-muted/40 transition-colors">
                           <div className="flex justify-between items-center mb-1">
-                            <p className="text-xs text-muted-foreground">I/O Score</p>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <p className="text-xs text-muted-foreground flex items-center gap-1 cursor-help">
+                                  I/O Score
+                                  <Info className="w-3 h-3 opacity-50" />
+                                </p>
+                              </TooltipTrigger>
+                              <TooltipContent className="max-w-xs">
+                                <p className="text-xs">Velocidade de leitura/escrita em disco. Importante para boot, instalação de programas e transferência de arquivos.</p>
+                              </TooltipContent>
+                            </Tooltip>
                             <p
                               className={`text-sm font-semibold ${
                                 isBestValue(distro.io_score, getBestValue(selectedDistros, "io_score"))
@@ -376,9 +411,9 @@ const Comparison = () => {
                               {distro.io_score}/10
                             </p>
                           </div>
-                          <div className="w-full bg-muted rounded-full h-2">
+                          <div className="w-full bg-muted/50 rounded-full h-2.5 overflow-hidden">
                             <div
-                              className="bg-primary rounded-full h-2 smooth-transition"
+                              className="bg-gradient-to-r from-primary to-primary/80 rounded-full h-2.5 smooth-transition shadow-sm"
                               style={{ width: `${(distro.io_score / 10) * 100}%` }}
                             />
                           </div>
@@ -387,7 +422,7 @@ const Comparison = () => {
 
                       {/* Requirements */}
                       {distro.requirements && (
-                        <div className="flex justify-between pt-2">
+                        <div className="flex justify-between px-6 md:px-8 py-3 bg-accent/30 hover:bg-accent/40 transition-colors">
                           <span className="text-xs text-muted-foreground">Requisitos</span>
                           <span className="text-sm font-medium">
                             {distro.requirements}
@@ -398,39 +433,39 @@ const Comparison = () => {
                   </div>
                 ) : (
                   // Placeholder enquanto backend não tiver dados
-                  <div className="bg-muted/30 rounded-lg p-4 border border-border">
-                    <p className="text-xs text-center text-muted-foreground">
+                  <div className="bg-muted/30 rounded-lg p-6 border border-dashed border-border">
+                    <p className="text-sm text-center text-muted-foreground">
                       📊 Dados de performance em breve
                     </p>
                   </div>
                 )}
 
                 {/* Technical Details */}
-                <div>
-                  <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-3">
+                <div className="pt-6 -mx-6 md:-mx-8 px-6 md:px-8 border-t border-border">
+                  <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4">
                     Detalhes Técnicos
                   </h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
+                  <div className="space-y-0 -mx-6 md:-mx-8 text-sm">
+                    <div className="flex justify-between px-6 md:px-8 py-3 hover:bg-muted/40 transition-colors">
                       <span className="text-muted-foreground">Baseado em</span>
                       <span className="font-medium">{distro.based_on || distro.baseSystem || 'Independente'}</span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between px-6 md:px-8 py-3 bg-accent/30 hover:bg-accent/40 transition-colors">
                       <span className="text-muted-foreground">Arquitetura</span>
                       <span className="font-medium">{distro.architecture || 'x86_64'}</span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between px-6 md:px-8 py-3 hover:bg-muted/40 transition-colors">
                       <span className="text-muted-foreground">Origem</span>
                       <span className="font-medium">{distro.origin || 'N/A'}</span>
                     </div>
                     {(distro.packageManager || distro.package_management) && (
-                      <div className="flex justify-between">
+                      <div className="flex justify-between px-6 md:px-8 py-3 bg-accent/30 hover:bg-accent/40 transition-colors">
                         <span className="text-muted-foreground">Pacotes</span>
                         <span className="font-medium">{distro.packageManager || distro.package_management}</span>
                       </div>
                     )}
                     {distro.officeManager && (
-                      <div className="flex justify-between">
+                      <div className="flex justify-between px-6 md:px-8 py-3 hover:bg-muted/40 transition-colors">
                         <span className="text-muted-foreground">Office</span>
                         <span className="font-medium">{distro.officeManager}</span>
                       </div>
@@ -439,9 +474,10 @@ const Comparison = () => {
                 </div>
 
                 {/* CTA */}
-                <Link to={`/distro/${distro.id}`}>
-                  <Button variant="outline" className="w-full">
+                <Link to={`/distro/${distro.id}`} className="block">
+                  <Button variant="outline" className="w-full group hover:bg-primary hover:text-primary-foreground transition-all duration-300">
                     Ver Detalhes Completos
+                    <ExternalLink className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
               </div>

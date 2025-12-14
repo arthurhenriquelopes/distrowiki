@@ -2,9 +2,10 @@ import { Distro } from "@/types";
 import { Link } from "react-router-dom";
 import ScoreBadge from "@/components/ScoreBadge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Calendar, Cpu, HardDrive, Rocket } from "lucide-react";
+import { Calendar, Cpu, HardDrive, Rocket, Info } from "lucide-react";
 import { getDesktopEnvColor } from "@/utils/desktopEnvColors";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface DistroCardListProps {
   distro: Distro;
@@ -108,10 +109,18 @@ const DistroCardList = ({
             {distro.idle_ram_usage && (
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <p className="text-xs text-muted-foreground flex items-center gap-1">
-                    <HardDrive className="w-3 h-3" />
-                    RAM Idle
-                  </p>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <p className="text-xs text-muted-foreground flex items-center gap-1 cursor-help">
+                        <HardDrive className="w-3 h-3" />
+                        RAM Idle
+                        <Info className="w-3 h-3" />
+                      </p>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Quantidade de memória RAM usada após a inicialização. Menos é melhor para liberar recursos para seus aplicativos.</p>
+                    </TooltipContent>
+                  </Tooltip>
                   <p className="text-xs font-semibold">
                     {distro.idle_ram_usage} MB
                   </p>
@@ -133,10 +142,18 @@ const DistroCardList = ({
             {distro.cpu_score && (
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <p className="text-xs text-muted-foreground flex items-center gap-1">
-                    <Cpu className="w-3 h-3" />
-                    CPU Score
-                  </p>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <p className="text-xs text-muted-foreground flex items-center gap-1 cursor-help">
+                        <Cpu className="w-3 h-3" />
+                        CPU Score
+                        <Info className="w-3 h-3 opacity-50" />
+                      </p>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs">
+                      <p className="text-xs">Desempenho do processador medido por benchmark. Quanto maior, melhor para tarefas intensivas.</p>
+                    </TooltipContent>
+                  </Tooltip>
                   <p className="text-xs font-semibold">{distro.cpu_score}/10</p>
                 </div>
                 <div className="w-full bg-muted rounded-full h-1.5">
@@ -151,10 +168,18 @@ const DistroCardList = ({
             {distro.io_score && (
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <p className="text-xs text-muted-foreground flex items-center gap-1">
-                    <HardDrive className="w-3 h-3" />
-                    I/O Score
-                  </p>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <p className="text-xs text-muted-foreground flex items-center gap-1 cursor-help">
+                        <HardDrive className="w-3 h-3" />
+                        I/O Score
+                        <Info className="w-3 h-3 opacity-50" />
+                      </p>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs">
+                      <p className="text-xs">Velocidade de leitura/escrita em disco. Importante para boot, instalação de programas e transferência de arquivos.</p>
+                    </TooltipContent>
+                  </Tooltip>
                   <p className="text-xs font-semibold">{distro.io_score}/10</p>
                 </div>
                 <div className="w-full bg-muted rounded-full h-1.5">
