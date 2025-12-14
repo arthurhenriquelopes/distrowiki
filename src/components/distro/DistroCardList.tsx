@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import ScoreBadge from "@/components/ScoreBadge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar, Cpu, HardDrive, Rocket, Info } from "lucide-react";
-import { getDesktopEnvColor } from "@/utils/desktopEnvColors";
+import { DesktopEnvBadge } from "@/components/DesktopEnvBadge";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -81,23 +81,13 @@ const DistroCardList = ({
           )}
         </div>
 
-        {distro.desktopEnvironments && (
+        {distro.desktopEnvironments && distro.desktopEnvironments.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-3">
-            {distro.desktopEnvironments.slice(0, 3).map((de) => {
-              const colors = getDesktopEnvColor(de).split(" ");
-              return (
-                <span
-                  key={de}
-                  className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${colors.join(
-                    " "
-                  )}`}
-                >
-                  {de}
-                </span>
-              );
-            })}
+            {distro.desktopEnvironments.slice(0, 3).map((de) => (
+              <DesktopEnvBadge key={de} name={de} size="sm" />
+            ))}
             {distro.desktopEnvironments.length > 3 && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-secondary text-secondary-foreground">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-medium bg-muted/50 text-muted-foreground border border-border/50">
                 +{distro.desktopEnvironments.length - 3}
               </span>
             )}

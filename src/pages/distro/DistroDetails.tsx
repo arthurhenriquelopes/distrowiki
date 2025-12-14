@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink, Loader2, GitCompare } from "lucide-react";
-import { getDesktopEnvColor } from "@/utils/desktopEnvColors";
+import { DesktopEnvBadge } from "@/components/DesktopEnvBadge";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
 import ScoreBadge from "@/components/ScoreBadge";
 import { Badge } from "@/components/ui/badge";
@@ -309,12 +309,7 @@ const DistroDetails = () => {
               <h3 className="text-xl font-bold mb-4">Ambientes Gráficos Disponíveis</h3>
               <div className="flex flex-wrap gap-2">
                 {distro.desktop_environments.map((de: string) => (
-                  <span
-                    key={de}
-                    className={`inline-flex items-center px-3 py-1 rounded-md text-sm font-medium ${getDesktopEnvColor(de)}`}
-                  >
-                    {de}
-                  </span>
+                  <DesktopEnvBadge key={de} name={de} size="md" />
                 ))}
               </div>
             </div>
