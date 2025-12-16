@@ -189,24 +189,27 @@ const Comparison = () => {
 
       {/* Cards de Distro - Header Sticky */}
       <motion.div 
-        className="sticky top-16 z-40 -mx-4 px-4 sm:mx-0 sm:px-0 py-4 bg-background/80 backdrop-blur-xl border-b border-border/50 mb-6"
+        className="sticky top-16 z-40 -mx-4 px-4 sm:mx-0 sm:px-0 py-3 bg-background/80 backdrop-blur-xl border-b border-border/50 mb-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
       >
         <div 
-          className="grid gap-3 md:gap-4"
+          className="grid gap-2 sm:gap-3 md:gap-4"
           style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, 1fr)` }}
         >
           {selectedDistros.map((distro) => {
             const score = calculatePerformanceScore(distro);
             const isWinner = distro.id === winnerDistro.id && selectedDistros.length > 1;
+            const shortName = distro.name.split(' ')[0];
             
             return (
               <motion.div
                 key={distro.id}
                 className={cn(
-                  "relative rounded-xl p-4 border transition-all duration-300",
+                  "relative rounded-xl border transition-all duration-300",
+                  // Padding responsivo
+                  "p-2 sm:p-3 md:p-4",
                   isWinner 
                     ? "bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/50 shadow-lg shadow-primary/10" 
                     : "bg-card/50 border-border/50 hover:border-border"
@@ -214,19 +217,21 @@ const Comparison = () => {
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                {/* Badge de vencedor */}
+                {/* Badge de vencedor - compacto em mobile */}
                 {isWinner && (
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2">
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-xs font-medium shadow-lg">
-                      <Trophy className="w-3 h-3" />
-                      Melhor
+                  <div className="absolute -top-3 sm:-top-2 left-1/2 -translate-x-1/2 z-10">
+                    <span className="inline-flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-[10px] sm:text-xs font-medium shadow-lg">
+                      <Trophy className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                      <span className="hidden sm:inline">Melhor</span>
                     </span>
                   </div>
                 )}
                 
-                {/* Botão remover */}
+                {/* Botão remover - apenas em desktop */}
                 <button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     removeDistro(distro.id);
                     const remaining = selectedDistros.filter(d => d.id !== distro.id);
                     if (remaining.length >= 2) {
@@ -236,36 +241,59 @@ const Comparison = () => {
                       navigate('/comparacao', { replace: true });
                     }
                   }}
-                  className="absolute top-2 right-2 p-1 rounded-full bg-background/80 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                  className="absolute top-1 right-1 sm:top-2 sm:right-2 p-0.5 sm:p-1 rounded-full bg-background/80 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors z-10"
                   aria-label={`Remover ${distro.name}`}
                 >
-                  <X className="w-3.5 h-3.5" />
+                  <X className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 </button>
 
-                <div className="flex items-center gap-3">
-                  <img
-                    src={distro.logo || `/logos/${distro.id}.svg`}
-                    alt={distro.name}
-                    className="w-12 h-12 object-contain rounded-lg"
-                    onError={(e) => {
-                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(distro.name)}&background=random&size=48`;
-                    }}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <h2 className="font-bold text-lg truncate">{distro.name}</h2>
-                    <p className="text-xs text-muted-foreground truncate">
-                      {distro.family || distro.based_on || 'Independente'}
-                    </p>
-                  </div>
-                  <ScoreBadge score={score} size="md" />
-                </div>
-                
-                {/* Link para detalhes */}
+                {/* Link clicável para detalhes - todo o card em mobile */}
                 <Link 
                   to={`/distro/${distro.id}`}
-                  className="mt-3 flex items-center justify-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
+                  className="block"
                 >
-                  Ver detalhes <ExternalLink className="w-3 h-3" />
+                  {/* Layout Mobile: compacto e vertical */}
+                  <div className="flex flex-col items-center text-center sm:hidden">
+                    <img
+                      src={distro.logo || `/logos/${distro.id}.svg`}
+                      alt={distro.name}
+                      className="w-8 h-8 object-contain rounded-md mb-1"
+                      onError={(e) => {
+                        e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(distro.name)}&background=random&size=32`;
+                      }}
+                    />
+                    <h2 className="font-bold text-xs truncate w-full max-w-[80px]">{shortName}</h2>
+                    <div className="mt-1">
+                      <ScoreBadge score={score} size="sm" />
+                    </div>
+                  </div>
+
+                  {/* Layout Desktop: horizontal com mais info */}
+                  <div className="hidden sm:flex items-center gap-3">
+                    <img
+                      src={distro.logo || `/logos/${distro.id}.svg`}
+                      alt={distro.name}
+                      className="w-10 h-10 md:w-12 md:h-12 object-contain rounded-lg"
+                      onError={(e) => {
+                        e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(distro.name)}&background=random&size=48`;
+                      }}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <h2 className="font-bold text-sm md:text-lg truncate">{distro.name}</h2>
+                      <p className="text-[10px] md:text-xs text-muted-foreground truncate">
+                        {distro.family || distro.based_on || 'Independente'}
+                      </p>
+                    </div>
+                    <ScoreBadge score={score} size="md" />
+                  </div>
+                </Link>
+                
+                {/* Link para detalhes - apenas em desktop */}
+                <Link 
+                  to={`/distro/${distro.id}`}
+                  className="hidden sm:flex mt-2 md:mt-3 items-center justify-center gap-1 text-[10px] md:text-xs text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Ver detalhes <ExternalLink className="w-2.5 h-2.5 md:w-3 md:h-3" />
                 </Link>
               </motion.div>
             );

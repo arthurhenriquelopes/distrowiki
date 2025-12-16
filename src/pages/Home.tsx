@@ -83,55 +83,58 @@ const Home = () => {
       />
       <div className="absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none"></div>
       
-      <section className="container mx-auto px-4 py-20 md:py-32 relative">
-        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary/20 rounded-full blur-[120px] pointer-events-none"></div>
+      <section className="container mx-auto px-4 py-4 sm:py-8 md:py-16 lg:py-24 relative">
+        <div className="absolute top-10 sm:top-20 left-1/2 -translate-x-1/2 w-64 sm:w-96 h-64 sm:h-96 bg-primary/20 rounded-full blur-[100px] sm:blur-[120px] pointer-events-none"></div>
         
         <motion.div 
-          className="text-center space-y-8 relative z-10"
+          className="text-center space-y-3 sm:space-y-5 md:space-y-6 relative z-10"
           initial="initial"
           animate="animate"
           variants={stagger}
         >
           <motion.div variants={fadeIn}>
-            <div className="inline-block px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-6">
-              <span className="text-primary font-semibold">🐧 A melhor plataforma para escolher sua distro</span>
+            <div className="inline-block px-2.5 sm:px-4 py-1 sm:py-2 bg-primary/10 border border-primary/20 rounded-full mb-2 sm:mb-4">
+              <span className="text-primary font-semibold text-xs sm:text-sm md:text-base">🐧 A melhor plataforma para escolher sua distro</span>
             </div>
           </motion.div>
           
-          <motion.h1 className="text-5xl md:text-7xl font-bold gradient-text flex items-center justify-center gap-2" variants={fadeIn}>
+          <motion.h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl font-bold gradient-text flex items-center justify-center gap-1 sm:gap-2" variants={fadeIn}>
             DistroWiki
             <img 
               src="/logo/logo.svg" 
               alt="DistroWiki Logo" 
-              className="h-32 w-32 md:h-30 md:w-30 inline-block"
+              className="h-10 w-10 sm:h-14 sm:w-14 md:h-20 md:w-20 lg:h-28 lg:w-28 inline-block"
             />
           </motion.h1>
           
-          <motion.p className="text-xl md:text-2xl text-foreground max-w-3xl mx-auto" variants={fadeIn}>
+          <motion.p className="text-sm sm:text-base md:text-xl lg:text-2xl text-foreground max-w-3xl mx-auto px-2" variants={fadeIn}>
             Descubra a <span className="text-primary font-semibold">melhor Distro Linux</span> para a sua maior necessidade
           </motion.p>
           
-          <motion.p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto" variants={fadeIn}>
+          <motion.p className="text-xs sm:text-sm md:text-base text-muted-foreground max-w-2xl mx-auto px-4 hidden sm:block" variants={fadeIn}>
             Plataforma open source para comparar distribuições Linux de forma objetiva, transparente e em português.
           </motion.p>
           
-          <motion.div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4" variants={fadeIn}>
-            <Link to="/catalogo">
-              <Button size="lg" className="text-base px-8 group shadow-lg shadow-primary/20">
+          <motion.div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center items-center pt-1 sm:pt-4 px-4 sm:px-0" variants={fadeIn}>
+            <Link to="/catalogo" className="w-full sm:w-auto">
+              <Button size="default" className="w-full sm:w-auto text-sm sm:text-base px-4 sm:px-8 h-10 sm:h-11 group shadow-lg shadow-primary/20">
                 Explorar Catálogo
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 smooth-transition" />
+                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 smooth-transition" />
               </Button>
             </Link>
-            <Link to="/comparacao">
-              <Button size="lg" variant="outline" className="text-base px-8 border-2">
-                Comparar Agora
-              </Button>
-            </Link>
+            <Button 
+              size="default" 
+              variant="outline" 
+              className="w-full sm:w-auto text-sm sm:text-base px-4 sm:px-8 h-10 sm:h-11 border-2"
+              onClick={() => document.getElementById('compare-section')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              Comparar Agora
+            </Button>
           </motion.div>
         </motion.div>
       </section>
 
-      <section className="container mx-auto px-4 pb-16">
+      <section id="compare-section" className="container mx-auto px-4 pb-16 scroll-mt-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
