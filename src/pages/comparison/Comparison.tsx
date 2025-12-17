@@ -1,12 +1,11 @@
 import { useComparison } from "@/contexts/ComparisonContext";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ExternalLink, X, Share2, Check, Info } from "lucide-react";
-import { getDesktopEnvColor } from "@/utils/desktopEnvColors";
+import { ArrowLeft, ExternalLink, X, Share2, Check, Info, Trophy, Zap, HardDrive, Cpu, Monitor, Globe, Calendar, Package, MapPin } from "lucide-react";
+import { DesktopEnvList } from "@/components/DesktopEnvBadge";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
 import ScoreBadge from "@/components/ScoreBadge";
-import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import {
   fetchDistrosByIds,
@@ -16,8 +15,11 @@ import {
 } from "@/utils/comparisonHelpers";
 import { SEO } from "@/components/SEO";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 const Comparison = () => {
+  const { t } = useTranslation();
   const { selectedDistros, removeDistro, replaceSelection } = useComparison();
   const { distroIds } = useParams<{ distroIds?: string }>();
   const navigate = useNavigate();
@@ -62,7 +64,7 @@ const Comparison = () => {
       <div className="container mx-auto px-4 py-20 min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Carregando comparação...</p>
+          <p className="text-muted-foreground">{t('comparison.loading')}</p>
         </div>
       </div>
     );
@@ -77,14 +79,14 @@ const Comparison = () => {
           canonical="https://distrowiki.site/comparacao"
         />
         <div className="text-center space-y-6 max-w-2xl mx-auto animate-fade-in">
-          <h1 className="text-4xl font-bold">Nenhuma Distro Selecionada</h1>
+          <h1 className="text-4xl font-bold">{t('comparison.noSelection.title')}</h1>
           <p className="text-lg text-muted-foreground">
-            Selecione pelo menos 2 distribuições no catálogo para comparar.
+            {t('comparison.noSelection.subtitle')}
           </p>
           <Link to="/catalogo">
             <Button size="lg">
               <ArrowLeft className="mr-2 h-5 w-5" />
-              Ir para o Catálogo
+              {t('comparison.noSelection.goToCatalog')}
             </Button>
           </Link>
         </div>
@@ -94,6 +96,11 @@ const Comparison = () => {
 
   // Usar helpers utilitários
   const performanceAvailable = hasPerformanceData(selectedDistros);
+  
+  // Encontrar o vencedor geral (maior score)
+  const winnerDistro = selectedDistros.reduce((prev, current) => 
+    calculatePerformanceScore(current) > calculatePerformanceScore(prev) ? current : prev
+  );
 
   const comparisonTitle = `Comparar ${selectedDistros.map(d => d.name).join(' vs ')}`;
   const comparisonDescription = `Comparação detalhada entre ${selectedDistros.map(d => d.name).join(', ')}. Analise métricas de desempenho, uso de RAM, benchmarks e especificações técnicas.`;
@@ -132,7 +139,7 @@ const Comparison = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 lg:py-16 min-h-screen">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 min-h-screen">
       <SEO
         title={comparisonTitle}
         description={comparisonDescription}
@@ -140,17 +147,19 @@ const Comparison = () => {
         keywords={`comparação, ${selectedDistros.map(d => d.name).join(', ')}, linux, benchmark`}
         structuredData={structuredData}
       />
+      
+      {/* Header */}
       <motion.div 
-        className="mb-8 md:mb-12"
+        className="mb-8"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
           <Link to="/catalogo">
-            <Button variant="ghost">
+            <Button variant="ghost" size="sm">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Voltar ao Catálogo
+              {t('comparison.backToCatalog')}
             </Button>
           </Link>
           
@@ -163,51 +172,61 @@ const Comparison = () => {
             {copied ? (
               <>
                 <Check className="h-4 w-4" />
-                Copiado!
+                {t('comparison.copied')}
               </>
             ) : (
               <>
                 <Share2 className="h-4 w-4" />
-                Compartilhar
+                {t('comparison.share')}
               </>
             )}
           </Button>
         </div>
         
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 tracking-tight">Comparação de Distros</h1>
-        <p className="text-base md:text-lg text-muted-foreground">
-          Comparando {selectedDistros.length} distribuições lado a lado
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2 tracking-tight">{t('comparison.title')}</h1>
+        <p className="text-muted-foreground">
+          {t('comparison.comparing', { count: selectedDistros.length })}
         </p>
       </motion.div>
 
-      <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
-        <motion.div 
-          className="grid gap-4 md:gap-6 lg:gap-8 pb-4" 
-          style={{ 
-            gridTemplateColumns: selectedDistros.length === 2 
-              ? 'repeat(auto-fit, minmax(300px, 1fr))'
-              : `repeat(${selectedDistros.length}, minmax(280px, 1fr))` 
-          }}
-          initial="initial"
-          animate="animate"
-          variants={{
-            animate: {
-              transition: {
-                staggerChildren: 0.1
-              }
-            }
-          }}
+      {/* Cards de Distro - Header Sticky */}
+      <motion.div 
+        className="sticky top-16 z-40 -mx-4 px-4 sm:mx-0 sm:px-0 py-4 bg-background/80 backdrop-blur-xl border-b border-border/50 mb-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
+        <div 
+          className="grid gap-3 md:gap-4"
+          style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, 1fr)` }}
         >
-          {selectedDistros.map((distro) => (
-            <motion.div 
-              key={distro.id} 
-              className="bg-card border border-border rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
-              variants={{
-                initial: { opacity: 0, scale: 0.9 },
-                animate: { opacity: 1, scale: 1 }
-              }}
-            >
-              <div className="p-6 md:p-8 border-b border-border relative bg-gradient-to-br from-card to-muted/20">
+          {selectedDistros.map((distro) => {
+            const score = calculatePerformanceScore(distro);
+            const isWinner = distro.id === winnerDistro.id && selectedDistros.length > 1;
+            
+            return (
+              <motion.div
+                key={distro.id}
+                className={cn(
+                  "relative rounded-xl p-4 border transition-all duration-300",
+                  isWinner 
+                    ? "bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/50 shadow-lg shadow-primary/10" 
+                    : "bg-card/50 border-border/50 hover:border-border"
+                )}
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                {/* Badge de vencedor */}
+                {isWinner && (
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-xs font-medium shadow-lg">
+                      <Trophy className="w-3 h-3" />
+                      {t('comparison.best')}
+                    </span>
+                  </div>
+                )}
+                
+                {/* Botão remover */}
                 <button
                   onClick={() => {
                     removeDistro(distro.id);
@@ -219,271 +238,377 @@ const Comparison = () => {
                       navigate('/comparacao', { replace: true });
                     }
                   }}
-                  className="absolute top-4 right-4 p-1.5 rounded-lg bg-background/80 backdrop-blur-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 smooth-transition"
-                  aria-label={`Remover ${distro.name} da comparação`}
+                  className="absolute top-2 right-2 p-1 rounded-full bg-background/80 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                  aria-label={`Remover ${distro.name}`}
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
-                <img
-                  src={distro.logo || `/logos/${distro.id}.svg`}
-                  alt={`${distro.name} logo`}
-                  className="w-24 h-24 object-contain mx-auto mb-5"
-                  onError={(e) => {
-                    e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(distro.name)}&background=random&size=80`;
-                  }}
-                />
-                <h2 className="text-2xl md:text-3xl font-bold text-center mb-2 tracking-tight">{distro.name}</h2>
-                <p className="text-sm text-muted-foreground text-center mb-5">
-                  {distro.family || distro.based_on || 'Independente'}
-                </p>
-                <div className="flex justify-center">
-                  <ScoreBadge score={calculatePerformanceScore(distro)} size="lg" />
-                </div>
-              </div>
 
-              <div className="p-6 md:p-8 space-y-8">
-                {/* Descrição */}
-                {distro.description && (
-                  <div className="pb-6 -mx-6 md:-mx-8 px-6 md:px-8 border-b border-border">
-                    <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">
-                      Descrição
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-4 min-h-[5.6rem]">
-                      {distro.description}
+                <div className="flex items-center gap-3">
+                  <img
+                    src={distro.logo || `/logos/${distro.id}.svg`}
+                    alt={distro.name}
+                    className="w-12 h-12 object-contain rounded-lg"
+                    onError={(e) => {
+                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(distro.name)}&background=random&size=48`;
+                    }}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h2 className="font-bold text-lg truncate">{distro.name}</h2>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {distro.family || distro.based_on || t('comparison.independent')}
                     </p>
                   </div>
-                )}
-
-                <div>
-                  <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4">
-                    Informações Básicas
-                  </h3>
-                  <div className="space-y-0 -mx-6 md:-mx-8">
-                    <div className="px-6 md:px-8 py-3 hover:bg-muted/40 transition-colors">
-                      <p className="text-xs text-muted-foreground mb-1.5">Site Oficial</p>
-                      {distro.website || distro.homepage ? (
-                        <a
-                          href={distro.website || distro.homepage}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-primary hover:underline inline-flex items-center gap-1"
-                        >
-                          Visitar <ExternalLink className="w-3 h-3" />
-                        </a>
-                      ) : (
-                        <p className="text-sm text-muted-foreground">N/A</p>
-                      )}
-                    </div>
-                    {distro.lastRelease || distro.latest_release_date ? (
-                      <div className="px-6 md:px-8 py-3 bg-accent/30 hover:bg-accent/40 transition-colors">
-                        <p className="text-xs text-muted-foreground mb-1.5">Último Lançamento</p>
-                        <p className="text-sm font-medium">
-                          {new Date(distro.lastRelease || distro.latest_release_date).toLocaleDateString("pt-BR")}
-                        </p>
-                      </div>
-                    ) : null}
-                    <div className="px-6 md:px-8 py-3 hover:bg-muted/40 transition-colors">
-                      <p className="text-xs text-muted-foreground mb-1.5">Categoria</p>
-                      <p className="text-sm font-medium">{distro.category || 'N/A'}</p>
-                    </div>
-                    <div className="px-6 md:px-8 py-3 bg-accent/30 hover:bg-accent/40 transition-colors">
-                      <p className="text-xs text-muted-foreground mb-1.5">Status</p>
-                      <p className="text-sm">
-                        <span className={distro.status === 'Active' ? 'text-success' : ''}>
-                          {distro.status || 'N/A'}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
+                  <ScoreBadge score={score} size="md" />
                 </div>
-
-                {(distro.desktopEnvironments || distro.desktop_environments)?.length > 0 && (
-                  <div className="pt-6 -mx-6 md:-mx-8 px-6 md:px-8 border-t border-border">
-                    <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4">
-                      Ambientes Gráficos
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {(distro.desktopEnvironments || distro.desktop_environments).map((de: string) => (
-                        <span
-                          key={de}
-                          className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium ${getDesktopEnvColor(de)}`}
-                        >
-                          {de}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {performanceAvailable ? (
-                  <div className="pt-6 -mx-6 md:-mx-8 px-6 md:px-8 border-t border-border">
-                    <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4">
-                      Desempenho
-                    </h3>
-                    <div className="space-y-0 -mx-6 md:-mx-8">
-                      {distro.idle_ram_usage ? (
-                        <div className="px-6 md:px-8 py-3 hover:bg-muted/40 transition-colors">
-                          <div className="flex justify-between items-center mb-1">
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <p className="text-xs text-muted-foreground flex items-center gap-1 cursor-help">
-                                  RAM Idle
-                                  <Info className="w-3 h-3" />
-                                </p>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p>Quantidade de memória RAM usada após a inicialização. Menos é melhor para liberar recursos para seus aplicativos.</p>
-                              </TooltipContent>
-                            </Tooltip>
-                            <p
-                              className={`text-sm font-semibold ${
-                                isBestValue(distro.idle_ram_usage, getBestValue(selectedDistros, "idle_ram_usage", true))
-                                  ? "text-success"
-                                  : ""
-                              }`}
-                            >
-                              {distro.idle_ram_usage} MB
-                            </p>
-                          </div>
-                          <div className="w-full bg-muted/50 rounded-full h-2.5 overflow-hidden">
-                            <div
-                              className="bg-gradient-to-r from-primary to-primary/80 rounded-full h-2.5 smooth-transition shadow-sm"
-                              style={{ width: `${Math.min((distro.idle_ram_usage / 2000) * 100, 100)}%` }}
-                            />
-                          </div>
-                        </div>
-                      ) : null}
-
-                      {distro.cpu_score ? (
-                        <div className="px-6 md:px-8 py-3 bg-accent/30 hover:bg-accent/40 transition-colors">
-                          <div className="flex justify-between items-center mb-1">
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <p className="text-xs text-muted-foreground flex items-center gap-1 cursor-help">
-                                  CPU Score
-                                  <Info className="w-3 h-3 opacity-50" />
-                                </p>
-                              </TooltipTrigger>
-                              <TooltipContent className="max-w-xs">
-                                <p className="text-xs">Desempenho do processador medido por benchmark. Quanto maior, melhor para tarefas intensivas.</p>
-                              </TooltipContent>
-                            </Tooltip>
-                            <p
-                              className={`text-sm font-semibold ${
-                                isBestValue(distro.cpu_score, getBestValue(selectedDistros, "cpu_score"))
-                                  ? "text-success"
-                                  : ""
-                              }`}
-                            >
-                              {distro.cpu_score}/10
-                            </p>
-                          </div>
-                          <div className="w-full bg-muted/50 rounded-full h-2.5 overflow-hidden">
-                            <div
-                              className="bg-gradient-to-r from-primary to-primary/80 rounded-full h-2.5 smooth-transition shadow-sm"
-                              style={{ width: `${(distro.cpu_score / 10) * 100}%` }}
-                            />
-                          </div>
-                        </div>
-                      ) : null}
-
-                      {distro.io_score ? (
-                        <div className="px-6 md:px-8 py-3 hover:bg-muted/40 transition-colors">
-                          <div className="flex justify-between items-center mb-1">
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <p className="text-xs text-muted-foreground flex items-center gap-1 cursor-help">
-                                  I/O Score
-                                  <Info className="w-3 h-3 opacity-50" />
-                                </p>
-                              </TooltipTrigger>
-                              <TooltipContent className="max-w-xs">
-                                <p className="text-xs">Velocidade de leitura/escrita em disco. Importante para boot, instalação de programas e transferência de arquivos.</p>
-                              </TooltipContent>
-                            </Tooltip>
-                            <p
-                              className={`text-sm font-semibold ${
-                                isBestValue(distro.io_score, getBestValue(selectedDistros, "io_score"))
-                                  ? "text-success"
-                                  : ""
-                              }`}
-                            >
-                              {distro.io_score}/10
-                            </p>
-                          </div>
-                          <div className="w-full bg-muted/50 rounded-full h-2.5 overflow-hidden">
-                            <div
-                              className="bg-gradient-to-r from-primary to-primary/80 rounded-full h-2.5 smooth-transition shadow-sm"
-                              style={{ width: `${(distro.io_score / 10) * 100}%` }}
-                            />
-                          </div>
-                        </div>
-                      ) : null}
-
-                      {/* Requirements */}
-                      {distro.requirements && (
-                        <div className="flex justify-between px-6 md:px-8 py-3 bg-accent/30 hover:bg-accent/40 transition-colors">
-                          <span className="text-xs text-muted-foreground">Requisitos</span>
-                          <span className="text-sm font-medium">
-                            {distro.requirements}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  // Placeholder enquanto backend não tiver dados
-                  <div className="bg-muted/30 rounded-lg p-6 border border-dashed border-border">
-                    <p className="text-sm text-center text-muted-foreground">
-                      📊 Dados de performance em breve
-                    </p>
-                  </div>
-                )}
-
-                {/* Technical Details */}
-                <div className="pt-6 -mx-6 md:-mx-8 px-6 md:px-8 border-t border-border">
-                  <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4">
-                    Detalhes Técnicos
-                  </h3>
-                  <div className="space-y-0 -mx-6 md:-mx-8 text-sm">
-                    <div className="flex justify-between px-6 md:px-8 py-3 hover:bg-muted/40 transition-colors">
-                      <span className="text-muted-foreground">Baseado em</span>
-                      <span className="font-medium">{distro.based_on || distro.baseSystem || 'Independente'}</span>
-                    </div>
-                    <div className="flex justify-between px-6 md:px-8 py-3 bg-accent/30 hover:bg-accent/40 transition-colors">
-                      <span className="text-muted-foreground">Arquitetura</span>
-                      <span className="font-medium">{distro.architecture || 'x86_64'}</span>
-                    </div>
-                    <div className="flex justify-between px-6 md:px-8 py-3 hover:bg-muted/40 transition-colors">
-                      <span className="text-muted-foreground">Origem</span>
-                      <span className="font-medium">{distro.origin || 'N/A'}</span>
-                    </div>
-                    {(distro.packageManager || distro.package_management) && (
-                      <div className="flex justify-between px-6 md:px-8 py-3 bg-accent/30 hover:bg-accent/40 transition-colors">
-                        <span className="text-muted-foreground">Pacotes</span>
-                        <span className="font-medium">{distro.packageManager || distro.package_management}</span>
-                      </div>
-                    )}
-                    {distro.officeManager && (
-                      <div className="flex justify-between px-6 md:px-8 py-3 hover:bg-muted/40 transition-colors">
-                        <span className="text-muted-foreground">Office</span>
-                        <span className="font-medium">{distro.officeManager}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* CTA */}
-                <Link to={`/distro/${distro.id}`} className="block">
-                  <Button variant="outline" className="w-full group hover:bg-primary hover:text-primary-foreground transition-all duration-300">
-                    Ver Detalhes Completos
-                    <ExternalLink className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Button>
+                
+                {/* Link para detalhes */}
+                <Link 
+                  to={`/distro/${distro.id}`}
+                  className="mt-3 flex items-center justify-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {t('comparison.sections.viewDetails')} <ExternalLink className="w-3 h-3" />
                 </Link>
+              </motion.div>
+            );
+          })}
+        </div>
+      </motion.div>
+
+      {/* Tabela de Comparação */}
+      <div className="space-y-4">
+        
+        {/* Seção: Descrição */}
+        <ComparisonSection title={t('comparison.sections.description')} icon={<Info className="w-4 h-4" />}>
+          <div 
+            className="grid gap-4"
+            style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, 1fr)` }}
+          >
+            {selectedDistros.map((distro) => (
+              <div key={distro.id} className="text-sm text-muted-foreground leading-relaxed">
+                {distro.description || "Descrição não disponível."}
               </div>
-            </motion.div>
-          ))}
-        </motion.div>
+            ))}
+          </div>
+        </ComparisonSection>
+
+        {/* Seção: Desempenho */}
+        {performanceAvailable && (
+          <ComparisonSection title={t('comparison.sections.performance')} icon={<Zap className="w-4 h-4" />} highlight>
+            <div className="space-y-4">
+              {/* RAM Idle */}
+              <ComparisonRow 
+                label={t('comparison.sections.ramIdle')}
+                tooltip={t('comparison.sections.ramIdleTooltip')}
+                icon={<HardDrive className="w-3.5 h-3.5" />}
+              >
+                {selectedDistros.map((distro) => {
+                  const value = distro.idle_ram_usage;
+                  const best = getBestValue(selectedDistros, "idle_ram_usage", true);
+                  const isBest = value && isBestValue(value, best);
+                  
+                  return (
+                    <div key={distro.id} className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className={cn(
+                          "text-sm font-medium",
+                          isBest && "text-green-500"
+                        )}>
+                          {value ? `${value} MB` : "N/A"}
+                        </span>
+                        {isBest && <Trophy className="w-3.5 h-3.5 text-green-500" />}
+                      </div>
+                      {value && (
+                        <div className="w-full bg-muted/50 rounded-full h-2 overflow-hidden">
+                          <motion.div
+                            className={cn(
+                              "h-2 rounded-full",
+                              isBest ? "bg-green-500" : "bg-primary/70"
+                            )}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${Math.min((value / 2000) * 100, 100)}%` }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </ComparisonRow>
+
+              {/* CPU Score */}
+              <ComparisonRow 
+                label={t('comparison.sections.cpuScore')}
+                tooltip={t('comparison.sections.cpuScoreTooltip')}
+                icon={<Cpu className="w-3.5 h-3.5" />}
+              >
+                {selectedDistros.map((distro) => {
+                  const value = distro.cpu_score;
+                  const best = getBestValue(selectedDistros, "cpu_score");
+                  const isBest = value && isBestValue(value, best);
+                  
+                  return (
+                    <div key={distro.id} className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className={cn(
+                          "text-sm font-medium",
+                          isBest && "text-green-500"
+                        )}>
+                          {value ? `${value}/10` : "N/A"}
+                        </span>
+                        {isBest && <Trophy className="w-3.5 h-3.5 text-green-500" />}
+                      </div>
+                      {value && (
+                        <div className="w-full bg-muted/50 rounded-full h-2 overflow-hidden">
+                          <motion.div
+                            className={cn(
+                              "h-2 rounded-full",
+                              isBest ? "bg-green-500" : "bg-primary/70"
+                            )}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${(value / 10) * 100}%` }}
+                            transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </ComparisonRow>
+
+              {/* I/O Score */}
+              <ComparisonRow 
+                label={t('comparison.sections.ioScore')}
+                tooltip={t('comparison.sections.ioScoreTooltip')}
+                icon={<HardDrive className="w-3.5 h-3.5" />}
+              >
+                {selectedDistros.map((distro) => {
+                  const value = distro.io_score;
+                  const best = getBestValue(selectedDistros, "io_score");
+                  const isBest = value && isBestValue(value, best);
+                  
+                  return (
+                    <div key={distro.id} className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className={cn(
+                          "text-sm font-medium",
+                          isBest && "text-green-500"
+                        )}>
+                          {value ? `${value}/10` : "N/A"}
+                        </span>
+                        {isBest && <Trophy className="w-3.5 h-3.5 text-green-500" />}
+                      </div>
+                      {value && (
+                        <div className="w-full bg-muted/50 rounded-full h-2 overflow-hidden">
+                          <motion.div
+                            className={cn(
+                              "h-2 rounded-full",
+                              isBest ? "bg-green-500" : "bg-primary/70"
+                            )}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${(value / 10) * 100}%` }}
+                            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </ComparisonRow>
+
+              {/* Requisitos */}
+              <ComparisonRow label={t('comparison.sections.requirements')}>
+                {selectedDistros.map((distro) => (
+                  <span key={distro.id} className="text-sm font-medium">
+                    {distro.requirements || "N/A"}
+                  </span>
+                ))}
+              </ComparisonRow>
+            </div>
+          </ComparisonSection>
+        )}
+
+        {/* Seção: Ambientes Gráficos */}
+        <ComparisonSection title={t('comparison.sections.desktopEnv')} icon={<Monitor className="w-4 h-4" />}>
+          <div 
+            className="grid gap-4"
+            style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, 1fr)` }}
+          >
+            {selectedDistros.map((distro) => {
+              const desktops = distro.desktopEnvironments || distro.desktop_environments || [];
+              return (
+                <div key={distro.id} className="flex justify-center">
+                  <DesktopEnvList environments={desktops} size="md" />
+                </div>
+              );
+            })}
+          </div>
+        </ComparisonSection>
+
+        {/* Seção: Informações Gerais */}
+        <ComparisonSection title={t('comparison.sections.basicInfo')} icon={<Globe className="w-4 h-4" />}>
+          <div className="space-y-3">
+            <ComparisonRow label={t('comparison.sections.officialSite')} icon={<Globe className="w-3.5 h-3.5" />}>
+              {selectedDistros.map((distro) => (
+                <div key={distro.id}>
+                  {distro.website || distro.homepage ? (
+                    <a
+                      href={distro.website || distro.homepage}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+                    >
+                      {t('comparison.sections.visit')} <ExternalLink className="w-3 h-3" />
+                    </a>
+                  ) : (
+                    <span className="text-sm text-muted-foreground">{t('common.na')}</span>
+                  )}
+                </div>
+              ))}
+            </ComparisonRow>
+
+            <ComparisonRow label={t('comparison.sections.lastRelease')} icon={<Calendar className="w-3.5 h-3.5" />}>
+              {selectedDistros.map((distro) => (
+                <span key={distro.id} className="text-sm font-medium">
+                  {distro.lastRelease || distro.latest_release_date 
+                    ? new Date(distro.lastRelease || distro.latest_release_date).toLocaleDateString("pt-BR")
+                    : "N/A"}
+                </span>
+              ))}
+            </ComparisonRow>
+
+            <ComparisonRow label={t('comparison.sections.category')}>
+              {selectedDistros.map((distro) => (
+                <span key={distro.id} className="text-sm font-medium">
+                  {distro.category || t('common.na')}
+                </span>
+              ))}
+            </ComparisonRow>
+
+            <ComparisonRow label={t('comparison.sections.status')}>
+              {selectedDistros.map((distro) => (
+                <span 
+                  key={distro.id} 
+                  className={cn(
+                    "text-sm font-medium",
+                    distro.status === 'Active' && "text-green-500"
+                  )}
+                >
+                  {distro.status || t('common.na')}
+                </span>
+              ))}
+            </ComparisonRow>
+          </div>
+        </ComparisonSection>
+
+        {/* Seção: Detalhes Técnicos */}
+        <ComparisonSection title={t('comparison.sections.technicalDetails')} icon={<Package className="w-4 h-4" />}>
+          <div className="space-y-3">
+            <ComparisonRow label={t('comparison.sections.basedOn')}>
+              {selectedDistros.map((distro) => (
+                <span key={distro.id} className="text-sm font-medium">
+                  {distro.based_on || distro.baseSystem || t('comparison.independent')}
+                </span>
+              ))}
+            </ComparisonRow>
+
+            <ComparisonRow label={t('comparison.sections.architecture')}>
+              {selectedDistros.map((distro) => (
+                <span key={distro.id} className="text-sm font-medium font-mono">
+                  {distro.architecture || "x86_64"}
+                </span>
+              ))}
+            </ComparisonRow>
+
+            <ComparisonRow label={t('comparison.sections.origin')} icon={<MapPin className="w-3.5 h-3.5" />}>
+              {selectedDistros.map((distro) => (
+                <span key={distro.id} className="text-sm font-medium">
+                  {distro.origin || t('common.na')}
+                </span>
+              ))}
+            </ComparisonRow>
+
+            <ComparisonRow label={t('comparison.sections.packages')} icon={<Package className="w-3.5 h-3.5" />}>
+              {selectedDistros.map((distro) => (
+                <span key={distro.id} className="text-sm font-medium font-mono">
+                  {distro.packageManager || distro.package_management || t('common.na')}
+                </span>
+              ))}
+            </ComparisonRow>
+          </div>
+        </ComparisonSection>
+
+      </div>
+    </div>
+  );
+};
+
+// Componente auxiliar: Seção de Comparação
+interface ComparisonSectionProps {
+  title: string;
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+  highlight?: boolean;
+}
+
+const ComparisonSection = ({ title, icon, children, highlight }: ComparisonSectionProps) => (
+  <motion.div
+    className={cn(
+      "rounded-xl border p-5",
+      highlight 
+        ? "bg-gradient-to-br from-primary/5 via-transparent to-transparent border-primary/20" 
+        : "bg-card/30 border-border/50"
+    )}
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.4 }}
+  >
+    <div className="flex items-center justify-center gap-2 mb-4">
+      {icon && <span className="text-primary">{icon}</span>}
+      <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+        {title}
+      </h3>
+    </div>
+    {children}
+  </motion.div>
+);
+
+// Componente auxiliar: Linha de Comparação
+interface ComparisonRowProps {
+  label: string;
+  tooltip?: string;
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+}
+
+const ComparisonRow = ({ label, tooltip, icon, children }: ComparisonRowProps) => {
+  const { selectedDistros } = useComparison();
+  
+  return (
+    <div className="py-2 border-b border-border/30 last:border-0">
+      <div className="flex items-center gap-1.5 mb-2">
+        {icon && <span className="text-muted-foreground">{icon}</span>}
+        {tooltip ? (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="text-xs text-muted-foreground cursor-help flex items-center gap-1">
+                {label}
+                <Info className="w-3 h-3 opacity-50" />
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="text-xs max-w-xs">{tooltip}</p>
+            </TooltipContent>
+          </Tooltip>
+        ) : (
+          <span className="text-xs text-muted-foreground">{label}</span>
+        )}
+      </div>
+      <div 
+        className="grid gap-4"
+        style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, 1fr)` }}
+      >
+        {children}
       </div>
     </div>
   );

@@ -223,6 +223,7 @@
         "share": "Share",
         "copied": "Copied!",
         "loading": "Loading comparison...",
+        "best": "Best",
         "sections": {
             "description": "Description",
             "basicInfo": "Basic Information",
