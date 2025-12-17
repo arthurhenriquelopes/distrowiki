@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, GitCompare, BarChart3 } from "lucide-react";
 import ScoreBadge from "@/components/ScoreBadge";
@@ -12,7 +13,7 @@ import { DistroSelect } from "@/components/home/DistroSelect";
 import { StatCard } from "@/components/home/StatCard";
 import { BenefitCard } from "@/components/home/BenefitCard";
 import { HowItWorksStep } from "@/components/home/HowItWorksStep";
-import { STATS, BENEFITS, HOW_IT_WORKS_STEPS } from "@/constants/homeContent";
+import { useHomeContent } from "@/constants/homeContent";
 import { SEO } from "@/components/SEO";
 
 const Home = () => {
@@ -20,6 +21,8 @@ const Home = () => {
   const { replaceSelection } = useComparison();
   const [distro1, setDistro1] = useState<string>("");
   const [distro2, setDistro2] = useState<string>("");
+  const { t } = useTranslation();
+  const { STATS, BENEFITS, HOW_IT_WORKS_STEPS } = useHomeContent();
 
   const { distros, loading } = useDistros();
 
@@ -94,7 +97,7 @@ const Home = () => {
         >
           <motion.div variants={fadeIn}>
             <div className="inline-block px-2.5 sm:px-4 py-1 sm:py-2 bg-primary/10 border border-primary/20 rounded-full mb-2 sm:mb-4">
-              <span className="text-primary font-semibold text-xs sm:text-sm md:text-base">🐧 A melhor plataforma para escolher sua distro</span>
+              <span className="text-primary font-semibold text-xs sm:text-sm md:text-base">{t("home.badge")}</span>
             </div>
           </motion.div>
           
@@ -108,17 +111,17 @@ const Home = () => {
           </motion.h1>
           
           <motion.p className="text-sm sm:text-base md:text-xl lg:text-2xl text-foreground max-w-3xl mx-auto px-2" variants={fadeIn}>
-            Descubra a <span className="text-primary font-semibold">melhor Distro Linux</span> para a sua maior necessidade
+            {t("home.subtitle").split("<highlight>")[0]}<span className="text-primary font-semibold">{t("home.subtitle").match(/<highlight>(.*?)<\/highlight>/)?.[1]}</span>{t("home.subtitle").split("</highlight>")[1]}
           </motion.p>
           
           <motion.p className="text-xs sm:text-sm md:text-base text-muted-foreground max-w-2xl mx-auto px-4 hidden sm:block" variants={fadeIn}>
-            Plataforma open source para comparar distribuições Linux de forma objetiva, transparente e em português.
+            {t("home.description")}
           </motion.p>
           
           <motion.div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center items-center pt-1 sm:pt-4 px-4 sm:px-0" variants={fadeIn}>
             <Link to="/catalogo" className="w-full sm:w-auto">
               <Button size="default" className="w-full sm:w-auto text-sm sm:text-base px-4 sm:px-8 h-10 sm:h-11 group shadow-lg shadow-primary/20">
-                Explorar Catálogo
+                {t("home.exploreCatalog")}
                 <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 smooth-transition" />
               </Button>
             </Link>
@@ -128,7 +131,7 @@ const Home = () => {
               className="w-full sm:w-auto text-sm sm:text-base px-4 sm:px-8 h-10 sm:h-11 border-2"
               onClick={() => document.getElementById('compare-section')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              Comparar Agora
+              {t("home.compareNow")}
             </Button>
           </motion.div>
         </motion.div>
@@ -145,8 +148,8 @@ const Home = () => {
             <CardContent className="p-8">
               <div className="text-center mb-6">
                 <GitCompare className="w-12 h-12 text-primary mx-auto mb-3" />
-                <h2 className="text-2xl md:text-3xl font-bold mb-2">Compare Rapidamente</h2>
-                <p className="text-muted-foreground">Selecione duas distribuições e veja as diferenças lado a lado</p>
+                <h2 className="text-2xl md:text-3xl font-bold mb-2">{t("home.quickCompare.title")}</h2>
+                <p className="text-muted-foreground">{t("home.quickCompare.subtitle")}</p>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -155,16 +158,16 @@ const Home = () => {
                   onValueChange={setDistro1}
                   distros={distros}
                   excludeId={distro2}
-                  label="Primeira Distro"
-                  ariaLabel="Selecionar primeira distribuição Linux para comparar"
+                  label={t("home.quickCompare.firstDistro")}
+                  ariaLabel={t("home.quickCompare.selectFirst")}
                 />
                 <DistroSelect
                   value={distro2}
                   onValueChange={setDistro2}
                   distros={distros}
                   excludeId={distro1}
-                  label="Segunda Distro"
-                  ariaLabel="Selecionar segunda distribuição Linux para comparar"
+                  label={t("home.quickCompare.secondDistro")}
+                  ariaLabel={t("home.quickCompare.selectSecond")}
                 />
               </div>
 
@@ -174,7 +177,7 @@ const Home = () => {
                 size="lg"
                 className="w-full h-12 text-base shadow-lg shadow-primary/20"
               >
-                Comparar Distros
+                {t("home.quickCompare.compareButton")}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </CardContent>
@@ -204,7 +207,7 @@ const Home = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          Distribuições em Destaque
+          {t("home.featured")}
         </motion.h2>
         <motion.div 
           className="grid grid-cols-1 md:grid-cols-3 gap-6"
@@ -246,10 +249,10 @@ const Home = () => {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
-            Por que DistroWiki?
+            {t("home.benefits.title")}
           </h2>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-            A plataforma definitiva para tomar decisões informadas sobre distribuições Linux
+            {t("home.benefits.subtitle")}
           </p>
         </motion.div>
         
@@ -270,10 +273,10 @@ const Home = () => {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
-            Como Funciona
+            {t("home.howItWorks.title")}
           </h2>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Três passos simples para encontrar a distribuição Linux perfeita
+            {t("home.howItWorks.subtitle")}
           </p>
         </motion.div>
         
@@ -300,21 +303,21 @@ const Home = () => {
             <div className="relative z-10">
               <BarChart3 className="w-16 h-16 text-primary mx-auto mb-6" />
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Pronto para encontrar sua distro ideal?
+                {t("home.cta.title")}
               </h2>
               <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Explore nosso catálogo completo ou comece comparando as distribuições mais populares.
+                {t("home.cta.subtitle")}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/catalogo">
                   <Button size="lg" className="text-base px-8 shadow-lg shadow-primary/20">
-                    Ver Catálogo Completo
+                    {t("home.cta.viewCatalog")}
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 <Link to="/sobre">
                   <Button size="lg" variant="outline" className="text-base px-8 border-2">
-                    Saber Mais
+                    {t("home.cta.learnMore")}
                   </Button>
                 </Link>
               </div>

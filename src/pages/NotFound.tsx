@@ -1,12 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 import { SEO } from "@/components/SEO";
 
 const NotFound = () => {
   const location = useLocation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
@@ -55,10 +57,10 @@ const NotFound = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Oops! Essa distro não existe... ainda! 🐧
+            {t("notFound.title")}
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-            Parece que você se perdeu no kernel. A página que você procura foi compilada em outra dimensão do Linux.
+            {t("notFound.description")}
           </p>
         </motion.div>
 
@@ -74,7 +76,7 @@ const NotFound = () => {
               className="text-base font-medium text-foreground hover:text-primary border-b-2 border-foreground hover:border-primary rounded-none px-6 smooth-transition"
             >
               <Home className="mr-2 h-5 w-5" />
-              Voltar para a página inicial
+              {t("notFound.backHome")}
             </Button>
           </Link>
         </motion.div>
@@ -85,7 +87,7 @@ const NotFound = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.6 }}
         >
-          Caminho tentado: <code className="bg-muted px-2 py-1 rounded">{location.pathname}</code>
+          {t("notFound.pathAttempted")} <code className="bg-muted px-2 py-1 rounded">{location.pathname}</code>
         </motion.p>
       </motion.div>
     </div>

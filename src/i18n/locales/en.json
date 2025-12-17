@@ -1,0 +1,299 @@
+{
+    "nav": {
+        "home": "Home",
+        "catalog": "Catalog",
+        "about": "About"
+    },
+    "footer": {
+        "description": "Open source platform for objective and transparent comparison of desktop-focused Linux distributions.",
+        "navigation": "Navigation",
+        "resources": "Resources",
+        "contribute": "Contribute",
+        "license": "MIT License",
+        "copyright": "© {{year}} DistroWiki. Open source project under MIT license."
+    },
+    "home": {
+        "badge": "🐧 The best platform to choose your distro",
+        "subtitle": "Discover the <highlight>best Linux Distro</highlight> for your biggest need",
+        "description": "Open source platform to compare Linux distributions objectively and transparently.",
+        "exploreCatalog": "Explore Catalog",
+        "compareNow": "Compare Now",
+        "quickCompare": {
+            "title": "Quick Compare",
+            "subtitle": "Select two distributions and see the differences side by side",
+            "firstDistro": "First Distro",
+            "secondDistro": "Second Distro",
+            "selectFirst": "Select first Linux distribution to compare",
+            "selectSecond": "Select second Linux distribution to compare",
+            "compareButton": "Compare Distros"
+        },
+        "featured": "Featured Distributions",
+        "benefits": {
+            "title": "Why DistroWiki?",
+            "subtitle": "The ultimate platform for making informed decisions about Linux distributions"
+        },
+        "howItWorks": {
+            "title": "How It Works",
+            "subtitle": "Three simple steps to find the perfect Linux distribution"
+        },
+        "cta": {
+            "title": "Ready to find your ideal distro?",
+            "subtitle": "Explore our complete catalog or start comparing the most popular distributions.",
+            "viewCatalog": "View Full Catalog",
+            "learnMore": "Learn More"
+        },
+        "stats": {
+            "distros": "Distributions",
+            "comparisons": "Comparisons",
+            "openSource": "Open Source"
+        },
+        "benefitCards": {
+            "informed": {
+                "title": "Informed Decision",
+                "description": "Compare real performance metrics, resource usage, and technical specifications."
+            },
+            "transparency": {
+                "title": "Total Transparency",
+                "description": "Open methodology and verifiable data. No commercial bias."
+            },
+            "updated": {
+                "title": "Always Updated",
+                "description": "Information about recent releases and distribution evolution."
+            },
+            "ptbr": {
+                "title": "Multilingual",
+                "description": "Content available in multiple languages, accessible to everyone."
+            }
+        },
+        "howItWorksSteps": {
+            "filter": {
+                "title": "Filter",
+                "description": "Search by family, desktop environment, or release date."
+            },
+            "compare": {
+                "title": "Compare",
+                "description": "Select up to 4 distros and compare side by side."
+            },
+            "decide": {
+                "title": "Decide",
+                "description": "Make your decision based on objective data."
+            }
+        }
+    },
+    "about": {
+        "title": "About DistroWiki",
+        "subtitle": "Objective and transparent comparison of Linux distributions for desktop",
+        "mission": {
+            "title": "Our Mission",
+            "description": "DistroWiki was born from the need to make choosing a Linux distribution simpler and based on real data. We want to democratize access to technical information in a clear way, without commercial bias or marketing."
+        },
+        "whyUseful": {
+            "title": "Why is this useful?",
+            "items": {
+                "informed": {
+                    "title": "Informed Decisions",
+                    "description": "Compare real metrics instead of subjective opinions or marketing."
+                },
+                "transparency": {
+                    "title": "Total Transparency",
+                    "description": "Open methodology, verifiable data, and no conflict of interest."
+                },
+                "timeSaving": {
+                    "title": "Time Saving",
+                    "description": "Avoid testing dozens of distros. Find the ideal one faster."
+                },
+                "desktop": {
+                    "title": "Desktop Focus",
+                    "description": "Specialized in desktop use, not servers or embedded systems."
+                },
+                "community": {
+                    "title": "Global Community",
+                    "description": "Content accessible to the worldwide community."
+                },
+                "free": {
+                    "title": "100% Free",
+                    "description": "Open source project without paywall, ads, or subscriptions."
+                }
+            }
+        },
+        "methodology": {
+            "title": "Scoring Methodology",
+            "whatWeMeasure": {
+                "title": "What we measure",
+                "informative": {
+                    "title": "1. Informative Attributes",
+                    "description": "Base/family, available desktop environments, release date, package manager, release model (rolling/fixed), LTS support."
+                },
+                "practical": {
+                    "title": "2. Practical Indicators",
+                    "description": "Idle RAM usage, CPU and I/O benchmarks, minimum hardware requirements, documentation quality, community size."
+                },
+                "consolidated": {
+                    "title": "3. Consolidated View (Score)",
+                    "description": "Score from 0-10 based on performance, stability, ease of use, community support, and package updates. Weights adjusted for desktop use."
+                }
+            },
+            "howWeScore": {
+                "title": "How we score",
+                "intro": "The overall score is calculated considering multiple factors:",
+                "performance": "<strong>Performance (30%):</strong> Idle RAM, CPU and I/O benchmarks",
+                "stability": "<strong>Stability (25%):</strong> Critical bug frequency, LTS support",
+                "usability": "<strong>Usability (20%):</strong> Ease of installation and configuration",
+                "community": "<strong>Community (15%):</strong> Size, activity, and support quality",
+                "updates": "<strong>Updates (10%):</strong> Update frequency and package versions"
+            },
+            "limitations": {
+                "title": "Limitations and Transparency",
+                "items": [
+                    "Benchmarks are run on standardized hardware, results may vary on your system.",
+                    "Scope focused on <strong>desktop use</strong>. We don't cover servers or embedded systems.",
+                    "Scores are updated periodically, but don't reflect real-time changes.",
+                    "The \"best distro\" depends on your specific use case. Use our filters!"
+                ]
+            }
+        },
+        "roadmap": {
+            "title": "Public Roadmap",
+            "items": {
+                "catalog": "Catalog with 12+ popular distros",
+                "comparison": "Side-by-side comparison system",
+                "filters": "Filters by family and desktop environment",
+                "search": "Advanced search system",
+                "charts": "Historical score evolution charts",
+                "pdf": "Comparison export to PDF",
+                "api": "Public API for developers",
+                "contribution": "Community contribution system"
+            }
+        },
+        "contribute": {
+            "title": "How to Contribute",
+            "subtitle": "DistroWiki is an open source project and depends on the community to grow and improve.",
+            "feedback": {
+                "title": "Feedback",
+                "description": "Report bugs, suggest features, or improve documentation"
+            },
+            "data": {
+                "title": "Data",
+                "description": "Contribute with metrics, benchmarks, or distro information"
+            },
+            "code": {
+                "title": "Code",
+                "description": "Submit PRs, fix bugs, or implement new features"
+            },
+            "visitGithub": "Visit GitHub"
+        },
+        "license": {
+            "title": "License and Privacy",
+            "description": "DistroWiki is licensed under <strong>MIT License</strong> - free for use, modification, and distribution.",
+            "privacy": "We don't collect personal data. We don't use tracking cookies. No ads."
+        }
+    },
+    "catalog": {
+        "title": "Distribution Catalog",
+        "loading": "Loading...",
+        "explore": "Explore {{count}} Linux distributions",
+        "search": {
+            "placeholder": "Search Linux distributions...",
+            "results": "{{count}} distros",
+            "resultsOf": "{{count}} of {{total}}"
+        },
+        "filters": {
+            "title": "Filters and Sorting",
+            "family": "Family/Base",
+            "familyAll": "All",
+            "de": "Desktop Environment",
+            "deAll": "All",
+            "sortBy": "Sort by",
+            "sortScore": "Score (highest)",
+            "sortName": "Name (A-Z)",
+            "sortRelease": "Release (recent)"
+        },
+        "compare": "Compare {{count}} distros",
+        "error": "Error"
+    },
+    "comparison": {
+        "title": "Distro Comparison",
+        "comparing": "Comparing {{count}} distributions side by side",
+        "noSelection": {
+            "title": "No Distro Selected",
+            "subtitle": "Select at least 2 distributions from the catalog to compare.",
+            "goToCatalog": "Go to Catalog"
+        },
+        "backToCatalog": "Back to Catalog",
+        "share": "Share",
+        "copied": "Copied!",
+        "loading": "Loading comparison...",
+        "sections": {
+            "description": "Description",
+            "basicInfo": "Basic Information",
+            "officialSite": "Official Site",
+            "visit": "Visit",
+            "lastRelease": "Last Release",
+            "category": "Category",
+            "status": "Status",
+            "desktopEnv": "Desktop Environments",
+            "performance": "Performance",
+            "performanceSoon": "📊 Performance data coming soon",
+            "ramIdle": "RAM Idle",
+            "ramIdleTooltip": "Amount of RAM used after boot. Less is better to free up resources for your applications.",
+            "cpuScore": "CPU Score",
+            "cpuScoreTooltip": "Processor performance measured by benchmark. Higher is better for intensive tasks.",
+            "ioScore": "I/O Score",
+            "ioScoreTooltip": "Disk read/write speed. Important for boot, program installation, and file transfer.",
+            "requirements": "Requirements",
+            "technicalDetails": "Technical Details",
+            "basedOn": "Based on",
+            "architecture": "Architecture",
+            "origin": "Origin",
+            "packages": "Packages",
+            "office": "Office",
+            "viewDetails": "View Full Details"
+        },
+        "independent": "Independent"
+    },
+    "distroDetails": {
+        "loading": "Loading distribution...",
+        "notFound": "Distribution not found",
+        "backToCatalog": "Back to Catalog",
+        "goToCatalog": "Go to Catalog",
+        "officialSite": "Official Site",
+        "compareWith": "Compare with...",
+        "compare": "Compare",
+        "tabs": {
+            "overview": "Overview",
+            "specs": "Specifications",
+            "links": "Useful Links"
+        },
+        "overview": {
+            "about": "About {{name}}",
+            "noDescription": "No description available",
+            "family": "Family/Base",
+            "origin": "Origin",
+            "status": "Status",
+            "desktopEnv": "Available Desktop Environments"
+        },
+        "specs": {
+            "title": "Technical Specifications",
+            "basedOn": "Based on",
+            "category": "Category",
+            "packageManager": "Package Manager",
+            "osType": "OS Type",
+            "requirements": "Requirements",
+            "officeManager": "Office Manager"
+        },
+        "links": {
+            "title": "Useful Links",
+            "officialSite": "Official Site"
+        },
+        "independent": "Independent"
+    },
+    "notFound": {
+        "title": "Oops! This distro doesn't exist... yet! 🐧",
+        "description": "Looks like you got lost in the kernel. The page you're looking for was compiled in another Linux dimension.",
+        "backHome": "Back to home page",
+        "pathAttempted": "Path attempted:"
+    },
+    "common": {
+        "na": "N/A"
+    }
+}

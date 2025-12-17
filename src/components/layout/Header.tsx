@@ -1,18 +1,21 @@
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Github } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "../ui/button";
 import Logo from "../Logo";
 import { ThemeToggle } from "../theme-toggle";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { t } = useTranslation();
 
   const navLinks = [
-    { path: "/", label: "Home" },
-    { path: "/catalogo", label: "Catálogo" },
-    { path: "/sobre", label: "Sobre" },
+    { path: "/", label: t("nav.home") },
+    { path: "/catalogo", label: t("nav.catalog") },
+    { path: "/sobre", label: t("nav.about") },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -47,6 +50,7 @@ const Header = () => {
           >
             <Github className="h-5 w-5" />
           </a>
+          <LanguageSwitcher />
           <ThemeToggle />
         </nav>
 
@@ -87,7 +91,8 @@ const Header = () => {
               <Github className="h-5 w-5" />
               <span>GitHub</span>
             </a>
-            <div className="pt-2">
+            <div className="flex items-center gap-2 pt-2">
+              <LanguageSwitcher />
               <ThemeToggle />
             </div>
           </nav>
@@ -98,3 +103,4 @@ const Header = () => {
 };
 
 export default Header;
+

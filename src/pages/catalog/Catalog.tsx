@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import DistroCard from "@/components/distro/DistroCard";
 import DistroCardSkeleton from "@/components/DistroCardSkeleton";
 import CatalogFilters from "@/components/catalog/CatalogFilters";
@@ -23,6 +24,7 @@ const Catalog = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [showSpecs, setShowSpecs] = useLocalStorage("catalog-show-specs", false);
   const [viewMode, setViewMode] = useLocalStorage<"list" | "grid" | "terminal">("catalog-view-mode", "list");
+  const { t } = useTranslation();
 
   // Usar hook customizado para buscar distros
   const { distros, loading, error } = useDistros();
@@ -185,12 +187,12 @@ const Catalog = () => {
         ) : (
           <>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Catálogo de Distribuições
+              {t("catalog.title")}
             </h1>
             <p className="text-lg text-muted-foreground">
               {loading
-                ? "Carregando..."
-                : `Explore ${distros.length} distribuições Linux`}
+                ? t("catalog.loading")
+                : t("catalog.explore", { count: distros.length })}
             </p>
           </>
         )}
@@ -215,7 +217,7 @@ const Catalog = () => {
       {error && !loading && (
         <Alert variant="destructive" className="mb-8">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Erro</AlertTitle>
+          <AlertTitle>{t("catalog.error")}</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
@@ -285,9 +287,9 @@ const Catalog = () => {
             <motion.div className="fixed bottom-8 right-8 z-50">
               <Link to={`/comparacao/${selectedDistros.map(d => d.id).join('+')}`}>
                 <Button size="lg" className="shadow-2xl gap-2">
-                  <GitCompare className="w-5 h-5" />
-                  Comparar {selectedDistros.length} distros
-                </Button>
+                <GitCompare className="w-5 h-5" />
+                {t("catalog.compare", { count: selectedDistros.length })}
+              </Button>
               </Link>
             </motion.div>
           )}

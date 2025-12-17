@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import { Github } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import Logo from "../Logo";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { t } = useTranslation();
 
   return (
     <footer className="border-t border-border/40 bg-background-dark mt-20">
@@ -15,7 +17,7 @@ const Footer = () => {
               <Logo />
             </Link>
             <p className="text-muted-foreground text-sm max-w-md">
-              Plataforma open source para comparação objetiva e transparente de distribuições Linux focadas em desktop.
+              {t("footer.description")}
             </p>
             <div className="flex items-center space-x-4 mt-4">
               <a
@@ -32,28 +34,28 @@ const Footer = () => {
 
           {/* Links */}
           <div>
-            <h3 className="text-sm font-semibold text-foreground mb-4">Navegação</h3>
+            <h3 className="text-sm font-semibold text-foreground mb-4">{t("footer.navigation")}</h3>
             <ul className="space-y-2">
               <li>
                 <Link to="/" className="text-sm text-muted-foreground hover:text-primary smooth-transition">
-                  Home
+                  {t("nav.home")}
                 </Link>
               </li>
               <li>
                 <Link to="/catalogo" className="text-sm text-muted-foreground hover:text-primary smooth-transition">
-                  Catálogo
+                  {t("nav.catalog")}
                 </Link>
               </li>
               <li>
                 <Link to="/sobre" className="text-sm text-muted-foreground hover:text-primary smooth-transition">
-                  Sobre
+                  {t("nav.about")}
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-foreground mb-4">Recursos</h3>
+            <h3 className="text-sm font-semibold text-foreground mb-4">{t("footer.resources")}</h3>
             <ul className="space-y-2">
               <li>
                 <a href="https://github.com/arthurhenriquelopes/distrowiki" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary smooth-transition">
@@ -62,12 +64,12 @@ const Footer = () => {
               </li>
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary smooth-transition">
-                  Contribuir
+                  {t("footer.contribute")}
                 </a>
               </li>
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary smooth-transition">
-                  Licença MIT
+                  {t("footer.license")}
                 </a>
               </li>
             </ul>
@@ -76,7 +78,7 @@ const Footer = () => {
 
         <div className="border-t border-border/40 mt-8 pt-8 text-center">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} DistroWiki. Projeto open source sob licença MIT.
+            {t("footer.copyright", { year: currentYear })}
           </p>
         </div>
       </div>
@@ -85,3 +87,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

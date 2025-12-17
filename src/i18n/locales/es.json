@@ -1,0 +1,299 @@
+{
+    "nav": {
+        "home": "Inicio",
+        "catalog": "Catálogo",
+        "about": "Acerca de"
+    },
+    "footer": {
+        "description": "Plataforma de código abierto para la comparación objetiva y transparente de distribuciones Linux enfocadas en escritorio.",
+        "navigation": "Navegación",
+        "resources": "Recursos",
+        "contribute": "Contribuir",
+        "license": "Licencia MIT",
+        "copyright": "© {{year}} DistroWiki. Proyecto de código abierto bajo licencia MIT."
+    },
+    "home": {
+        "badge": "🐧 La mejor plataforma para elegir tu distro",
+        "subtitle": "Descubre la <highlight>mejor Distro Linux</highlight> para tu mayor necesidad",
+        "description": "Plataforma de código abierto para comparar distribuciones Linux de forma objetiva y transparente.",
+        "exploreCatalog": "Explorar Catálogo",
+        "compareNow": "Comparar Ahora",
+        "quickCompare": {
+            "title": "Compara Rápidamente",
+            "subtitle": "Selecciona dos distribuciones y ve las diferencias lado a lado",
+            "firstDistro": "Primera Distro",
+            "secondDistro": "Segunda Distro",
+            "selectFirst": "Seleccionar primera distribución Linux para comparar",
+            "selectSecond": "Seleccionar segunda distribución Linux para comparar",
+            "compareButton": "Comparar Distros"
+        },
+        "featured": "Distribuciones Destacadas",
+        "benefits": {
+            "title": "¿Por qué DistroWiki?",
+            "subtitle": "La plataforma definitiva para tomar decisiones informadas sobre distribuciones Linux"
+        },
+        "howItWorks": {
+            "title": "Cómo Funciona",
+            "subtitle": "Tres pasos simples para encontrar la distribución Linux perfecta"
+        },
+        "cta": {
+            "title": "¿Listo para encontrar tu distro ideal?",
+            "subtitle": "Explora nuestro catálogo completo o comienza comparando las distribuciones más populares.",
+            "viewCatalog": "Ver Catálogo Completo",
+            "learnMore": "Saber Más"
+        },
+        "stats": {
+            "distros": "Distribuciones",
+            "comparisons": "Comparaciones",
+            "openSource": "Código Abierto"
+        },
+        "benefitCards": {
+            "informed": {
+                "title": "Decisión Informada",
+                "description": "Compara métricas reales de rendimiento, uso de recursos y especificaciones técnicas."
+            },
+            "transparency": {
+                "title": "Transparencia Total",
+                "description": "Metodología abierta y datos verificables. Sin sesgo comercial."
+            },
+            "updated": {
+                "title": "Siempre Actualizado",
+                "description": "Información sobre lanzamientos recientes y evolución de las distribuciones."
+            },
+            "ptbr": {
+                "title": "Multilingüe",
+                "description": "Contenido disponible en varios idiomas, accesible para todos."
+            }
+        },
+        "howItWorksSteps": {
+            "filter": {
+                "title": "Filtrar",
+                "description": "Busca por familia, entorno gráfico o fecha de lanzamiento."
+            },
+            "compare": {
+                "title": "Comparar",
+                "description": "Selecciona hasta 4 distros y compara lado a lado."
+            },
+            "decide": {
+                "title": "Decidir",
+                "description": "Toma tu decisión basada en datos objetivos."
+            }
+        }
+    },
+    "about": {
+        "title": "Acerca de DistroWiki",
+        "subtitle": "Comparación objetiva y transparente de distribuciones Linux para escritorio",
+        "mission": {
+            "title": "Nuestra Misión",
+            "description": "DistroWiki nació de la necesidad de hacer más simple la elección de una distribución Linux y basarla en datos reales. Queremos democratizar el acceso a información técnica de forma clara, sin sesgo comercial ni marketing."
+        },
+        "whyUseful": {
+            "title": "¿Por qué es útil?",
+            "items": {
+                "informed": {
+                    "title": "Decisiones Informadas",
+                    "description": "Compara métricas reales en lugar de opiniones subjetivas o marketing."
+                },
+                "transparency": {
+                    "title": "Transparencia Total",
+                    "description": "Metodología abierta, datos verificables y sin conflicto de intereses."
+                },
+                "timeSaving": {
+                    "title": "Ahorro de Tiempo",
+                    "description": "Evita probar decenas de distros. Encuentra la ideal más rápido."
+                },
+                "desktop": {
+                    "title": "Enfoque en Escritorio",
+                    "description": "Especializado en uso de escritorio, no servidores o sistemas embebidos."
+                },
+                "community": {
+                    "title": "Comunidad Global",
+                    "description": "Contenido accesible para la comunidad mundial."
+                },
+                "free": {
+                    "title": "100% Gratis",
+                    "description": "Proyecto de código abierto sin paywall, anuncios o suscripciones."
+                }
+            }
+        },
+        "methodology": {
+            "title": "Metodología de Puntuación",
+            "whatWeMeasure": {
+                "title": "Qué medimos",
+                "informative": {
+                    "title": "1. Atributos Informativos",
+                    "description": "Base/familia, entornos gráficos disponibles, fecha de lanzamiento, gestor de paquetes, modelo de release (rolling/fixed), soporte LTS."
+                },
+                "practical": {
+                    "title": "2. Indicadores Prácticos",
+                    "description": "Uso de RAM en idle, benchmarks de CPU e I/O, requisitos mínimos de hardware, calidad de documentación, tamaño de la comunidad."
+                },
+                "consolidated": {
+                    "title": "3. Visión Consolidada (Score)",
+                    "description": "Puntuación de 0-10 basada en rendimiento, estabilidad, facilidad de uso, soporte de la comunidad y actualización de paquetes. Pesos ajustados para uso de escritorio."
+                }
+            },
+            "howWeScore": {
+                "title": "Cómo puntuamos",
+                "intro": "El score general se calcula considerando múltiples factores:",
+                "performance": "<strong>Rendimiento (30%):</strong> RAM idle, benchmarks de CPU e I/O",
+                "stability": "<strong>Estabilidad (25%):</strong> Frecuencia de bugs críticos, soporte LTS",
+                "usability": "<strong>Usabilidad (20%):</strong> Facilidad de instalación y configuración",
+                "community": "<strong>Comunidad (15%):</strong> Tamaño, actividad y calidad del soporte",
+                "updates": "<strong>Actualización (10%):</strong> Frecuencia de updates y versiones de paquetes"
+            },
+            "limitations": {
+                "title": "Limitaciones y Transparencia",
+                "items": [
+                    "Los benchmarks se ejecutan en hardware estandarizado, los resultados pueden variar en tu sistema.",
+                    "Alcance enfocado en <strong>uso de escritorio</strong>. No cubrimos servidores o sistemas embebidos.",
+                    "Las puntuaciones se actualizan periódicamente, pero no reflejan cambios en tiempo real.",
+                    "La \"mejor distro\" depende de tu caso de uso específico. ¡Usa nuestros filtros!"
+                ]
+            }
+        },
+        "roadmap": {
+            "title": "Roadmap Público",
+            "items": {
+                "catalog": "Catálogo con 12+ distros populares",
+                "comparison": "Sistema de comparación lado a lado",
+                "filters": "Filtros por familia y entorno gráfico",
+                "search": "Sistema de búsqueda avanzada",
+                "charts": "Gráficos de evolución histórica de scores",
+                "pdf": "Exportación de comparaciones en PDF",
+                "api": "API pública para desarrolladores",
+                "contribution": "Sistema de contribución comunitaria"
+            }
+        },
+        "contribute": {
+            "title": "Cómo Contribuir",
+            "subtitle": "DistroWiki es un proyecto de código abierto y depende de la comunidad para crecer y mejorar.",
+            "feedback": {
+                "title": "Feedback",
+                "description": "Reporta bugs, sugiere features o mejora la documentación"
+            },
+            "data": {
+                "title": "Datos",
+                "description": "Contribuye con métricas, benchmarks o información de distros"
+            },
+            "code": {
+                "title": "Código",
+                "description": "Envía PRs, corrige bugs o implementa nuevas funcionalidades"
+            },
+            "visitGithub": "Visitar GitHub"
+        },
+        "license": {
+            "title": "Licencia y Privacidad",
+            "description": "DistroWiki está licenciado bajo <strong>Licencia MIT</strong> - libre para uso, modificación y distribución.",
+            "privacy": "No recolectamos datos personales. No usamos cookies de tracking. Sin anuncios."
+        }
+    },
+    "catalog": {
+        "title": "Catálogo de Distribuciones",
+        "loading": "Cargando...",
+        "explore": "Explora {{count}} distribuciones Linux",
+        "search": {
+            "placeholder": "Buscar distribuciones Linux...",
+            "results": "{{count}} distros",
+            "resultsOf": "{{count}} de {{total}}"
+        },
+        "filters": {
+            "title": "Filtros y Ordenamiento",
+            "family": "Familia/Base",
+            "familyAll": "Todas",
+            "de": "Entorno Gráfico",
+            "deAll": "Todos",
+            "sortBy": "Ordenar por",
+            "sortScore": "Score (mayor)",
+            "sortName": "Nombre (A-Z)",
+            "sortRelease": "Lanzamiento (reciente)"
+        },
+        "compare": "Comparar {{count}} distros",
+        "error": "Error"
+    },
+    "comparison": {
+        "title": "Comparación de Distros",
+        "comparing": "Comparando {{count}} distribuciones lado a lado",
+        "noSelection": {
+            "title": "Ninguna Distro Seleccionada",
+            "subtitle": "Selecciona al menos 2 distribuciones del catálogo para comparar.",
+            "goToCatalog": "Ir al Catálogo"
+        },
+        "backToCatalog": "Volver al Catálogo",
+        "share": "Compartir",
+        "copied": "¡Copiado!",
+        "loading": "Cargando comparación...",
+        "sections": {
+            "description": "Descripción",
+            "basicInfo": "Información Básica",
+            "officialSite": "Sitio Oficial",
+            "visit": "Visitar",
+            "lastRelease": "Último Lanzamiento",
+            "category": "Categoría",
+            "status": "Estado",
+            "desktopEnv": "Entornos Gráficos",
+            "performance": "Rendimiento",
+            "performanceSoon": "📊 Datos de rendimiento próximamente",
+            "ramIdle": "RAM Idle",
+            "ramIdleTooltip": "Cantidad de memoria RAM usada después del arranque. Menos es mejor para liberar recursos para tus aplicaciones.",
+            "cpuScore": "CPU Score",
+            "cpuScoreTooltip": "Rendimiento del procesador medido por benchmark. Mayor es mejor para tareas intensivas.",
+            "ioScore": "I/O Score",
+            "ioScoreTooltip": "Velocidad de lectura/escritura en disco. Importante para el arranque, instalación de programas y transferencia de archivos.",
+            "requirements": "Requisitos",
+            "technicalDetails": "Detalles Técnicos",
+            "basedOn": "Basado en",
+            "architecture": "Arquitectura",
+            "origin": "Origen",
+            "packages": "Paquetes",
+            "office": "Office",
+            "viewDetails": "Ver Detalles Completos"
+        },
+        "independent": "Independiente"
+    },
+    "distroDetails": {
+        "loading": "Cargando distribución...",
+        "notFound": "Distribución no encontrada",
+        "backToCatalog": "Volver al Catálogo",
+        "goToCatalog": "Ir al Catálogo",
+        "officialSite": "Sitio Oficial",
+        "compareWith": "Comparar con...",
+        "compare": "Comparar",
+        "tabs": {
+            "overview": "Visión General",
+            "specs": "Especificaciones",
+            "links": "Enlaces Útiles"
+        },
+        "overview": {
+            "about": "Acerca de {{name}}",
+            "noDescription": "Sin descripción disponible",
+            "family": "Familia/Base",
+            "origin": "Origen",
+            "status": "Estado",
+            "desktopEnv": "Entornos Gráficos Disponibles"
+        },
+        "specs": {
+            "title": "Especificaciones Técnicas",
+            "basedOn": "Basado en",
+            "category": "Categoría",
+            "packageManager": "Gestor de Paquetes",
+            "osType": "Tipo de SO",
+            "requirements": "Requisitos",
+            "officeManager": "Gestor de Office"
+        },
+        "links": {
+            "title": "Enlaces Útiles",
+            "officialSite": "Sitio Oficial"
+        },
+        "independent": "Independiente"
+    },
+    "notFound": {
+        "title": "¡Ups! Esta distro no existe... ¡todavía! 🐧",
+        "description": "Parece que te perdiste en el kernel. La página que buscas fue compilada en otra dimensión de Linux.",
+        "backHome": "Volver a la página de inicio",
+        "pathAttempted": "Ruta intentada:"
+    },
+    "common": {
+        "na": "N/A"
+    }
+}

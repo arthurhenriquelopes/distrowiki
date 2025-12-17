@@ -1,4 +1,5 @@
 import { SlidersHorizontal } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   Select,
   SelectContent,
@@ -41,12 +42,14 @@ const CatalogFilters = ({
   viewMode,
   setViewMode,
 }: CatalogFiltersProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 mb-8 animate-slide-up">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <SlidersHorizontal className="w-5 h-5 text-primary" />
-          <h2 className="text-lg font-semibold">Filtros e Ordenação</h2>
+          <h2 className="text-lg font-semibold">{t("catalog.filters.title")}</h2>
         </div>
 
         <CatalogViewControls
@@ -61,14 +64,14 @@ const CatalogFilters = ({
       <div className="flex flex-wrap gap-3">
         <div className="min-w-[140px] max-w-[200px] flex-1">
           <label className="text-xs font-medium mb-1.5 block text-muted-foreground">
-            Família/Base
+            {t("catalog.filters.family")}
           </label>
           <Select value={filterFamily} onValueChange={setFilterFamily}>
             <SelectTrigger className="h-9 text-sm">
-              <SelectValue placeholder="Todas" />
+              <SelectValue placeholder={t("catalog.filters.familyAll")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Todas</SelectItem>
+              <SelectItem value="all">{t("catalog.filters.familyAll")}</SelectItem>
               {families.map((family) => (
                 <SelectItem key={family} value={family}>
                   <div className="flex items-center justify-between w-full gap-2">
@@ -83,14 +86,14 @@ const CatalogFilters = ({
 
         <div className="min-w-[140px] max-w-[200px] flex-1">
           <label className="text-xs font-medium mb-1.5 block text-muted-foreground">
-            Ambiente Gráfico
+            {t("catalog.filters.de")}
           </label>
           <Select value={filterDE} onValueChange={setFilterDE}>
             <SelectTrigger className="h-9 text-sm">
-              <SelectValue placeholder="Todos" />
+              <SelectValue placeholder={t("catalog.filters.deAll")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Todos</SelectItem>
+              <SelectItem value="all">{t("catalog.filters.deAll")}</SelectItem>
               {allDEs.map((de) => (
                 <SelectItem key={de} value={de}>
                   <div className="flex items-center justify-between w-full gap-2">
@@ -105,16 +108,16 @@ const CatalogFilters = ({
 
         <div className="min-w-[140px] max-w-[200px] flex-1">
           <label className="text-xs font-medium mb-1.5 block text-muted-foreground">
-            Ordenar por
+            {t("catalog.filters.sortBy")}
           </label>
           <Select value={sortBy} onValueChange={setSortBy}>
             <SelectTrigger className="h-9 text-sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="score">Score (maior)</SelectItem>
-              <SelectItem value="name">Nome (A-Z)</SelectItem>
-              <SelectItem value="release">Lançamento (recente)</SelectItem>
+              <SelectItem value="score">{t("catalog.filters.sortScore")}</SelectItem>
+              <SelectItem value="name">{t("catalog.filters.sortName")}</SelectItem>
+              <SelectItem value="release">{t("catalog.filters.sortRelease")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
