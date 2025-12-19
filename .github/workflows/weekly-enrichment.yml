@@ -1,0 +1,100 @@
+# DistroWiki - Weekly Data Enrichment
+# Este workflow automatiza o enriquecimento semanal dos dados das distros
+# Roda todo domingo às 6h UTC (3h Brasília)
+
+name: Weekly Data Enrichment
+
+on:
+  schedule:
+    # Todo domingo às 6h UTC (3h da manhã no horário de Brasília)
+    - cron: '0 6 * * 0'
+  
+  # Permite rodar manualmente pelo GitHub Actions UI
+  workflow_dispatch:
+    inputs:
+      enrichment_type:
+        description: 'Tipo de enriquecimento'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all            # Todas as distros
+          - performance    # Só métricas de performance
+          - dates          # Só datas de release
+
+jobs:
+  enrich-distros:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📋 Log início do job
+        run: |
+          echo "🚀 Iniciando enriquecimento semanal"
+          echo "Data: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "Trigger: ${{ github.event_name }}"
+
+      # Step 1: Atualizar datas de release (via DistroWatch scraping)
+      - name: 📅 Atualizar datas de release
+        run: |
+          echo "🔍 Scraping datas de release do DistroWatch..."
+          
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            "${{ secrets.API_BASE_URL }}/enrich-sheets/" \
+            -H "Content-Type: application/json" \
+            -H "X-API-Key: ${{ secrets.API_KEY }}" \
+            -d '{"fields": ["Latest Release"]}')
+          
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+          
+          echo "HTTP Code: $http_code"
+          echo "Response: $body"
+          
+          if [ "$http_code" -ne 200 ]; then
+            echo "❌ Falha ao atualizar datas"
+            exit 1
+          fi
+          
+          echo "✅ Datas atualizadas com sucesso"
+
+      # Step 2: Atualizar métricas de performance (via Groq AI)
+      - name: 🤖 Atualizar métricas de performance
+        if: ${{ github.event.inputs.enrichment_type != 'dates' }}
+        run: |
+          echo "🤖 Enriquecendo métricas via Groq AI..."
+          
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            "${{ secrets.API_BASE_URL }}/enrich-sheets/" \
+            -H "Content-Type: application/json" \
+            -H "X-API-Key: ${{ secrets.API_KEY }}" \
+            -d '{"fields": ["Idle RAM Usage", "CPU Score", "I/O Score", "Requirements"]}')
+          
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+          
+          echo "HTTP Code: $http_code"
+          echo "Response: $body"
+          
+          if [ "$http_code" -ne 200 ]; then
+            echo "⚠️ Falha ao atualizar métricas (não crítico)"
+          else
+            echo "✅ Métricas atualizadas com sucesso"
+          fi
+
+      # Step 3: Forçar refresh do cache
+      - name: 🔄 Limpar cache da API
+        run: |
+          echo "🔄 Forçando refresh do cache..."
+          
+          curl -s -X POST \
+            "${{ secrets.API_BASE_URL }}/distros/refresh" \
+            -H "X-API-Key: ${{ secrets.API_KEY }}" || true
+          
+          echo "✅ Cache invalidado"
+
+      - name: ✅ Resumo
+        run: |
+          echo "========================================"
+          echo "✅ Enriquecimento semanal concluído!"
+          echo "========================================"
+          echo "Data: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
