@@ -35,6 +35,7 @@ jobs:
           echo "Tipo: ${{ github.event.inputs.enrichment_type || 'all' }}"
 
       # Step 1: Atualizar datas de release (via DistroWatch scraping)
+      # Só roda se: all OU dates (NÃO roda se for performance)
       - name: 📅 Atualizar datas de release
         if: ${{ github.event.inputs.enrichment_type != 'performance' }}
         run: |
@@ -59,38 +60,111 @@ jobs:
           
           echo "✅ Datas atualizadas com sucesso"
 
-      # Step 2: Atualizar métricas de performance (via Groq AI)
-      - name: 🤖 Atualizar métricas de performance
+      # Step 2: Atualizar métricas de performance em batches
+      # Só roda se: all OU performance (NÃO roda se for dates)
+      - name: 🤖 Atualizar métricas de performance (batch 1-5)
         if: ${{ github.event.inputs.enrichment_type != 'dates' }}
         run: |
-          echo "🤖 Enriquecendo métricas via Groq AI..."
-          
-          response=$(curl -s -w "\n%{http_code}" -X POST \
-            "${{ secrets.API_BASE_URL }}/enrich-sheets/" \
+          echo "🤖 Enriquecendo batch 1 (distros 0-4)..."
+          curl -s -X POST "${{ secrets.API_BASE_URL }}/enrich-sheets/batch" \
             -H "Content-Type: application/json" \
             -H "X-API-Key: ${{ secrets.API_KEY }}" \
-            -d '{"fields": ["Idle RAM Usage", "CPU Score", "I/O Score", "Requirements"]}')
-          
-          http_code=$(echo "$response" | tail -n1)
-          body=$(echo "$response" | sed '$d')
-          
-          echo "HTTP Code: $http_code"
-          echo "Response: $body"
-          
-          if [ "$http_code" -ne 200 ]; then
-            echo "⚠️ Falha ao atualizar métricas (não crítico)"
-          else
-            echo "✅ Métricas atualizadas com sucesso"
-          fi
+            -d '{"offset": 0, "limit": 5, "fields": ["CPU Score", "I/O Score"]}'
+          echo ""
+
+      - name: 🤖 Atualizar métricas (batch 6-10)
+        if: ${{ github.event.inputs.enrichment_type != 'dates' }}
+        run: |
+          sleep 5
+          echo "🤖 Enriquecendo batch 2 (distros 5-9)..."
+          curl -s -X POST "${{ secrets.API_BASE_URL }}/enrich-sheets/batch" \
+            -H "Content-Type: application/json" \
+            -H "X-API-Key: ${{ secrets.API_KEY }}" \
+            -d '{"offset": 5, "limit": 5, "fields": ["CPU Score", "I/O Score"]}'
+          echo ""
+
+      - name: 🤖 Atualizar métricas (batch 11-15)
+        if: ${{ github.event.inputs.enrichment_type != 'dates' }}
+        run: |
+          sleep 5
+          echo "🤖 Enriquecendo batch 3 (distros 10-14)..."
+          curl -s -X POST "${{ secrets.API_BASE_URL }}/enrich-sheets/batch" \
+            -H "Content-Type: application/json" \
+            -H "X-API-Key: ${{ secrets.API_KEY }}" \
+            -d '{"offset": 10, "limit": 5, "fields": ["CPU Score", "I/O Score"]}'
+          echo ""
+
+      - name: 🤖 Atualizar métricas (batch 16-20)
+        if: ${{ github.event.inputs.enrichment_type != 'dates' }}
+        run: |
+          sleep 5
+          echo "🤖 Enriquecendo batch 4 (distros 15-19)..."
+          curl -s -X POST "${{ secrets.API_BASE_URL }}/enrich-sheets/batch" \
+            -H "Content-Type: application/json" \
+            -H "X-API-Key: ${{ secrets.API_KEY }}" \
+            -d '{"offset": 15, "limit": 5, "fields": ["CPU Score", "I/O Score"]}'
+          echo ""
+
+      - name: 🤖 Atualizar métricas (batch 21-40)
+        if: ${{ github.event.inputs.enrichment_type != 'dates' }}
+        run: |
+          for offset in 20 25 30 35; do
+            sleep 5
+            echo "🤖 Enriquecendo batch offset=$offset..."
+            curl -s -X POST "${{ secrets.API_BASE_URL }}/enrich-sheets/batch" \
+              -H "Content-Type: application/json" \
+              -H "X-API-Key: ${{ secrets.API_KEY }}" \
+              -d "{\"offset\": $offset, \"limit\": 5, \"fields\": [\"CPU Score\", \"I/O Score\"]}"
+            echo ""
+          done
+
+      - name: 🤖 Atualizar métricas (batch 41-60)
+        if: ${{ github.event.inputs.enrichment_type != 'dates' }}
+        run: |
+          for offset in 40 45 50 55; do
+            sleep 5
+            echo "🤖 Enriquecendo batch offset=$offset..."
+            curl -s -X POST "${{ secrets.API_BASE_URL }}/enrich-sheets/batch" \
+              -H "Content-Type: application/json" \
+              -H "X-API-Key: ${{ secrets.API_KEY }}" \
+              -d "{\"offset\": $offset, \"limit\": 5, \"fields\": [\"CPU Score\", \"I/O Score\"]}"
+            echo ""
+          done
+
+      - name: 🤖 Atualizar métricas (batch 61-80)
+        if: ${{ github.event.inputs.enrichment_type != 'dates' }}
+        run: |
+          for offset in 60 65 70 75; do
+            sleep 5
+            echo "🤖 Enriquecendo batch offset=$offset..."
+            curl -s -X POST "${{ secrets.API_BASE_URL }}/enrich-sheets/batch" \
+              -H "Content-Type: application/json" \
+              -H "X-API-Key: ${{ secrets.API_KEY }}" \
+              -d "{\"offset\": $offset, \"limit\": 5, \"fields\": [\"CPU Score\", \"I/O Score\"]}"
+            echo ""
+          done
+
+      - name: 🤖 Atualizar métricas (batch 81-100)
+        if: ${{ github.event.inputs.enrichment_type != 'dates' }}
+        run: |
+          for offset in 80 85 90 95; do
+            sleep 5
+            echo "🤖 Enriquecendo batch offset=$offset..."
+            curl -s -X POST "${{ secrets.API_BASE_URL }}/enrich-sheets/batch" \
+              -H "Content-Type: application/json" \
+              -H "X-API-Key: ${{ secrets.API_KEY }}" \
+              -d "{\"offset\": $offset, \"limit\": 5, \"fields\": [\"CPU Score\", \"I/O Score\"]}"
+            echo ""
+          done
 
       # Step 3: Forçar refresh do cache
       - name: 🔄 Limpar cache da API
         run: |
           echo "🔄 Forçando refresh do cache..."
           
-          curl -s -X POST \
-            "${{ secrets.API_BASE_URL }}/distros/refresh" \
-            -H "X-API-Key: ${{ secrets.API_KEY }}" || true
+          curl -s -X GET \
+            "${{ secrets.API_BASE_URL }}/distros?force_refresh=true" \
+            -H "X-API-Key: ${{ secrets.API_KEY }}" > /dev/null || true
           
           echo "✅ Cache invalidado"
 
