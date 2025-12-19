@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { Distro } from "@/data/distros";
+import type { Distro } from "@/types";
 
 interface ComparisonContextType {
   selectedDistros: Distro[];

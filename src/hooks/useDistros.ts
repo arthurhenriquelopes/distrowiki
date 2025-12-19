@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { transformDistros } from "@/utils/apiTransform";
 import type { Distro } from "@/types";
 
@@ -7,7 +7,6 @@ interface UseDistrosOptions {
   pageSize?: number;
   sortBy?: string;
   order?: "asc" | "desc";
-  forceRefresh?: boolean;
 }
 
 interface UseDistrosReturn {
@@ -17,53 +16,39 @@ interface UseDistrosReturn {
   refetch: () => void;
 }
 
+const API_BASE = import.meta.env.VITE_API_BASE_ || "https://distrowiki-api.vercel.app";
+
+async function fetchDistros(options: UseDistrosOptions): Promise<Distro[]> {
+  const { page = 1, pageSize = 100, sortBy = "name", order = "asc" } = options;
+  
+  const url = `${API_BASE}/distros?page=${page}&page_size=${pageSize}&sort_by=${sortBy}&order=${order}`;
+  const response = await fetch(url);
+  
+  if (!response.ok) {
+    throw new Error(`Erro ao buscar distribuições: ${response.status}`);
+  }
+  
+  const data = await response.json();
+  return transformDistros(data.distros || []);
+}
+
 /**
- * Hook customizado para buscar distribuições da API
+ * Custom hook to fetch distributions from API with React Query caching
  */
 export function useDistros(options: UseDistrosOptions = {}): UseDistrosReturn {
-  const {
-    page = 1,
-    pageSize = 100,
-    sortBy = "name",
-    order = "asc",
-    forceRefresh = false,
-  } = options;
+  const { page = 1, pageSize = 100, sortBy = "name", order = "asc" } = options;
+  
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ["distros", page, pageSize, sortBy, order],
+    queryFn: () => fetchDistros({ page, pageSize, sortBy, order }),
+    staleTime: 5 * 60 * 1000, // 5 minutes cache
+    gcTime: 10 * 60 * 1000, // 10 minutes garbage collection
+  });
 
-  const [distros, setDistros] = useState<Distro[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [refetchTrigger, setRefetchTrigger] = useState(0);
-
-  useEffect(() => {
-    const fetchDistros = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        const apiBase = import.meta.env.VITE_API_BASE_ || "https://distrowiki-api.vercel.app";
-        const url = `${apiBase}/distros?page=${page}&page_size=${pageSize}&sort_by=${sortBy}&order=${order}&force_refresh=${forceRefresh}`;
-        
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-          throw new Error(`Erro ao buscar distribuições: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        const transformed = transformDistros(data.distros || []);
-        setDistros(transformed);
-      } catch (err: any) {
-        console.error(err);
-        setError(err.message || "Erro ao carregar distribuições");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDistros();
-  }, [page, pageSize, sortBy, order, forceRefresh, refetchTrigger]);
-
-  const refetch = () => setRefetchTrigger((prev) => prev + 1);
-
-  return { distros, loading, error, refetch };
+  return {
+    distros: data || [],
+    loading: isLoading,
+    error: error ? (error as Error).message : null,
+    refetch,
+  };
 }

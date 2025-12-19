@@ -256,7 +256,7 @@ const Comparison = () => {
                   <div className="flex-1 min-w-0">
                     <h2 className="font-bold text-lg truncate">{distro.name}</h2>
                     <p className="text-xs text-muted-foreground truncate">
-                      {distro.family || distro.based_on || t('comparison.independent')}
+                      {distro.family || distro.basedOn || t('comparison.independent')}
                     </p>
                   </div>
                   <ScoreBadge score={score} size="md" />
@@ -303,8 +303,8 @@ const Comparison = () => {
                 icon={<HardDrive className="w-3.5 h-3.5" />}
               >
                 {selectedDistros.map((distro) => {
-                  const value = distro.idle_ram_usage;
-                  const best = getBestValue(selectedDistros, "idle_ram_usage", true);
+                  const value = distro.idleRamUsage;
+                  const best = getBestValue(selectedDistros, "idleRamUsage", true);
                   const isBest = value && isBestValue(value, best);
                   
                   return (
@@ -343,8 +343,8 @@ const Comparison = () => {
                 icon={<Cpu className="w-3.5 h-3.5" />}
               >
                 {selectedDistros.map((distro) => {
-                  const value = distro.cpu_score;
-                  const best = getBestValue(selectedDistros, "cpu_score");
+                  const value = distro.cpuScore;
+                  const best = getBestValue(selectedDistros, "cpuScore");
                   const isBest = value && isBestValue(value, best);
                   
                   return (
@@ -383,8 +383,8 @@ const Comparison = () => {
                 icon={<HardDrive className="w-3.5 h-3.5" />}
               >
                 {selectedDistros.map((distro) => {
-                  const value = distro.io_score;
-                  const best = getBestValue(selectedDistros, "io_score");
+                  const value = distro.ioScore;
+                  const best = getBestValue(selectedDistros, "ioScore");
                   const isBest = value && isBestValue(value, best);
                   
                   return (
@@ -435,7 +435,7 @@ const Comparison = () => {
             style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, 1fr)` }}
           >
             {selectedDistros.map((distro) => {
-              const desktops = distro.desktopEnvironments || distro.desktop_environments || [];
+              const desktops = distro.desktopEnvironments || [];
               return (
                 <div key={distro.id} className="flex justify-center">
                   <DesktopEnvList environments={desktops} size="md" />
@@ -470,8 +470,8 @@ const Comparison = () => {
             <ComparisonRow label={t('comparison.sections.lastRelease')} icon={<Calendar className="w-3.5 h-3.5" />}>
               {selectedDistros.map((distro) => (
                 <span key={distro.id} className="text-sm font-medium">
-                  {distro.lastRelease || distro.latest_release_date 
-                    ? new Date(distro.lastRelease || distro.latest_release_date).toLocaleDateString("pt-BR")
+                  {distro.lastRelease 
+                    ? new Date(distro.lastRelease).toLocaleDateString("pt-BR")
                     : "N/A"}
                 </span>
               ))}
@@ -507,7 +507,7 @@ const Comparison = () => {
             <ComparisonRow label={t('comparison.sections.basedOn')}>
               {selectedDistros.map((distro) => (
                 <span key={distro.id} className="text-sm font-medium">
-                  {distro.based_on || distro.baseSystem || t('comparison.independent')}
+                  {distro.basedOn || distro.baseSystem || t('comparison.independent')}
                 </span>
               ))}
             </ComparisonRow>
@@ -531,7 +531,7 @@ const Comparison = () => {
             <ComparisonRow label={t('comparison.sections.packages')} icon={<Package className="w-3.5 h-3.5" />}>
               {selectedDistros.map((distro) => (
                 <span key={distro.id} className="text-sm font-medium font-mono">
-                  {distro.packageManager || distro.package_management || t('common.na')}
+                  {distro.packageManager || t('common.na')}
                 </span>
               ))}
             </ComparisonRow>

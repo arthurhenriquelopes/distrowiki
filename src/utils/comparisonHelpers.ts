@@ -1,13 +1,14 @@
 import { transformDistro } from "./apiTransform";
 import type { Distro, DistroAPI } from "@/types";
 
+const API_BASE = import.meta.env.VITE_API_BASE_ || "https://distrowiki-api.vercel.app";
+
 /**
  * Carrega uma distro individual da API
  */
 export async function fetchDistroById(id: string): Promise<Distro | null> {
   try {
-    const apiBase = import.meta.env.VITE_API_BASE || "https://distrowiki-api.vercel.app";
-    const response = await fetch(`${apiBase}/distros/${id.toLowerCase()}`);
+    const response = await fetch(`${API_BASE}/distros/${id.toLowerCase()}`);
     
     if (!response.ok) {
       console.error(`Erro ao buscar distro ${id}: ${response.status}`);
@@ -45,24 +46,19 @@ export function getBestValue(
   
   if (values.length === 0) return null;
   
-  // Se são números, usar min/max
   if (typeof values[0] === "number") {
     return reverse
       ? Math.min(...(values as number[]))
       : Math.max(...(values as number[]));
   }
   
-  // Se são strings, retornar primeiro valor (para casos especiais)
   return values[0];
 }
 
 /**
  * Verifica se um valor é o melhor da comparação
  */
-export function isBestValue(
-  value: any,
-  bestValue: any
-): boolean {
+export function isBestValue(value: any, bestValue: any): boolean {
   return value != null && value !== 0 && value === bestValue;
 }
 
@@ -70,7 +66,5 @@ export function isBestValue(
  * Verifica se alguma distro tem dados de performance
  */
 export function hasPerformanceData(distros: Distro[]): boolean {
-  return distros.some(
-    (d) => d.idle_ram_usage || d.cpu_score || d.io_score
-  );
+  return distros.some((d) => d.idleRamUsage || d.cpuScore || d.ioScore);
 }

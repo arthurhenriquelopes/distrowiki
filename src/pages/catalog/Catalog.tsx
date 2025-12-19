@@ -109,10 +109,10 @@ const Catalog = () => {
         case "name":
           return a.name.localeCompare(b.name);
         case "release":
-          if (!a.release_year && !b.release_year) return 0;
-          if (!a.release_year) return 1;
-          if (!b.release_year) return -1;
-          return b.release_year - a.release_year;
+          if (!a.releaseYear && !b.releaseYear) return 0;
+          if (!a.releaseYear) return 1;
+          if (!b.releaseYear) return -1;
+          return b.releaseYear - a.releaseYear;
         default:
           return 0;
       }

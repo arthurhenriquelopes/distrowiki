@@ -1,6 +1,7 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink, Loader2, GitCompare } from "lucide-react";
 import { DesktopEnvBadge } from "@/components/DesktopEnvBadge";
@@ -21,6 +22,7 @@ const DistroDetails = () => {
   const [error, setError] = useState<string | null>(null);
   const [allDistros, setAllDistros] = useState<any[]>([]);
   const [compareWith, setCompareWith] = useState<string>("");
+  const { t } = useTranslation();
 
   // Buscar distro atual
   useEffect(() => {
@@ -103,7 +105,7 @@ const DistroDetails = () => {
       ...distro, 
       id: distro.id || id,
       score: distro.rating || 0,
-      desktopEnvironments: distro.desktop_environments || [],
+      desktopEnvironments: distro.desktopEnvironments || distro.desktop_environments || [],
       lastRelease: distro.latest_release_date || new Date().toISOString(),
     };
     const d2 = allDistros.find((d) => d.id === compareWith);
@@ -121,7 +123,7 @@ const DistroDetails = () => {
       <div className="container mx-auto px-4 py-12 min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-12 h-12 animate-spin text-primary" />
-          <p className="text-lg text-muted-foreground">Carregando distribuição...</p>
+          <p className="text-lg text-muted-foreground">{t("distroDetails.loading")}</p>
         </div>
       </div>
     );
@@ -131,21 +133,21 @@ const DistroDetails = () => {
     return (
       <div className="container mx-auto px-4 py-12 min-h-screen">
         <SEO
-          title="Distribuição não encontrada"
+          title={t("distroDetails.notFound")}
           description="A distribuição Linux solicitada não foi encontrada no catálogo."
           canonical={`https://distrowiki.site/distro/${id}`}
         />
         <Link to="/catalogo">
           <Button variant="ghost" className="mb-6">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Voltar ao Catálogo
+            {t("distroDetails.backToCatalog")}
           </Button>
         </Link>
         <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">Distribuição não encontrada</h1>
+          <h1 className="text-4xl font-bold mb-4">{t("distroDetails.notFound")}</h1>
           <p className="text-muted-foreground mb-6">{error}</p>
           <Link to="/catalogo">
-            <Button>Ir para o Catálogo</Button>
+            <Button>{t("distroDetails.goToCatalog")}</Button>
           </Link>
         </div>
       </div>
@@ -191,7 +193,7 @@ const DistroDetails = () => {
         title={`${distro.name} - Análise Completa`}
         description={distroDescription}
         canonical={`https://distrowiki.site/distro/${distro.id}`}
-        keywords={`${distro.name}, ${distro.family}, linux, distro, ${(distro.desktop_environments || []).join(', ')}`}
+        keywords={`${distro.name}, ${distro.family}, linux, distro, ${(distro.desktopEnvironments || distro.desktop_environments || []).join(', ')}`}
         ogImage={`https://distrowiki.site/logos/${distro.id}.svg`}
         structuredData={structuredData}
       />
@@ -204,7 +206,7 @@ const DistroDetails = () => {
         <Link to="/catalogo">
           <Button variant="ghost" className="mb-6">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Voltar ao Catálogo
+            {t("distroDetails.backToCatalog")}
           </Button>
         </Link>
       </motion.div>
@@ -227,14 +229,14 @@ const DistroDetails = () => {
           />
           <div className="flex-1 text-center md:text-left">
             <h1 className="text-4xl md:text-5xl font-bold mb-2">{distro.name}</h1>
-            <p className="text-xl text-muted-foreground mb-4">{distro.family || 'Independente'}</p>
+            <p className="text-xl text-muted-foreground mb-4">{distro.family || t("distroDetails.independent")}</p>
             <div className="flex flex-wrap gap-3 justify-center md:justify-start items-center">
               <ScoreBadge score={calculatePerformanceScore(distro)} size="lg" />
               {distro.homepage && (
                 <a href={distro.homepage} target="_blank" rel="noopener noreferrer">
                   <Button className="gap-2">
                     <ExternalLink className="w-4 h-4" />
-                    Site Oficial
+                    {t("distroDetails.officialSite")}
                   </Button>
                 </a>
               )}
@@ -243,7 +245,7 @@ const DistroDetails = () => {
               <div className="flex gap-2 items-center">
                 <Select value={compareWith} onValueChange={setCompareWith}>
                   <SelectTrigger className="w-[200px] h-10">
-                    <SelectValue placeholder="Comparar com..." />
+                    <SelectValue placeholder={t("distroDetails.compareWith")} />
                   </SelectTrigger>
                   <SelectContent className="max-h-[300px]">
                     {allDistros
@@ -265,7 +267,7 @@ const DistroDetails = () => {
                   className="gap-2"
                 >
                   <GitCompare className="w-4 h-4" />
-                  Comparar
+                  {t("distroDetails.compare")}
                 </Button>
               </div>
             </div>
@@ -276,39 +278,39 @@ const DistroDetails = () => {
       {/* Tabs */}
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 md:grid-cols-3">
-          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-          <TabsTrigger value="specs">Especificações</TabsTrigger>
-          <TabsTrigger value="links">Links Úteis</TabsTrigger>
+          <TabsTrigger value="overview">{t("distroDetails.tabs.overview")}</TabsTrigger>
+          <TabsTrigger value="specs">{t("distroDetails.tabs.specs")}</TabsTrigger>
+          <TabsTrigger value="links">{t("distroDetails.tabs.links")}</TabsTrigger>
         </TabsList>
 
         {/* Overview */}
         <TabsContent value="overview" className="space-y-6 animate-fade-in">
           <div className="bg-card border border-border rounded-xl p-6">
-            <h2 className="text-2xl font-bold mb-4">Sobre {distro.name}</h2>
+            <h2 className="text-2xl font-bold mb-4">{t("distroDetails.overview.about", { name: distro.name })}</h2>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              {distro.summary || distro.description || 'Sem descrição disponível'}
+              {distro.summary || distro.description || t("distroDetails.overview.noDescription")}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Família/Base</p>
-                <p className="font-medium">{distro.family || 'Independente'}</p>
+                <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.overview.family")}</p>
+                <p className="font-medium">{distro.family || t("distroDetails.independent")}</p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Origem</p>
-                <p className="font-medium">{distro.origin || 'N/A'}</p>
+                <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.overview.origin")}</p>
+                <p className="font-medium">{distro.origin || t("common.na")}</p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Status</p>
-                <p className="font-medium">{distro.status || 'N/A'}</p>
+                <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.overview.status")}</p>
+                <p className="font-medium">{distro.status || t("common.na")}</p>
               </div>
             </div>
           </div>
 
-          {distro.desktop_environments && distro.desktop_environments.length > 0 && (
+          {(distro.desktopEnvironments || distro.desktop_environments) && (distro.desktopEnvironments || distro.desktop_environments).length > 0 && (
             <div className="bg-card border border-border rounded-xl p-6">
-              <h3 className="text-xl font-bold mb-4">Ambientes Gráficos Disponíveis</h3>
+              <h3 className="text-xl font-bold mb-4">{t("distroDetails.overview.desktopEnv")}</h3>
               <div className="flex flex-wrap gap-2">
-                {distro.desktop_environments.map((de: string) => (
+                {(distro.desktopEnvironments || distro.desktop_environments).map((de: string) => (
                   <DesktopEnvBadge key={de} name={de} size="md" />
                 ))}
               </div>
@@ -319,36 +321,36 @@ const DistroDetails = () => {
         {/* Specs */}
         <TabsContent value="specs" className="space-y-6 animate-fade-in">
           <div className="bg-card border border-border rounded-xl p-6">
-            <h2 className="text-2xl font-bold mb-6">Especificações Técnicas</h2>
+            <h2 className="text-2xl font-bold mb-6">{t("distroDetails.specs.title")}</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Baseado em</p>
-                  <p className="text-lg font-medium">{distro.based_on || 'N/A'}</p>
+                  <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.specs.basedOn")}</p>
+                  <p className="text-lg font-medium">{distro.based_on || t("common.na")}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Categoria</p>
-                  <p className="text-lg font-medium">{distro.category || 'N/A'}</p>
+                  <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.specs.category")}</p>
+                  <p className="text-lg font-medium">{distro.category || t("common.na")}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Package Manager</p>
-                  <p className="text-lg font-medium">{distro.package_manager || 'N/A'}</p>
+                  <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.specs.packageManager")}</p>
+                  <p className="text-lg font-medium">{distro.package_manager || t("common.na")}</p>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">OS Type</p>
-                  <p className="text-lg font-medium">{distro.os_type || 'N/A'}</p>
+                  <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.specs.osType")}</p>
+                  <p className="text-lg font-medium">{distro.os_type || t("common.na")}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Requirements</p>
-                  <p className="text-lg font-medium">{distro.requirements || 'N/A'}</p>
+                  <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.specs.requirements")}</p>
+                  <p className="text-lg font-medium">{distro.requirements || t("common.na")}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Office Manager</p>
-                  <p className="text-lg font-medium">{distro.office_manager || 'N/A'}</p>
+                  <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.specs.officeManager")}</p>
+                  <p className="text-lg font-medium">{distro.office_manager || t("common.na")}</p>
                 </div>
               </div>
             </div>
@@ -358,7 +360,7 @@ const DistroDetails = () => {
         {/* Links */}
         <TabsContent value="links" className="space-y-6 animate-fade-in">
           <div className="bg-card border border-border rounded-xl p-6">
-            <h2 className="text-2xl font-bold mb-6">Links Úteis</h2>
+            <h2 className="text-2xl font-bold mb-6">{t("distroDetails.links.title")}</h2>
             
             <div className="space-y-3">
               {distro.homepage && (
@@ -368,7 +370,7 @@ const DistroDetails = () => {
                   rel="noopener noreferrer"
                   className="flex items-center justify-between p-4 bg-muted rounded-lg hover:bg-muted/80 smooth-transition group"
                 >
-                  <span className="font-medium">Site Oficial</span>
+                  <span className="font-medium">{t("distroDetails.links.officialSite")}</span>
                   <ExternalLink className="w-5 h-5 text-primary group-hover:translate-x-1 smooth-transition" />
                 </a>
               )}

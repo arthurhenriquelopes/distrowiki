@@ -1,3 +1,6 @@
+/**
+ * Distro data from API
+ */
 export interface DistroAPI {
   id: string;
   name: string;
@@ -23,67 +26,64 @@ export interface DistroAPI {
   release_model?: string;
   lts_support?: boolean;
   release_year?: number;
-  requirements?: any;
+  requirements?: string;
+  os_type?: string;
+  office_suite?: string;
 }
 
+/**
+ * Distro data for the application (normalized)
+ * Uses camelCase consistently for all fields
+ */
 export interface Distro {
   id: string;
   name: string;
   family: string;
+  logo: string;
   
-  logo?: string;
+  // Desktop environments
+  desktopEnvironments: string[];
   
-  desktopEnvironments?: string[];
-  desktop_environments?: string[];
+  // Dates
+  lastRelease: string;
+  releaseYear?: number;
   
-  releasedIn?: string;
-  lastRelease?: string;
-  latest_release_date?: string;
-  release_year?: number;
+  // Score
+  score: number;
   
-  score?: number;
-  rating?: number;
-  
-  idle_ram_usage?: number;
-  ramIdle?: number;
-  
-  cpu_score?: number;
+  // Performance metrics
+  idleRamUsage?: number;
   cpuScore?: number;
-  
-  io_score?: number;
   ioScore?: number;
   
+  // Requirements
   requirements?: string;
-  minRam?: number;
-  minStorage?: number;
   
+  // URLs
   website?: string;
   homepage?: string;
   
+  // Package management
   packageManager?: string;
-  package_management?: string;
   
+  // Description
   description?: string;
-  summary?: string;
   
+  // Release info
   releaseModel?: string;
-  release_model?: string;
   ltsSupport?: boolean;
-  lts_support?: boolean;
   
-  architectures?: string[];
+  // Architecture
   architecture?: string;
   
+  // Base system
   baseSystem?: string;
-  based_on?: string;
+  basedOn?: string;
   
+  // Metadata
   category?: string;
   status?: string;
   origin?: string;
-  os_type?: string;
-  image_size?: number;
-  office_suite?: string;
+  osType?: string;
   ranking?: number;
-  
-  last_updated?: string;
 }

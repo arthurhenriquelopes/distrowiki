@@ -34,7 +34,7 @@ const DistroCardList = ({
   };
 
   const hasPerformanceData =
-    distro.idle_ram_usage || distro.cpu_score || distro.io_score;
+    distro.idleRamUsage || distro.cpuScore || distro.ioScore;
 
   return (
     <div className="relative bg-card border border-border rounded-xl p-5 card-hover group h-full flex flex-col">
@@ -73,10 +73,10 @@ const DistroCardList = ({
               <span className="truncate">{distro.category}</span>
             </div>
           )}
-          {distro.release_year && (
+          {distro.releaseYear && (
             <div className="flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5" />
-              <span>{distro.release_year}</span>
+              <span>{distro.releaseYear}</span>
             </div>
           )}
         </div>
@@ -96,7 +96,7 @@ const DistroCardList = ({
 
         {showSpecs && hasPerformanceData && (
           <div className="space-y-2 py-3 border-t border-border">
-            {distro.idle_ram_usage && (
+            {distro.idleRamUsage && (
               <div>
                 <div className="flex justify-between items-center mb-1">
                   <Tooltip>
@@ -112,7 +112,7 @@ const DistroCardList = ({
                     </TooltipContent>
                   </Tooltip>
                   <p className="text-xs font-semibold">
-                    {distro.idle_ram_usage} MB
+                    {distro.idleRamUsage} MB
                   </p>
                 </div>
                 <div className="w-full bg-muted rounded-full h-1.5">
@@ -120,7 +120,7 @@ const DistroCardList = ({
                     className="bg-blue-500 rounded-full h-1.5 transition-all duration-300"
                     style={{
                       width: `${Math.min(
-                        (distro.idle_ram_usage / 2000) * 100,
+                        (distro.idleRamUsage / 2000) * 100,
                         100
                       )}%`,
                     }}
@@ -129,7 +129,7 @@ const DistroCardList = ({
               </div>
             )}
 
-            {distro.cpu_score && (
+            {distro.cpuScore && (
               <div>
                 <div className="flex justify-between items-center mb-1">
                   <Tooltip>
@@ -144,18 +144,18 @@ const DistroCardList = ({
                       <p className="text-xs">Desempenho do processador medido por benchmark. Quanto maior, melhor para tarefas intensivas.</p>
                     </TooltipContent>
                   </Tooltip>
-                  <p className="text-xs font-semibold">{distro.cpu_score}/10</p>
+                  <p className="text-xs font-semibold">{distro.cpuScore}/10</p>
                 </div>
                 <div className="w-full bg-muted rounded-full h-1.5">
                   <div
                     className="bg-green-500 rounded-full h-1.5 transition-all duration-300"
-                    style={{ width: `${(distro.cpu_score / 10) * 100}%` }}
+                    style={{ width: `${(distro.cpuScore / 10) * 100}%` }}
                   />
                 </div>
               </div>
             )}
 
-            {distro.io_score && (
+            {distro.ioScore && (
               <div>
                 <div className="flex justify-between items-center mb-1">
                   <Tooltip>
@@ -170,12 +170,12 @@ const DistroCardList = ({
                       <p className="text-xs">Velocidade de leitura/escrita em disco. Importante para boot, instalação de programas e transferência de arquivos.</p>
                     </TooltipContent>
                   </Tooltip>
-                  <p className="text-xs font-semibold">{distro.io_score}/10</p>
+                  <p className="text-xs font-semibold">{distro.ioScore}/10</p>
                 </div>
                 <div className="w-full bg-muted rounded-full h-1.5">
                   <div
                     className="bg-purple-500 rounded-full h-1.5 transition-all duration-300"
-                    style={{ width: `${(distro.io_score / 10) * 100}%` }}
+                    style={{ width: `${(distro.ioScore / 10) * 100}%` }}
                   />
                 </div>
               </div>
@@ -198,7 +198,7 @@ const DistroCardList = ({
           <div className="flex items-center text-xs text-muted-foreground gap-1.5 min-w-0">
             <Calendar className="w-3.5 h-3.5 flex-shrink-0" />
             <span className="truncate">
-              {distro.latest_release_date || "Data indisponível"}
+              {distro.lastRelease || "Data indisponível"}
             </span>
           </div>
 

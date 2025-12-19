@@ -104,7 +104,7 @@ const DistroCardTerminal = ({
 
           {/* System Info */}
           <div className="space-y-1">
-            {formatCommand("neofetch --version", distro.latest_release_date || "N/A")}
+            {formatCommand("neofetch --version", distro.lastRelease || "N/A")}
             {formatCommand("cat /etc/os-release | grep PRETTY_NAME", distro.family)}
             
             {distro.desktopEnvironments && distro.desktopEnvironments.length > 0 && (
@@ -118,19 +118,19 @@ const DistroCardTerminal = ({
               </div>
             )}
 
-            {(distro.packageManager || distro.package_management) && (
-              formatCommand("which pkg-manager", distro.packageManager || distro.package_management)
+            {distro.packageManager && (
+              formatCommand("which pkg-manager", distro.packageManager)
             )}
 
             {/* Performance Stats */}
-            {(distro.idle_ram_usage || distro.cpu_score || distro.io_score) && (
+            {(distro.idleRamUsage || distro.cpuScore || distro.ioScore) && (
               <>
                 <div className="font-mono text-xs pt-2 border-t border-gray-700/30 mt-2">
                   <span className="text-yellow-400">## Performance Metrics</span>
                 </div>
-                {distro.idle_ram_usage && formatCommand("free -m | grep Mem", `${distro.idle_ram_usage}MB idle`)}
-                {distro.cpu_score && formatCommand("sysbench cpu --score", distro.cpu_score.toFixed(1))}
-                {distro.io_score && formatCommand("sysbench io --score", distro.io_score.toFixed(1))}
+                {distro.idleRamUsage && formatCommand("free -m | grep Mem", `${distro.idleRamUsage}MB idle`)}
+                {distro.cpuScore && formatCommand("sysbench cpu --score", distro.cpuScore.toFixed(1))}
+                {distro.ioScore && formatCommand("sysbench io --score", distro.ioScore.toFixed(1))}
               </>
             )}
 
