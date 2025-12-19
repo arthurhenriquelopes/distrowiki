@@ -52,6 +52,69 @@
     <meta name="msapplication-TileColor" content="#0077E6" />
     <meta name="msapplication-TileImage" content="/favicon/android-chrome-192x192.png" />
     <meta name="msapplication-config" content="/favicon/browserconfig.xml" />
+    
+    <!-- Bing Webmaster Verification (add your own code from Bing Webmaster Tools) -->
+    <!-- <meta name="msvalidate.01" content="YOUR_BING_VERIFICATION_CODE" /> -->
+    
+    <!-- Yandex Webmaster Verification (add your own code from Yandex Webmaster) -->
+    <!-- <meta name="yandex-verification" content="YOUR_YANDEX_VERIFICATION_CODE" /> -->
+    
+    <!-- Structured Data for Organization and SiteNavigation (helps with sitelinks) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://distrowiki.site/#website",
+          "url": "https://distrowiki.site/",
+          "name": "DistroWiki",
+          "description": "Plataforma open source para comparar distribuições Linux de forma objetiva e transparente",
+          "inLanguage": "pt-BR",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://distrowiki.site/catalogo?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://distrowiki.site/#organization",
+          "name": "DistroWiki",
+          "url": "https://distrowiki.site/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://distrowiki.site/logo/logo.svg",
+            "width": 512,
+            "height": 512
+          },
+          "sameAs": [
+            "https://github.com/arthurhenriquelopes/distrowiki"
+          ]
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Início",
+          "url": "https://distrowiki.site/"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Catálogo",
+          "url": "https://distrowiki.site/catalogo"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Comparação",
+          "url": "https://distrowiki.site/comparacao"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Sobre",
+          "url": "https://distrowiki.site/sobre"
+        }
+      ]
+    }
+    </script>
   </head>
 
   <body>
