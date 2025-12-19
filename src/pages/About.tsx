@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Shield, TrendingUp, Target, Code, Users, Heart } from "lucide-react";
+import { Shield, Target, Code, Users, Heart, Github, ExternalLink, Database, Zap } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/SEO";
@@ -34,21 +34,65 @@ const About = () => {
       "url": "https://distrowiki.site",
       "logo": "https://distrowiki.site/logo/logo.svg",
       "sameAs": [
-        "https://github.com/arthurhenrique/DistroWiki"
+        "https://github.com/arthurhenriquelopes/DistroWiki"
       ],
       "description": "Plataforma open source para comparar distribuições Linux de forma objetiva, transparente e em português"
     }
   };
 
+  const features = [
+    {
+      icon: Target,
+      title: t("about.whyUseful.items.informed.title"),
+      description: t("about.whyUseful.items.informed.description"),
+    },
+    {
+      icon: Shield,
+      title: t("about.whyUseful.items.transparency.title"),
+      description: t("about.whyUseful.items.transparency.description"),
+    },
+    {
+      icon: Database,
+      title: "Dados Reais",
+      description: "Métricas de performance obtidas através de testes padronizados: uso de RAM, scores de CPU e I/O.",
+    },
+    {
+      icon: Code,
+      title: t("about.whyUseful.items.desktop.title"),
+      description: t("about.whyUseful.items.desktop.description"),
+    },
+    {
+      icon: Users,
+      title: t("about.whyUseful.items.community.title"),
+      description: t("about.whyUseful.items.community.description"),
+    },
+    {
+      icon: Heart,
+      title: t("about.whyUseful.items.free.title"),
+      description: t("about.whyUseful.items.free.description"),
+    },
+  ];
+
+  const techStack = [
+    { name: "React", description: "Interface de usuário" },
+    { name: "TypeScript", description: "Tipagem segura" },
+    { name: "Vite", description: "Build & Dev Server" },
+    { name: "Tailwind CSS", description: "Estilização" },
+    { name: "Framer Motion", description: "Animações" },
+    { name: "Vercel", description: "Hospedagem" },
+  ];
+
   return (
     <div className="container mx-auto px-4 py-12 min-h-screen">
       <SEO
         title="Sobre o DistroWiki"
-        description="Conheça o DistroWiki, plataforma open source para comparação objetiva e transparente de distribuições Linux. Nossa missão, metodologia e roadmap público."
+        description="Conheça o DistroWiki, plataforma open source para comparação objetiva e transparente de distribuições Linux."
         canonical="https://distrowiki.site/sobre"
-        keywords="sobre, distrowiki, open source, linux, missão, metodologia"
+        keywords="sobre, distrowiki, open source, linux, comparação"
         structuredData={structuredData}
       />
+      
+      {/* Hero */}
       <motion.div 
         className="text-center mb-16"
         initial={{ opacity: 0, y: -20 }}
@@ -61,6 +105,7 @@ const About = () => {
         </p>
       </motion.div>
 
+      {/* Mission */}
       <motion.section 
         className="mb-16"
         initial={{ opacity: 0, y: 20 }}
@@ -68,15 +113,18 @@ const About = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
       >
-        <div className="bg-card border border-border rounded-xl p-8 max-w-4xl mx-auto">
+        <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-background border border-primary/20 rounded-2xl p-8 max-w-4xl mx-auto text-center">
+          <Zap className="w-12 h-12 text-primary mx-auto mb-4" />
           <h2 className="text-3xl font-bold mb-4">{t("about.mission.title")}</h2>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            {t("about.mission.description")}
+          <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+            O DistroWiki nasceu da frustração de não encontrar uma ferramenta simples e objetiva para comparar distribuições Linux. 
+            Nosso objetivo é ajudar você a escolher a distro certa, seja você um iniciante explorando Linux pela primeira vez 
+            ou um entusiasta buscando uma nova opção.
           </p>
         </div>
       </motion.section>
 
-      {/* Why Useful */}
+      {/* What We Offer */}
       <section className="mb-16">
         <motion.h2 
           className="text-3xl font-bold text-center mb-10"
@@ -85,7 +133,7 @@ const About = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          {t("about.whyUseful.title")}
+          O que oferecemos
         </motion.h2>
         <motion.div 
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
@@ -94,40 +142,9 @@ const About = () => {
           viewport={{ once: true }}
           variants={stagger}
         >
-          {[
-            {
-              icon: Target,
-              title: t("about.whyUseful.items.informed.title"),
-              description: t("about.whyUseful.items.informed.description"),
-            },
-            {
-              icon: Shield,
-              title: t("about.whyUseful.items.transparency.title"),
-              description: t("about.whyUseful.items.transparency.description"),
-            },
-            {
-              icon: TrendingUp,
-              title: t("about.whyUseful.items.timeSaving.title"),
-              description: t("about.whyUseful.items.timeSaving.description"),
-            },
-            {
-              icon: Code,
-              title: t("about.whyUseful.items.desktop.title"),
-              description: t("about.whyUseful.items.desktop.description"),
-            },
-            {
-              icon: Users,
-              title: t("about.whyUseful.items.community.title"),
-              description: t("about.whyUseful.items.community.description"),
-            },
-            {
-              icon: Heart,
-              title: t("about.whyUseful.items.free.title"),
-              description: t("about.whyUseful.items.free.description"),
-            },
-          ].map((item) => (
+          {features.map((item) => (
             <motion.div key={item.title} variants={fadeIn}>
-              <div className="bg-card border border-border rounded-xl p-6 card-hover">
+              <div className="bg-card border border-border rounded-xl p-6 h-full hover:border-primary/30 transition-all duration-300">
                 <item.icon className="w-10 h-10 text-primary mb-4" />
                 <h3 className="text-lg font-bold mb-2">{item.title}</h3>
                 <p className="text-sm text-muted-foreground">{item.description}</p>
@@ -137,107 +154,47 @@ const About = () => {
         </motion.div>
       </section>
 
-      {/* Methodology */}
+      {/* How It Works */}
       <section className="mb-16">
-        <h2 className="text-3xl font-bold text-center mb-10">{t("about.methodology.title")}</h2>
-        
-        <div className="space-y-6 max-w-4xl mx-auto">
-          <div className="bg-card border border-border rounded-xl p-6">
-            <h3 className="text-xl font-bold mb-3 text-primary">{t("about.methodology.whatWeMeasure.title")}</h3>
-            <div className="space-y-4">
-              <div>
-                <h4 className="font-semibold mb-2">{t("about.methodology.whatWeMeasure.informative.title")}</h4>
-                <p className="text-sm text-muted-foreground">
-                  {t("about.methodology.whatWeMeasure.informative.description")}
-                </p>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-2">{t("about.methodology.whatWeMeasure.practical.title")}</h4>
-                <p className="text-sm text-muted-foreground">
-                  {t("about.methodology.whatWeMeasure.practical.description")}
-                </p>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-2">{t("about.methodology.whatWeMeasure.consolidated.title")}</h4>
-                <p className="text-sm text-muted-foreground">
-                  {t("about.methodology.whatWeMeasure.consolidated.description")}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-card border border-border rounded-xl p-6">
-            <h3 className="text-xl font-bold mb-3 text-primary">{t("about.methodology.howWeScore.title")}</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              {t("about.methodology.howWeScore.intro")}
+        <div className="bg-card border border-border rounded-xl p-8 max-w-4xl mx-auto">
+          <h2 className="text-2xl font-bold mb-6">{t("about.methodology.howWeScore.title")}</h2>
+          <div className="space-y-4 text-muted-foreground">
+            <p>
+              O score de performance é calculado com base em três métricas principais:
             </p>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li className="flex items-start">
-                <span className="text-primary mr-2">•</span>
-                <span dangerouslySetInnerHTML={{ __html: t("about.methodology.howWeScore.performance") }} />
+            <ul className="space-y-3">
+              <li className="flex items-start gap-3">
+                <span className="bg-primary/20 text-primary px-2 py-1 rounded text-sm font-mono">RAM</span>
+                <span>Uso de memória RAM em idle - quanto menor, melhor para máquinas com recursos limitados.</span>
               </li>
-              <li className="flex items-start">
-                <span className="text-primary mr-2">•</span>
-                <span dangerouslySetInnerHTML={{ __html: t("about.methodology.howWeScore.stability") }} />
+              <li className="flex items-start gap-3">
+                <span className="bg-primary/20 text-primary px-2 py-1 rounded text-sm font-mono">CPU</span>
+                <span>Score de desempenho do processador medido via benchmark padronizado.</span>
               </li>
-              <li className="flex items-start">
-                <span className="text-primary mr-2">•</span>
-                <span dangerouslySetInnerHTML={{ __html: t("about.methodology.howWeScore.usability") }} />
-              </li>
-              <li className="flex items-start">
-                <span className="text-primary mr-2">•</span>
-                <span dangerouslySetInnerHTML={{ __html: t("about.methodology.howWeScore.community") }} />
-              </li>
-              <li className="flex items-start">
-                <span className="text-primary mr-2">•</span>
-                <span dangerouslySetInnerHTML={{ __html: t("about.methodology.howWeScore.updates") }} />
+              <li className="flex items-start gap-3">
+                <span className="bg-primary/20 text-primary px-2 py-1 rounded text-sm font-mono">I/O</span>
+                <span>Velocidade de leitura/escrita em disco, importante para boot e instalação de pacotes.</span>
               </li>
             </ul>
-          </div>
-
-          <div className="bg-warning/10 border border-warning/20 rounded-xl p-6">
-            <h3 className="text-xl font-bold mb-3 text-warning">{t("about.methodology.limitations.title")}</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              {(t("about.methodology.limitations.items", { returnObjects: true }) as string[]).map((item, index) => (
-                <li key={index} className="flex items-start">
-                  <span className="text-warning mr-2">⚠</span>
-                  <span dangerouslySetInnerHTML={{ __html: item }} />
-                </li>
-              ))}
-            </ul>
+            <p className="text-sm bg-warning/10 border border-warning/20 rounded-lg p-4 mt-4">
+              <strong className="text-warning">⚠️ Importante:</strong> Os scores são apenas uma métrica e não devem ser o único fator na sua decisão. 
+              Considere também a comunidade, documentação, facilidade de uso e seus casos de uso específicos.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Roadmap */}
+      {/* Tech Stack */}
       <section className="mb-16">
-        <h2 className="text-3xl font-bold text-center mb-10">{t("about.roadmap.title")}</h2>
-        <div className="max-w-3xl mx-auto space-y-4">
-          {[
-            { status: "✓", text: t("about.roadmap.items.catalog"), done: true },
-            { status: "✓", text: t("about.roadmap.items.comparison"), done: true },
-            { status: "✓", text: t("about.roadmap.items.filters"), done: true },
-            { status: "⏳", text: t("about.roadmap.items.search"), done: false },
-            { status: "⏳", text: t("about.roadmap.items.charts"), done: false },
-            { status: "⏳", text: t("about.roadmap.items.pdf"), done: false },
-            { status: "⏳", text: t("about.roadmap.items.api"), done: false },
-            { status: "⏳", text: t("about.roadmap.items.contribution"), done: false },
-          ].map((item, index) => (
-            <div
-              key={index}
-              className={`flex items-center space-x-4 p-4 rounded-lg ${
-                item.done
-                  ? "bg-success/10 border border-success/20"
-                  : "bg-card border border-border"
-              } animate-slide-up`}
-              style={{ animationDelay: `${index * 50}ms` }}
+        <h2 className="text-2xl font-bold text-center mb-8">Tecnologias</h2>
+        <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
+          {techStack.map((tech) => (
+            <div 
+              key={tech.name}
+              className="bg-card border border-border rounded-lg px-4 py-2 hover:border-primary/30 transition-colors"
             >
-              <span className={`text-2xl ${item.done ? "text-success" : "text-muted-foreground"}`}>
-                {item.status}
-              </span>
-              <span className={item.done ? "text-foreground font-medium" : "text-muted-foreground"}>
-                {item.text}
-              </span>
+              <span className="font-medium">{tech.name}</span>
+              <span className="text-muted-foreground text-sm ml-2">• {tech.description}</span>
             </div>
           ))}
         </div>
@@ -246,35 +203,26 @@ const About = () => {
       {/* Contribute */}
       <section className="mb-16">
         <div className="bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 rounded-2xl p-12 text-center max-w-4xl mx-auto">
+          <Github className="w-16 h-16 text-primary mx-auto mb-6" />
           <h2 className="text-3xl font-bold mb-4">{t("about.contribute.title")}</h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            {t("about.contribute.subtitle")}
+            O DistroWiki é um projeto open source. Contribuições são bem-vindas, seja reportando bugs, 
+            sugerindo melhorias, ou enviando pull requests.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-background/50 backdrop-blur rounded-xl p-4">
-              <h3 className="font-bold mb-2">{t("about.contribute.feedback.title")}</h3>
-              <p className="text-sm text-muted-foreground">
-                {t("about.contribute.feedback.description")}
-              </p>
-            </div>
-            <div className="bg-background/50 backdrop-blur rounded-xl p-4">
-              <h3 className="font-bold mb-2">{t("about.contribute.data.title")}</h3>
-              <p className="text-sm text-muted-foreground">
-                {t("about.contribute.data.description")}
-              </p>
-            </div>
-            <div className="bg-background/50 backdrop-blur rounded-xl p-4">
-              <h3 className="font-bold mb-2">{t("about.contribute.code.title")}</h3>
-              <p className="text-sm text-muted-foreground">
-                {t("about.contribute.code.description")}
-              </p>
-            </div>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="https://github.com/arthurhenriquelopes/DistroWiki" target="_blank" rel="noopener noreferrer">
+              <Button size="lg" className="text-base px-8">
+                <Github className="mr-2 h-5 w-5" />
+                Ver no GitHub
+              </Button>
+            </a>
+            <a href="https://github.com/arthurhenriquelopes/DistroWiki/issues" target="_blank" rel="noopener noreferrer">
+              <Button size="lg" variant="outline" className="text-base px-8 border-2">
+                <ExternalLink className="mr-2 h-5 w-5" />
+                Reportar Problema
+              </Button>
+            </a>
           </div>
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer">
-            <Button size="lg" className="text-base px-8">
-              {t("about.contribute.visitGithub")}
-            </Button>
-          </a>
         </div>
       </section>
 
@@ -282,9 +230,12 @@ const About = () => {
       <section className="text-center">
         <div className="max-w-2xl mx-auto">
           <h2 className="text-2xl font-bold mb-4">{t("about.license.title")}</h2>
-          <p className="text-muted-foreground mb-4" dangerouslySetInnerHTML={{ __html: t("about.license.description") }} />
+          <p className="text-muted-foreground mb-4">
+            Este projeto é distribuído sob a licença <strong>MIT</strong>. 
+            Você é livre para usar, modificar e distribuir o código.
+          </p>
           <p className="text-sm text-muted-foreground">
-            {t("about.license.privacy")}
+            Não coletamos dados pessoais. Não usamos cookies de rastreamento. Não exibimos anúncios.
           </p>
         </div>
       </section>

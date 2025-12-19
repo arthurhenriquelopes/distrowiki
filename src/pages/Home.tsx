@@ -216,12 +216,21 @@ const Home = () => {
           viewport={{ once: true }}
           variants={stagger}
         >
-          {topDistros.map((distro) => (
+          {topDistros.map((distro, index) => (
             <motion.div key={distro.id} variants={fadeIn}>
               <Link
                 to={`/distro/${distro.id}`}
-                className="block bg-card border border-border rounded-xl p-6 card-hover"
+                className="block bg-card border border-border rounded-xl p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/10 hover:border-primary/30 relative overflow-hidden group"
               >
+                {/* Ranking Badge */}
+                <div className={`absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                  index === 0 ? 'bg-yellow-500 text-yellow-950' :
+                  index === 1 ? 'bg-gray-300 text-gray-800' :
+                  'bg-amber-600 text-amber-50'
+                }`}>
+                  #{index + 1}
+                </div>
+                
               <div className="flex items-center space-x-4 mb-4">
                 <img
                   src={distro.logo}
@@ -233,6 +242,15 @@ const Home = () => {
                   <p className="text-sm text-muted-foreground">{distro.family}</p>
                 </div>
               </div>
+              
+              {/* Performance Metric */}
+              {distro.idleRamUsage && (
+                <div className="flex items-center justify-between text-sm text-muted-foreground mb-3 bg-muted/30 rounded-lg px-3 py-2">
+                  <span>RAM Idle</span>
+                  <span className="font-semibold text-foreground">{distro.idleRamUsage} MB</span>
+                </div>
+              )}
+              
               <ScoreBadge score={calculatePerformanceScore(distro)} size="lg" />
               </Link>
             </motion.div>
@@ -281,8 +299,12 @@ const Home = () => {
         </motion.div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto relative">
+          {/* Connector lines between cards - hidden on mobile */}
+          <div className="hidden md:block absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-8 h-[2px] bg-gradient-to-r from-primary/60 to-primary/30 z-10"></div>
+          <div className="hidden md:block absolute top-1/2 left-2/3 -translate-x-1/2 -translate-y-1/2 w-8 h-[2px] bg-gradient-to-r from-primary/60 to-primary/30 z-10"></div>
+          
           {HOW_IT_WORKS_STEPS.map((step, index) => (
-            <HowItWorksStep key={step.step} {...step} index={index} showConnector={index < 2} />
+            <HowItWorksStep key={step.step} {...step} index={index} showConnector={false} />
           ))}
         </div>
       </section>
@@ -305,9 +327,27 @@ const Home = () => {
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 {t("home.cta.title")}
               </h2>
-              <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              <p className="text-lg text-muted-foreground mb-4 max-w-2xl mx-auto">
                 {t("home.cta.subtitle")}
               </p>
+              
+              {/* Social Proof */}
+              <div className="flex items-center justify-center gap-4 mb-8 text-sm text-muted-foreground">
+                <a 
+                  href="https://github.com/arthurhenriquelopes/DistroWiki" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-background/50 rounded-full px-4 py-2 hover:bg-background/80 transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                  <span className="font-medium">Open Source</span>
+                </a>
+                <span className="text-muted-foreground/50">•</span>
+                <span>100% Gratuito</span>
+                <span className="text-muted-foreground/50">•</span>
+                <span>Sem Anúncios</span>
+              </div>
+              
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/catalogo">
                   <Button size="lg" className="text-base px-8 shadow-lg shadow-primary/20">

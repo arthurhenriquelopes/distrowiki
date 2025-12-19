@@ -11,7 +11,7 @@ interface HowItWorksStepProps {
   showConnector?: boolean;
 }
 
-export const HowItWorksStep = ({ icon: Icon, step, title, description, index, showConnector }: HowItWorksStepProps) => (
+export const HowItWorksStep = ({ icon: Icon, step, title, description, index }: HowItWorksStepProps) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -19,7 +19,7 @@ export const HowItWorksStep = ({ icon: Icon, step, title, description, index, sh
     transition={{ delay: index * 0.15 }}
     className="relative"
   >
-    <Card className="text-center bg-card/50 backdrop-blur-sm border-border/50 card-hover h-full">
+    <Card className="text-center bg-card/50 backdrop-blur-sm border-border/50 card-hover h-full hover:border-primary/30 transition-all duration-300">
       <CardContent className="p-8">
         <div className="flex items-center justify-center mb-6">
           <div className="relative">
@@ -29,14 +29,10 @@ export const HowItWorksStep = ({ icon: Icon, step, title, description, index, sh
             </div>
           </div>
         </div>
-        <Icon className="w-12 h-12 text-primary mx-auto mb-4" />
+        <Icon className="w-14 h-14 text-primary mx-auto mb-4" />
         <h3 className="text-xl font-bold text-foreground mb-3">{title}</h3>
-        <p className="text-muted-foreground">{description}</p>
+        <p className="text-muted-foreground text-base leading-relaxed">{description}</p>
       </CardContent>
     </Card>
-    
-    {showConnector && (
-      <div className="hidden md:block absolute top-1/2 -right-4 w-8 h-0.5 bg-gradient-to-r from-primary/50 to-transparent"></div>
-    )}
   </motion.div>
 );

@@ -117,3 +117,55 @@ storybook-static
 
 # Sentry
 .sentryclirc
+
+# Supabase
+.supabase/
+supabase/.temp/
+supabase/functions/.deno/
+*.supabase.local
+
+# Security / Secrets
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets/
+.secrets/
+*_rsa
+*_dsa
+*_ecdsa
+*_ed25519
+*.secret
+service-account*.json
+
+# Local development configs
+.env.example.local
+*.local.json
+local-config.js
+local-config.ts
+
+# Personal notes / scratch files
+scratch/
+notes/
+TODO.local.md
+NOTES.md
+*.scratch.*
+
+# Database dumps
+*.sql
+*.dump
+*.backup
+*.db
+*.sqlite
+*.sqlite3
+
+# Playwright / E2E
+/test-results/
+/e2e-results/
+
+# AI/Editor agents
+.gemini/
+.cursor/
+.claude/
+.copilot/
