@@ -19,7 +19,7 @@ on:
         type: choice
         options:
           - all            # Todas as distros
-          - performance    # Só métricas de performance
+          - performance    # Só métricas de performance (RAM, CPU, I/O)
           - dates          # Só datas de release
 
 jobs:
@@ -32,9 +32,11 @@ jobs:
           echo "🚀 Iniciando enriquecimento semanal"
           echo "Data: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
           echo "Trigger: ${{ github.event_name }}"
+          echo "Tipo: ${{ github.event.inputs.enrichment_type || 'all' }}"
 
       # Step 1: Atualizar datas de release (via DistroWatch scraping)
       - name: 📅 Atualizar datas de release
+        if: ${{ github.event.inputs.enrichment_type != 'performance' }}
         run: |
           echo "🔍 Scraping datas de release do DistroWatch..."
           
@@ -98,3 +100,4 @@ jobs:
           echo "✅ Enriquecimento semanal concluído!"
           echo "========================================"
           echo "Data: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "Tipo executado: ${{ github.event.inputs.enrichment_type || 'all' }}"
