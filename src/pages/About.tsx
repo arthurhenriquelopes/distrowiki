@@ -27,7 +27,7 @@ const About = () => {
     "name": "Sobre o DistroWiki",
     "description": "Conheça o DistroWiki, plataforma open source para comparação objetiva e transparente de distribuições Linux",
     "url": "https://distrowiki.site/sobre",
-    "inLanguage": "pt-BR",
+    "inLanguage": t('common.langCode') || "pt-BR",
     "mainEntity": {
       "@type": "Organization",
       "name": "DistroWiki",

@@ -306,6 +306,9 @@
         "pathAttempted": "Caminho tentado:"
     },
     "common": {
-        "na": "N/A"
+        "na": "N/A",
+        "langCode": "pt-BR",
+        "descriptionNA": "Descrição não disponível.",
+        "dateNA": "Data não disponível"
     }
 }

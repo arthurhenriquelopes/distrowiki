@@ -141,7 +141,7 @@ const Catalog = () => {
     "name": "Catálogo de Distribuições Linux",
     "description": catalogDescription,
     "url": "https://distrowiki.site/catalogo",
-    "inLanguage": "pt-BR",
+    "inLanguage": t('common.langCode') || "pt-BR",
     "numberOfItems": distros.length,
     "itemListElement": filteredAndSortedDistros.slice(0, 10).map((distro, index) => ({
       "@type": "ListItem",

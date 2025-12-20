@@ -6,6 +6,7 @@ import { ArrowLeft, ExternalLink, X, Share2, Check, Info, Trophy, Zap, HardDrive
 import { DesktopEnvList } from "@/components/DesktopEnvBadge";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
 import ScoreBadge from "@/components/ScoreBadge";
+import { MetricBar } from "@/components/comparison/MetricBar";
 import React, { useEffect, useState } from "react";
 import {
   fetchDistrosByIds,
@@ -155,7 +156,7 @@ const Comparison = () => {
     "name": comparisonTitle,
     "description": comparisonDescription,
     "url": comparisonUrl,
-    "inLanguage": "pt-BR",
+    "inLanguage": t('common.langCode') || "pt-BR",
     "about": selectedDistros.map(distro => ({
       "@type": "SoftwareApplication",
       "name": distro.name,
@@ -281,7 +282,7 @@ const Comparison = () => {
                     ? "bg-gradient-to-br from-primary/15 via-primary/5 to-transparent border-primary ring-2 ring-primary/30 shadow-xl shadow-primary/20" 
                     : "bg-card/30 border-border/40 opacity-80 hover:opacity-100 hover:border-border"
                 )}
-                whileHover={{ scale: 1 }}
+                whileHover={{ scale: 1.01 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 {/* Badge de vencedor - troféu no topo centralizado */}
@@ -425,7 +426,7 @@ const Comparison = () => {
             >
               {selectedDistros.map((distro) => (
                 <div key={distro.id} className="text-sm text-muted-foreground leading-relaxed line-clamp-4">
-                  {distro.description || "Descrição não disponível."}
+                  {distro.description || t('common.descriptionNA') || "Descrição não disponível."}
                 </div>
               ))}
             </div>
@@ -445,33 +446,15 @@ const Comparison = () => {
                 {selectedDistros.map((distro) => {
                   const value = distro.idleRamUsage;
                   const best = getBestValue(selectedDistros, "idleRamUsage", true);
-                  const isBest = value && isBestValue(value, best);
-                  
+                  const isBest = !!(value && isBestValue(value, best));
                   return (
-                    <div key={distro.id} className="space-y-1.5">
-                      <div className="flex items-center justify-between">
-                        <span className={cn(
-                          "text-sm font-medium",
-                          isBest && "text-green-500"
-                        )}>
-                          {value ? `${value} MB` : "N/A"}
-                        </span>
-                        {isBest && <Trophy className="w-3.5 h-3.5 text-green-500" />}
-                      </div>
-                      {value && (
-                        <div className="w-full bg-muted/50 rounded-full h-2 overflow-hidden">
-                          <motion.div
-                            className={cn(
-                              "h-2 rounded-full",
-                              isBest ? "bg-green-500" : "bg-primary/70"
-                            )}
-                            initial={{ width: 0 }}
-                            animate={{ width: `${Math.min((value / 2000) * 100, 100)}%` }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
-                          />
-                        </div>
-                      )}
-                    </div>
+                    <MetricBar 
+                      key={distro.id}
+                      value={value} 
+                      maxValue={2000} 
+                      isBest={isBest}
+                      formatValue={(v) => `${v} MB`}
+                    />
                   );
                 })}
               </ComparisonRow>
@@ -485,33 +468,16 @@ const Comparison = () => {
                 {selectedDistros.map((distro) => {
                   const value = distro.cpuScore;
                   const best = getBestValue(selectedDistros, "cpuScore");
-                  const isBest = value && isBestValue(value, best);
-                  
+                  const isBest = !!(value && isBestValue(value, best));
                   return (
-                    <div key={distro.id} className="space-y-1.5">
-                      <div className="flex items-center justify-between">
-                        <span className={cn(
-                          "text-sm font-medium",
-                          isBest && "text-green-500"
-                        )}>
-                          {value ? `${value}/10` : "N/A"}
-                        </span>
-                        {isBest && <Trophy className="w-3.5 h-3.5 text-green-500" />}
-                      </div>
-                      {value && (
-                        <div className="w-full bg-muted/50 rounded-full h-2 overflow-hidden">
-                          <motion.div
-                            className={cn(
-                              "h-2 rounded-full",
-                              isBest ? "bg-green-500" : "bg-primary/70"
-                            )}
-                            initial={{ width: 0 }}
-                            animate={{ width: `${(value / 10) * 100}%` }}
-                            transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-                          />
-                        </div>
-                      )}
-                    </div>
+                    <MetricBar 
+                      key={distro.id}
+                      value={value} 
+                      maxValue={10} 
+                      isBest={isBest}
+                      formatValue={(v) => `${v}/10`}
+                      delay={0.1}
+                    />
                   );
                 })}
               </ComparisonRow>
@@ -525,33 +491,16 @@ const Comparison = () => {
                 {selectedDistros.map((distro) => {
                   const value = distro.ioScore;
                   const best = getBestValue(selectedDistros, "ioScore");
-                  const isBest = value && isBestValue(value, best);
-                  
+                  const isBest = !!(value && isBestValue(value, best));
                   return (
-                    <div key={distro.id} className="space-y-1.5">
-                      <div className="flex items-center justify-between">
-                        <span className={cn(
-                          "text-sm font-medium",
-                          isBest && "text-green-500"
-                        )}>
-                          {value ? `${value}/10` : "N/A"}
-                        </span>
-                        {isBest && <Trophy className="w-3.5 h-3.5 text-green-500" />}
-                      </div>
-                      {value && (
-                        <div className="w-full bg-muted/50 rounded-full h-2 overflow-hidden">
-                          <motion.div
-                            className={cn(
-                              "h-2 rounded-full",
-                              isBest ? "bg-green-500" : "bg-primary/70"
-                            )}
-                            initial={{ width: 0 }}
-                            animate={{ width: `${(value / 10) * 100}%` }}
-                            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-                          />
-                        </div>
-                      )}
-                    </div>
+                    <MetricBar 
+                      key={distro.id}
+                      value={value} 
+                      maxValue={10} 
+                      isBest={isBest}
+                      formatValue={(v) => `${v}/10`}
+                      delay={0.2}
+                    />
                   );
                 })}
               </ComparisonRow>
@@ -626,12 +575,12 @@ const Comparison = () => {
                   <TooltipContent>
                     <p className="text-xs">
                       {distro.lastRelease 
-                        ? new Date(distro.lastRelease).toLocaleDateString("pt-BR", { 
+                        ? new Date(distro.lastRelease).toLocaleDateString(undefined, { 
                             day: '2-digit', 
                             month: 'long', 
                             year: 'numeric' 
                           })
-                        : "Data não disponível"}
+                        : t('common.dateNA') || "Data não disponível"}
                     </p>
                   </TooltipContent>
                 </Tooltip>
