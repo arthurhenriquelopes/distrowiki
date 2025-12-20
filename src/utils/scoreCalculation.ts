@@ -75,11 +75,11 @@ export const calculatePerformanceScore = (distro: Distro): number => {
     }
   }
 
-  // Pesos
-  const RAM_WEIGHT = 0.35;
-  const CPU_WEIGHT = 0.25;
-  const IO_WEIGHT = 0.20;
-  const FRESHNESS_WEIGHT = 0.20;
+  // Pesos - CPU e I/O são mais importantes que RAM
+  const CPU_WEIGHT = 0.35;    // 35% - Maior peso
+  const IO_WEIGHT = 0.30;     // 30% - Segundo maior
+  const RAM_WEIGHT = 0.20;    // 20% - Terceiro
+  const FRESHNESS_WEIGHT = 0.15; // 15% - Menor peso
 
   // Score ponderado
   let totalWeight = 0;
