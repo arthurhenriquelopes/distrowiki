@@ -191,8 +191,7 @@ export const DesktopEnvBadge = ({
   return (
     <span
       className={cn(
-        "inline-flex items-center font-medium rounded-lg border transition-all duration-200",
-        "hover:scale-105 hover:shadow-sm",
+        "inline-flex items-center font-medium rounded-lg border transition-colors duration-200",
         config.bg,
         config.text,
         config.border,

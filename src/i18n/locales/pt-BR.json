@@ -250,7 +250,17 @@
             "office": "Office",
             "viewDetails": "Ver Detalhes Completos"
         },
-        "independent": "Independente"
+        "independent": "Independente",
+        "relativeDate": {
+            "future": "Em breve",
+            "today": "Hoje",
+            "yesterday": "Ontem",
+            "daysAgo": "há {{count}} dias",
+            "oneMonthAgo": "há 1 mês",
+            "monthsAgo": "há {{count}} meses",
+            "oneYearAgo": "há 1 ano",
+            "yearsAgo": "há {{count}} anos"
+        }
     },
     "distroDetails": {
         "loading": "Carregando distribuição...",

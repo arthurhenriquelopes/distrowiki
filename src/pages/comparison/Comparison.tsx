@@ -2,7 +2,7 @@ import { useComparison } from "@/contexts/ComparisonContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ExternalLink, X, Share2, Check, Info, Trophy, Zap, HardDrive, Cpu, Monitor, Globe, Calendar, Package, MapPin } from "lucide-react";
+import { ArrowLeft, ExternalLink, X, Share2, Check, Info, Trophy, Zap, HardDrive, Cpu, Monitor, Globe, Calendar, Package, MapPin, ChevronDown, Plus } from "lucide-react";
 import { DesktopEnvList } from "@/components/DesktopEnvBadge";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
 import ScoreBadge from "@/components/ScoreBadge";
@@ -18,6 +18,27 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
+// Helper para formatar datas relativas (usa i18n)
+const formatRelativeDate = (
+  dateString: string | undefined | null, 
+  t: (key: string, options?: Record<string, unknown>) => string
+): string => {
+  if (!dateString) return "N/A";
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  
+  if (diffDays < 0) return t('comparison.relativeDate.future');
+  if (diffDays === 0) return t('comparison.relativeDate.today');
+  if (diffDays === 1) return t('comparison.relativeDate.yesterday');
+  if (diffDays < 30) return t('comparison.relativeDate.daysAgo', { count: diffDays });
+  if (diffDays < 60) return t('comparison.relativeDate.oneMonthAgo');
+  if (diffDays < 365) return t('comparison.relativeDate.monthsAgo', { count: Math.floor(diffDays / 30) });
+  if (diffDays < 730) return t('comparison.relativeDate.oneYearAgo');
+  return t('comparison.relativeDate.yearsAgo', { count: Math.floor(diffDays / 365) });
+};
+
 const Comparison = () => {
   const { t } = useTranslation();
   const { selectedDistros, removeDistro, replaceSelection } = useComparison();
@@ -25,6 +46,16 @@ const Comparison = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  
+  // Estado para seções colapsáveis
+  const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
+  
+  const toggleSection = (sectionId: string) => {
+    setCollapsedSections(prev => ({
+      ...prev,
+      [sectionId]: !prev[sectionId]
+    }));
+  };
 
   // Carregar distros da URL se houver parâmetros
   useEffect(() => {
@@ -163,24 +194,36 @@ const Comparison = () => {
             </Button>
           </Link>
           
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={handleShare}
-            className="gap-2"
-          >
-            {copied ? (
-              <>
-                <Check className="h-4 w-4" />
-                {t('comparison.copied')}
-              </>
-            ) : (
-              <>
-                <Share2 className="h-4 w-4" />
-                {t('comparison.share')}
-              </>
+          <div className="flex items-center gap-2">
+            {/* Botão Adicionar Distro */}
+            {selectedDistros.length < 4 && (
+              <Link to="/catalogo">
+                <Button variant="default" size="sm" className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  <span className="hidden sm:inline">Adicionar</span>
+                </Button>
+              </Link>
             )}
-          </Button>
+            
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={handleShare}
+              className="gap-2"
+            >
+              {copied ? (
+                <>
+                  <Check className="h-4 w-4" />
+                  {t('comparison.copied')}
+                </>
+              ) : (
+                <>
+                  <Share2 className="h-4 w-4" />
+                  {t('comparison.share')}
+                </>
+              )}
+            </Button>
+          </div>
         </div>
         
         <h1 className="text-3xl sm:text-4xl font-bold mb-2 tracking-tight">{t('comparison.title')}</h1>
@@ -191,7 +234,7 @@ const Comparison = () => {
 
       {/* Cards de Distro - Header Sticky */}
       <motion.div 
-        className="sticky top-16 z-40 -mx-4 px-4 sm:mx-0 sm:px-0 py-4 bg-background/80 backdrop-blur-xl border-b border-border/50 mb-6"
+        className="sticky top-16 z-40 -mx-4 px-4 sm:mx-0 sm:px-4 py-4 bg-background/80 backdrop-blur-xl border-b border-border/50 mb-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
@@ -212,10 +255,10 @@ const Comparison = () => {
                 className={cn(
                   "relative rounded-xl p-2 sm:p-4 border transition-all duration-300 min-w-0",
                   isWinner 
-                    ? "bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/50 shadow-lg shadow-primary/10" 
-                    : "bg-card/50 border-border/50 hover:border-border"
+                    ? "bg-gradient-to-br from-primary/15 via-primary/5 to-transparent border-primary ring-2 ring-primary/30 shadow-xl shadow-primary/20" 
+                    : "bg-card/30 border-border/40 opacity-80 hover:opacity-100 hover:border-border"
                 )}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 {/* Badge de vencedor - troféu no topo centralizado */}
@@ -264,7 +307,9 @@ const Comparison = () => {
                   <div className="w-full overflow-x-auto scrollbar-hide mt-1">
                     <h2 className="font-bold text-xs text-center whitespace-nowrap">{shortName}</h2>
                   </div>
-                  <ScoreBadge score={score} size="sm" />
+                  <div className="mt-2.5">
+                    <ScoreBadge score={score} size="sm" />
+                  </div>
                 </div>
 
                 {/* Desktop: Layout vertical quadrado */}
@@ -501,11 +546,24 @@ const Comparison = () => {
 
             <ComparisonRow label={t('comparison.sections.lastRelease')} icon={<Calendar className="w-3.5 h-3.5" />}>
               {selectedDistros.map((distro) => (
-                <span key={distro.id} className="text-sm font-medium">
-                  {distro.lastRelease 
-                    ? new Date(distro.lastRelease).toLocaleDateString("pt-BR")
-                    : "N/A"}
-                </span>
+                <Tooltip key={distro.id}>
+                  <TooltipTrigger asChild>
+                    <span className="text-sm font-medium cursor-help">
+                      {formatRelativeDate(distro.lastRelease, t)}
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="text-xs">
+                      {distro.lastRelease 
+                        ? new Date(distro.lastRelease).toLocaleDateString("pt-BR", { 
+                            day: '2-digit', 
+                            month: 'long', 
+                            year: 'numeric' 
+                          })
+                        : "Data não disponível"}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
               ))}
             </ComparisonRow>
 
@@ -575,35 +633,72 @@ const Comparison = () => {
   );
 };
 
-// Componente auxiliar: Seção de Comparação
+// Componente auxiliar: Seção de Comparação (Colapsável)
 interface ComparisonSectionProps {
   title: string;
   icon?: React.ReactNode;
   children: React.ReactNode;
   highlight?: boolean;
+  sectionId?: string;
+  defaultCollapsed?: boolean;
 }
 
-const ComparisonSection = ({ title, icon, children, highlight }: ComparisonSectionProps) => (
-  <motion.div
-    className={cn(
-      "rounded-xl border p-5",
-      highlight 
-        ? "bg-gradient-to-br from-primary/5 via-transparent to-transparent border-primary/20" 
-        : "bg-card/30 border-border/50"
-    )}
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.4 }}
-  >
-    <div className="flex items-center justify-center gap-2 mb-4">
-      {icon && <span className="text-primary">{icon}</span>}
-      <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-        {title}
-      </h3>
-    </div>
-    {children}
-  </motion.div>
-);
+const ComparisonSection = ({ 
+  title, 
+  icon, 
+  children, 
+  highlight,
+  sectionId,
+  defaultCollapsed = false 
+}: ComparisonSectionProps) => {
+  const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
+  
+  return (
+    <motion.div
+      className={cn(
+        "rounded-xl border overflow-hidden",
+        highlight 
+          ? "bg-gradient-to-br from-primary/5 via-transparent to-transparent border-primary/20" 
+          : "bg-card/30 border-border/50"
+      )}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
+      {/* Header clicável */}
+      <button
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        className="w-full flex items-center justify-center gap-2 p-4 hover:bg-muted/30 transition-colors"
+      >
+        {icon && <span className="text-primary">{icon}</span>}
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+          {title}
+        </h3>
+        <ChevronDown 
+          className={cn(
+            "w-4 h-4 text-muted-foreground transition-transform duration-200",
+            isCollapsed && "-rotate-90"
+          )} 
+        />
+      </button>
+      
+      {/* Conteúdo colapsável */}
+      <AnimatePresence initial={false}>
+        {!isCollapsed && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="px-5 pb-5"
+          >
+            {children}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+};
 
 // Componente auxiliar: Linha de Comparação
 interface ComparisonRowProps {
@@ -641,7 +736,7 @@ const ComparisonRow = ({ label, tooltip, icon, children }: ComparisonRowProps) =
         style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, 1fr)` }}
       >
         {React.Children.map(children, (child) => (
-          <div className="truncate text-xs sm:text-sm">
+          <div className="truncate text-xs sm:text-sm text-center">
             {child}
           </div>
         ))}
