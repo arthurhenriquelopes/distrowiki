@@ -267,32 +267,30 @@ const Comparison = () => {
                   <ScoreBadge score={score} size="sm" />
                 </div>
 
-                {/* Desktop: Layout horizontal normal */}
-                <div className="hidden sm:flex items-center gap-3">
+                {/* Desktop: Layout vertical quadrado */}
+                <div className="hidden sm:flex flex-col items-center text-center py-2">
                   <img
                     src={distro.logo || `/logos/${distro.id}.svg`}
                     alt={distro.name}
-                    className="w-12 h-12 object-contain rounded-lg"
+                    className="w-14 h-14 object-contain rounded-lg mb-2"
                     onError={(e) => {
-                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(distro.name)}&background=random&size=48`;
+                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(distro.name)}&background=random&size=56`;
                     }}
                   />
-                  <div className="flex-1 min-w-0">
-                    <h2 className="font-bold text-lg truncate">{distro.name}</h2>
-                    <p className="text-xs text-muted-foreground truncate">
-                      {distro.family || distro.basedOn || t('comparison.independent')}
-                    </p>
-                  </div>
+                  <h2 className="font-bold text-base truncate w-full px-1">{distro.name}</h2>
+                  <p className="text-xs text-muted-foreground truncate w-full px-1 mb-2">
+                    {distro.family || distro.basedOn || t('comparison.independent')}
+                  </p>
                   <ScoreBadge score={score} size="md" />
+                  
+                  {/* Link para detalhes */}
+                  <Link 
+                    to={`/distro/${distro.id}`}
+                    className="mt-2 flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {t('comparison.sections.viewDetails')} <ExternalLink className="w-3 h-3" />
+                  </Link>
                 </div>
-                
-                {/* Link para detalhes - só desktop */}
-                <Link 
-                  to={`/distro/${distro.id}`}
-                  className="hidden sm:flex mt-3 items-center justify-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
-                >
-                  {t('comparison.sections.viewDetails')} <ExternalLink className="w-3 h-3" />
-                </Link>
               </motion.div>
             );
           })}
@@ -445,7 +443,7 @@ const Comparison = () => {
               {/* Requisitos */}
               <ComparisonRow label={t('comparison.sections.requirements')}>
                 {selectedDistros.map((distro) => (
-                  <span key={distro.id} className="text-sm font-medium">
+                  <span key={distro.id} className="text-sm font-medium text-center block">
                     {distro.requirements || "N/A"}
                   </span>
                 ))}
@@ -465,7 +463,13 @@ const Comparison = () => {
               return (
                 <div key={distro.id} className="flex justify-center overflow-x-auto">
                   <div className="flex-shrink-0">
-                    <DesktopEnvList environments={desktops} size="sm" />
+                    {/* Mobile: sm, Desktop: md */}
+                    <div className="sm:hidden">
+                      <DesktopEnvList environments={desktops} size="sm" />
+                    </div>
+                    <div className="hidden sm:block">
+                      <DesktopEnvList environments={desktops} size="md" />
+                    </div>
                   </div>
                 </div>
               );
