@@ -98,6 +98,24 @@ const Comparison = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDistros.length]);
 
+  // Calcular scores UMA vez e cachear (evita N*2 recálculos)
+  const scoreMap = React.useMemo(() => {
+    const map = new Map<string, number>();
+    selectedDistros.forEach(d => map.set(d.id, calculatePerformanceScore(d)));
+    return map;
+  }, [selectedDistros]);
+  
+  // Encontrar o vencedor geral (maior score) usando cache
+  const winnerDistro = React.useMemo(() => {
+    if (selectedDistros.length === 0) return null;
+    return selectedDistros.reduce((prev, current) => 
+      (scoreMap.get(current.id) || 0) > (scoreMap.get(prev.id) || 0) ? current : prev
+    );
+  }, [selectedDistros, scoreMap]);
+
+  // Usar helpers utilitários
+  const performanceAvailable = hasPerformanceData(selectedDistros);
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-20 min-h-screen flex items-center justify-center">
@@ -132,23 +150,6 @@ const Comparison = () => {
       </div>
     );
   }
-
-  // Usar helpers utilitários
-  const performanceAvailable = hasPerformanceData(selectedDistros);
-  
-  // Calcular scores UMA vez e cachear (evita N*2 recálculos)
-  const scoreMap = React.useMemo(() => {
-    const map = new Map<string, number>();
-    selectedDistros.forEach(d => map.set(d.id, calculatePerformanceScore(d)));
-    return map;
-  }, [selectedDistros]);
-  
-  // Encontrar o vencedor geral (maior score) usando cache
-  const winnerDistro = React.useMemo(() => {
-    return selectedDistros.reduce((prev, current) => 
-      (scoreMap.get(current.id) || 0) > (scoreMap.get(prev.id) || 0) ? current : prev
-    );
-  }, [selectedDistros, scoreMap]);
 
   const comparisonTitle = `Comparar ${selectedDistros.map(d => d.name).join(' vs ')}`;
   const comparisonDescription = `Comparação detalhada entre ${selectedDistros.map(d => d.name).join(', ')}. Analise métricas de desempenho, uso de RAM, benchmarks e especificações técnicas.`;
