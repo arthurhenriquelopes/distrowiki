@@ -2,7 +2,7 @@ import { useComparison } from "@/contexts/ComparisonContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ExternalLink, X, Share2, Check, Info, Trophy, Zap, HardDrive, Cpu, Monitor, Globe, Calendar, Package, MapPin, ChevronDown, Plus } from "lucide-react";
+import { ArrowLeft, ExternalLink, X, Share2, Check, Info, Trophy, Zap, HardDrive, Cpu, Monitor, Globe, Calendar, Package, MapPin, ChevronDown, Plus, Eye, EyeOff } from "lucide-react";
 import { DesktopEnvList } from "@/components/DesktopEnvBadge";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
 import ScoreBadge from "@/components/ScoreBadge";
@@ -47,6 +47,7 @@ const Comparison = () => {
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [isCompact, setIsCompact] = useState(false);
+  const [showDesktop, setShowDesktop] = useState(false);
 
   // Scroll listener para compactar header
   useEffect(() => {
@@ -216,6 +217,17 @@ const Comparison = () => {
               </Link>
             )}
             
+            {/* Botão Desktop - só desktop */}
+            <Button 
+              variant={showDesktop ? "default" : "outline"}
+              size="sm"
+              onClick={() => setShowDesktop(!showDesktop)}
+              className="gap-2 hidden sm:flex"
+            >
+              {showDesktop ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              Desktop
+            </Button>
+            
             <Button 
               variant="outline" 
               size="sm"
@@ -323,51 +335,76 @@ const Comparison = () => {
                   </div>
                 </div>
 
-                {/* Desktop: Layout condicional (expandido/compacto) */}
+                {/* Desktop: Layout condicional (expandido/compacto/screenshot) */}
                 <div className={cn(
                   "hidden sm:flex flex-col items-center text-center transition-all duration-300 ease-out overflow-hidden",
                   isCompact ? "py-1" : "py-2"
                 )}>
-                  <div className={cn(
-                    "flex items-center gap-3 transition-all duration-300",
-                    isCompact ? "flex-row" : "flex-col"
-                  )}>
-                    <img
-                      src={distro.logo || `/logos/${distro.id}.svg`}
-                      alt={distro.name}
-                      className={cn(
-                        "object-contain rounded-lg transition-all duration-300",
-                        isCompact ? "w-8 h-8" : "w-14 h-14 mb-2"
-                      )}
-                      onError={(e) => {
-                        e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(distro.name)}&background=random&size=56`;
-                      }}
-                    />
-                    <div className={cn(
-                      "transition-all duration-300",
-                      isCompact ? "text-left" : "text-center w-full"
-                    )}>
-                      <h2 className={cn(
-                        "font-bold truncate transition-all duration-300",
-                        isCompact ? "text-sm" : "text-base w-full px-1"
-                      )}>{isCompact ? shortName : distro.name}</h2>
-                      {!isCompact && (
-                        <p className="text-xs text-muted-foreground truncate w-full px-1 mb-2">
-                          {distro.family || distro.basedOn || t('comparison.independent')}
-                        </p>
-                      )}
+                  {showDesktop && !isCompact ? (
+                    /* Modo Screenshot Desktop */
+                    <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-muted/50">
+                      <img
+                        src={`/logos/desktop/${distro.id}.png`}
+                        alt={`${distro.name} Desktop`}
+                        className="w-full h-full object-cover object-bottom"
+                        onError={(e) => {
+                          e.currentTarget.src = distro.logo || `/logos/${distro.id}.svg`;
+                          e.currentTarget.className = "w-full h-full object-contain p-4 opacity-30";
+                        }}
+                      />
+                      {/* Overlay com nome e score */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3">
+                        <div className="flex items-center justify-between">
+                          <h2 className="font-bold text-sm text-white truncate">{distro.name}</h2>
+                          <ScoreBadge score={score} size="sm" />
+                        </div>
+                      </div>
                     </div>
-                    <ScoreBadge score={score} size={isCompact ? "sm" : "md"} />
-                  </div>
-                  
-                  {/* Link para detalhes - só no modo expandido */}
-                  {!isCompact && (
-                    <Link 
-                      to={`/distro/${distro.id}`}
-                      className="mt-2 flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
-                    >
-                      {t('comparison.sections.viewDetails')} <ExternalLink className="w-3 h-3" />
-                    </Link>
+                  ) : (
+                    /* Modo Normal (expandido/compacto) */
+                    <>
+                      <div className={cn(
+                        "flex items-center gap-3 transition-all duration-300",
+                        isCompact ? "flex-row" : "flex-col"
+                      )}>
+                        <img
+                          src={distro.logo || `/logos/${distro.id}.svg`}
+                          alt={distro.name}
+                          className={cn(
+                            "object-contain rounded-lg transition-all duration-300",
+                            isCompact ? "w-8 h-8" : "w-14 h-14 mb-2"
+                          )}
+                          onError={(e) => {
+                            e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(distro.name)}&background=random&size=56`;
+                          }}
+                        />
+                        <div className={cn(
+                          "transition-all duration-300",
+                          isCompact ? "text-left" : "text-center w-full"
+                        )}>
+                          <h2 className={cn(
+                            "font-bold truncate transition-all duration-300",
+                            isCompact ? "text-sm" : "text-base w-full px-1"
+                          )}>{isCompact ? shortName : distro.name}</h2>
+                          {!isCompact && (
+                            <p className="text-xs text-muted-foreground truncate w-full px-1 mb-2">
+                              {distro.family || distro.basedOn || t('comparison.independent')}
+                            </p>
+                          )}
+                        </div>
+                        <ScoreBadge score={score} size={isCompact ? "sm" : "md"} />
+                      </div>
+                      
+                      {/* Link para detalhes - só no modo expandido */}
+                      {!isCompact && (
+                        <Link 
+                          to={`/distro/${distro.id}`}
+                          className="mt-2 flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
+                        >
+                          {t('comparison.sections.viewDetails')} <ExternalLink className="w-3 h-3" />
+                        </Link>
+                      )}
+                    </>
                   )}
                 </div>
               </motion.div>
