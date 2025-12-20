@@ -186,10 +186,10 @@ All colors MUST be HSL.
 
   /* Font utilities */
   .font-heading {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Overpass', sans-serif;
   }
 
   .font-rounded {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Catamaran', sans-serif;
   }
 }
