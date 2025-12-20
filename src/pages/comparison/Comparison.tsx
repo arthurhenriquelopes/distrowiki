@@ -63,7 +63,11 @@ const Comparison = () => {
 
   // Carregar distros da URL se houver parâmetros
   useEffect(() => {
-    if (!distroIds || selectedDistros.length >= 2) return;
+    if (!distroIds) return;
+
+    const urlIds = distroIds.split('+').sort().join('+');
+    const currentIds = selectedDistros.map(d => d.id).sort().join('+');
+    if (urlIds === currentIds && selectedDistros.length >= 2) return;
 
     const loadDistrosFromUrl = async () => {
       setLoading(true);
