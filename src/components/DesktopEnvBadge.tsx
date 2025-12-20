@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 // Configuração de cada ambiente gráfico com cores e ícones
 const desktopEnvConfig: Record<string, {
@@ -228,10 +229,12 @@ export const DesktopEnvList = ({
   centered = false,
   className 
 }: DesktopEnvListProps) => {
+  const { t } = useTranslation();
+  
   if (!environments || environments.length === 0) {
     return (
       <span className="text-sm text-muted-foreground italic">
-        Nenhum ambiente gráfico
+        {t('comparison.noDesktopEnv') || 'Nenhum'}
       </span>
     );
   }

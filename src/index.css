@@ -183,4 +183,13 @@ All colors MUST be HSL.
   .terminal-glow {
     text-shadow: 0 0 5px currentColor;
   }
+
+  /* Font utilities */
+  .font-heading {
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .font-rounded {
+    font-family: 'Poppins', sans-serif;
+  }
 }

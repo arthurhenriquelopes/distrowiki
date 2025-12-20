@@ -260,7 +260,8 @@
             "monthsAgo": "{{count}} months ago",
             "oneYearAgo": "1 year ago",
             "yearsAgo": "{{count}} years ago"
-        }
+        },
+        "noDesktopEnv": "None"
     },
     "distroDetails": {
         "loading": "Loading distribution...",

@@ -46,16 +46,6 @@ const Comparison = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
-  
-  // Estado para seções colapsáveis
-  const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
-  
-  const toggleSection = (sectionId: string) => {
-    setCollapsedSections(prev => ({
-      ...prev,
-      [sectionId]: !prev[sectionId]
-    }));
-  };
 
   // Carregar distros da URL se houver parâmetros
   useEffect(() => {
@@ -128,10 +118,19 @@ const Comparison = () => {
   // Usar helpers utilitários
   const performanceAvailable = hasPerformanceData(selectedDistros);
   
-  // Encontrar o vencedor geral (maior score)
-  const winnerDistro = selectedDistros.reduce((prev, current) => 
-    calculatePerformanceScore(current) > calculatePerformanceScore(prev) ? current : prev
-  );
+  // Calcular scores UMA vez e cachear (evita N*2 recálculos)
+  const scoreMap = React.useMemo(() => {
+    const map = new Map<string, number>();
+    selectedDistros.forEach(d => map.set(d.id, calculatePerformanceScore(d)));
+    return map;
+  }, [selectedDistros]);
+  
+  // Encontrar o vencedor geral (maior score) usando cache
+  const winnerDistro = React.useMemo(() => {
+    return selectedDistros.reduce((prev, current) => 
+      (scoreMap.get(current.id) || 0) > (scoreMap.get(prev.id) || 0) ? current : prev
+    );
+  }, [selectedDistros, scoreMap]);
 
   const comparisonTitle = `Comparar ${selectedDistros.map(d => d.name).join(' vs ')}`;
   const comparisonDescription = `Comparação detalhada entre ${selectedDistros.map(d => d.name).join(', ')}. Analise métricas de desempenho, uso de RAM, benchmarks e especificações técnicas.`;
@@ -152,7 +151,7 @@ const Comparison = () => {
       "url": `https://distrowiki.site/distro/${distro.id}`,
       "aggregateRating": {
         "@type": "AggregateRating",
-        "ratingValue": calculatePerformanceScore(distro).toFixed(1),
+        "ratingValue": (scoreMap.get(distro.id) || 0).toFixed(1),
         "bestRating": "10"
       }
     }))
@@ -244,7 +243,7 @@ const Comparison = () => {
           style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, 1fr)` }}
         >
           {selectedDistros.map((distro) => {
-            const score = calculatePerformanceScore(distro);
+            const score = scoreMap.get(distro.id) || 0;
             const isWinner = distro.id === winnerDistro.id && selectedDistros.length > 1;
             // Primeiro nome para mobile (ex: "Arch Linux" -> "Arch")
             const shortName = distro.name.split(' ')[0];
@@ -605,7 +604,7 @@ const Comparison = () => {
             <ComparisonRow label={t('comparison.sections.architecture')}>
               {selectedDistros.map((distro) => (
                 <span key={distro.id} className="text-sm font-medium font-mono">
-                  {distro.architecture || "x86_64"}
+                  {distro.architecture || t('common.na')}
                 </span>
               ))}
             </ComparisonRow>
@@ -639,7 +638,6 @@ interface ComparisonSectionProps {
   icon?: React.ReactNode;
   children: React.ReactNode;
   highlight?: boolean;
-  sectionId?: string;
   defaultCollapsed?: boolean;
 }
 
@@ -648,7 +646,6 @@ const ComparisonSection = ({
   icon, 
   children, 
   highlight,
-  sectionId,
   defaultCollapsed = false 
 }: ComparisonSectionProps) => {
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
@@ -671,7 +668,7 @@ const ComparisonSection = ({
         className="w-full flex items-center justify-center gap-2 p-4 hover:bg-muted/30 transition-colors"
       >
         {icon && <span className="text-primary">{icon}</span>}
-        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground font-heading">
           {title}
         </h3>
         <ChevronDown 
@@ -718,7 +715,7 @@ const ComparisonRow = ({ label, tooltip, icon, children }: ComparisonRowProps) =
         {tooltip ? (
           <Tooltip>
             <TooltipTrigger asChild>
-              <span className="text-xs text-muted-foreground cursor-help flex items-center gap-1">
+              <span className="text-xs text-muted-foreground cursor-help flex items-center gap-1 font-rounded">
                 {label}
                 <Info className="w-3 h-3 opacity-50" />
               </span>
@@ -728,7 +725,7 @@ const ComparisonRow = ({ label, tooltip, icon, children }: ComparisonRowProps) =
             </TooltipContent>
           </Tooltip>
         ) : (
-          <span className="text-xs text-muted-foreground">{label}</span>
+          <span className="text-xs text-muted-foreground font-rounded">{label}</span>
         )}
       </div>
       <div 
