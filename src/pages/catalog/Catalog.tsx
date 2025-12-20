@@ -269,18 +269,33 @@ const Catalog = () => {
                 : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
             }`}
           >
-            {filteredAndSortedDistros.map((distro) => (
-              <motion.div key={distro.id}>
-                <DistroCard
-                  distro={distro}
-                  isSelected={isSelected(distro.id)}
-                  onSelectToggle={() => handleSelectToggle(distro)}
-                  showCheckbox={true}
-                  showSpecs={showSpecs}
-                  viewMode={viewMode}
-                />
-              </motion.div>
-            ))}
+            {filteredAndSortedDistros.length > 0 ? (
+              filteredAndSortedDistros.map((distro) => (
+                <motion.div key={distro.id}>
+                  <DistroCard
+                    distro={distro}
+                    isSelected={isSelected(distro.id)}
+                    onSelectToggle={() => handleSelectToggle(distro)}
+                    showCheckbox={true}
+                    showSpecs={showSpecs}
+                    viewMode={viewMode}
+                  />
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full py-16 text-center">
+                 <div className="w-24 h-24 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-6">
+                   <AlertCircle className="w-10 h-10 text-muted-foreground" />
+                 </div>
+                 <h3 className="text-xl font-bold mb-2">{t("catalog.noResultsTitle") || "Nenhuma distribuição encontrada"}</h3>
+                 <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                   {t("catalog.noResultsDesc") || "Tente ajustar seus filtros ou busca para encontrar o que procura."}
+                 </p>
+                 <Button onClick={handleClearAllFilters} variant="outline">
+                   {t("catalog.filters.clearAll")}
+                 </Button>
+              </div>
+            )}
           </motion.div>
 
           {selectedDistros.length >= 2 && (

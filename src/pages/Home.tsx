@@ -134,6 +134,16 @@ const Home = () => {
               {t("home.compareNow")}
             </Button>
           </motion.div>
+
+          <motion.div variants={fadeIn} className="pt-4 flex items-center justify-center gap-2 text-sm text-muted-foreground hidden sm:flex">
+             <span>{t("home.trending") || "Em alta:"}</span>
+             <Link to="/comparacao/linux-mint+ubuntu" className="px-3 py-1 bg-muted/50 rounded-full hover:bg-primary/10 hover:text-primary transition-colors flex items-center gap-1 group">
+               Mint vs Ubuntu <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+             </Link>
+             <Link to="/comparacao/pop-os+fedora" className="px-3 py-1 bg-muted/50 rounded-full hover:bg-primary/10 hover:text-primary transition-colors flex items-center gap-1 group">
+               Pop!_OS vs Fedora <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+             </Link>
+          </motion.div>
         </motion.div>
       </section>
 
@@ -216,42 +226,85 @@ const Home = () => {
           viewport={{ once: true }}
           variants={stagger}
         >
-          {topDistros.map((distro, index) => (
-            <motion.div key={distro.id} variants={fadeIn}>
+          {distros
+            .map(d => ({ ...d, calculatedScore: calculatePerformanceScore(d) }))
+            .sort((a, b) => b.calculatedScore - a.calculatedScore)
+            .slice(0, 3)
+            .map((distro, index) => (
+            <motion.div key={distro.id} variants={fadeIn} className="h-full">
               <Link
                 to={`/distro/${distro.id}`}
-                className="block bg-card border border-border rounded-xl p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/10 hover:border-primary/30 relative overflow-hidden group"
+                className="block h-full bg-gradient-to-br from-card to-muted/20 border border-border rounded-xl p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/10 hover:border-primary/30 relative overflow-hidden group"
               >
+                {/* Background Glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
                 {/* Ranking Badge */}
-                <div className={`absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                  index === 0 ? 'bg-yellow-500 text-yellow-950' :
-                  index === 1 ? 'bg-gray-300 text-gray-800' :
-                  'bg-amber-600 text-amber-50'
+                <div className={`absolute top-0 right-0 p-3 rounded-bl-xl font-bold flex flex-col items-center justify-center min-w-[50px] shadow-sm z-10 ${
+                  index === 0 ? 'bg-yellow-500/10 text-yellow-600 border-l border-b border-yellow-500/20' :
+                  index === 1 ? 'bg-slate-300/10 text-slate-500 border-l border-b border-slate-300/20' :
+                  'bg-amber-600/10 text-amber-700 border-l border-b border-amber-600/20'
                 }`}>
-                  #{index + 1}
+                  <span className="text-xs uppercase text-[10px] opacity-70">Rank</span>
+                  <span className="text-xl">#{index + 1}</span>
                 </div>
                 
-              <div className="flex items-center space-x-4 mb-4">
-                <img
-                  src={distro.logo}
-                  alt={`${distro.name} logo`}
-                  className="w-16 h-16 object-contain"
-                />
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-foreground">{distro.name}</h3>
-                  <p className="text-sm text-muted-foreground">{distro.family}</p>
+                <div className="flex items-center gap-4 mb-6 relative z-10">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <img
+                      src={distro.logo}
+                      alt={`${distro.name} logo`}
+                      className="w-16 h-16 object-contain relative z-10 drop-shadow-md group-hover:drop-shadow-lg transition-all"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-xl font-bold text-foreground truncate group-hover:text-primary transition-colors">{distro.name}</h3>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                       <span className="truncate">{distro.family || "Independent"}</span>
+                       {distro.desktopEnvironments?.[0] && (
+                         <>
+                           <span className="w-1 h-1 rounded-full bg-muted-foreground/50"></span>
+                           <span className="truncate max-w-[100px]">{distro.desktopEnvironments[0]}</span>
+                         </>
+                       )}
+                    </div>
+                  </div>
                 </div>
-              </div>
-              
-              {/* Performance Metric */}
-              {distro.idleRamUsage && (
-                <div className="flex items-center justify-between text-sm text-muted-foreground mb-3 bg-muted/30 rounded-lg px-3 py-2">
-                  <span>RAM Idle</span>
-                  <span className="font-semibold text-foreground">{distro.idleRamUsage} MB</span>
+                
+                {/* Metrics */}
+                <div className="space-y-3 relative z-10 mb-4">
+                  {/* RAM Usage */}
+                  {distro.idleRamUsage && (
+                    <div className="bg-muted/30 rounded-lg p-2.5 flex items-center justify-between group-hover:bg-muted/50 transition-colors">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <BarChart3 className="w-3.5 h-3.5" />
+                        <span>RAM Idle</span>
+                      </div>
+                      <span className="font-mono font-medium text-sm">{distro.idleRamUsage} MB</span>
+                    </div>
+                  )}
+                  
+                  {/* Category or Other Info */}
+                  <div className="flex gap-2">
+                     <span className="text-xs px-2.5 py-1 rounded-full bg-primary/5 text-primary border border-primary/10">
+                       {distro.category || "Desktop"}
+                     </span>
+                     {distro.lastRelease && (
+                       <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground border border-border">
+                         Updated: {new Date(distro.lastRelease).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}
+                       </span>
+                     )}
+                  </div>
                 </div>
-              )}
-              
-              <ScoreBadge score={calculatePerformanceScore(distro)} size="lg" />
+                
+                {/* Score Footer */}
+                <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between relative z-10">
+                  <div className="text-sm text-muted-foreground">
+                    DistroScore
+                  </div>
+                  <ScoreBadge score={distro.calculatedScore} size="lg" />
+                </div>
               </Link>
             </motion.div>
           ))}

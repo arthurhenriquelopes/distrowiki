@@ -78,7 +78,8 @@
                 "title": "Decidir",
                 "description": "Tome sua decisão baseada em dados objetivos."
             }
-        }
+        },
+        "trending": "Em alta:"
     },
     "about": {
         "title": "Sobre o DistroWiki",
@@ -197,6 +198,10 @@
             "results": "{{count}} distros",
             "resultsOf": "{{count}} de {{total}}"
         },
+        "compare": "Comparar {{count}} distros",
+        "error": "Erro",
+        "noResultsTitle": "Nenhuma distribuição encontrada",
+        "noResultsDesc": "Tente ajustar seus filtros ou busca para encontrar o que procura.",
         "filters": {
             "title": "Filtros e Ordenação",
             "family": "Família/Base",
@@ -206,10 +211,9 @@
             "sortBy": "Ordenar por",
             "sortScore": "Score (maior)",
             "sortName": "Nome (A-Z)",
-            "sortRelease": "Lançamento (recente)"
-        },
-        "compare": "Comparar {{count}} distros",
-        "error": "Erro"
+            "sortRelease": "Lançamento (recente)",
+            "clearAll": "Limpar filtros"
+        }
     },
     "comparison": {
         "title": "Comparação de Distros",

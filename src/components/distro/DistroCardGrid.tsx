@@ -20,8 +20,8 @@ const DistroCardGrid = ({
   return (
     <div className="relative bg-card border border-border rounded-xl p-4 card-hover group flex flex-col h-[200px]">
       {showCheckbox && onSelectToggle && (
-        <div className="absolute top-3 right-3 z-10">
-          <Checkbox checked={isSelected} onCheckedChange={onSelectToggle} />
+        <div className="absolute top-3 right-3 z-10" onClick={(e) => e.stopPropagation()}>
+          <Checkbox checked={isSelected} onCheckedChange={onSelectToggle} className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground border-primary/50" />
         </div>
       )}
 

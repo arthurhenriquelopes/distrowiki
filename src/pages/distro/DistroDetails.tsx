@@ -3,7 +3,8 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ExternalLink, Loader2, GitCompare } from "lucide-react";
+import { ArrowLeft, ExternalLink, Loader2, GitCompare, HardDrive, Cpu, Zap, Copy, Check } from "lucide-react";
+import { MetricBar } from "@/components/comparison/MetricBar";
 import { DesktopEnvBadge } from "@/components/DesktopEnvBadge";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
 import ScoreBadge from "@/components/ScoreBadge";
@@ -279,9 +280,78 @@ const DistroDetails = () => {
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 md:grid-cols-3">
           <TabsTrigger value="overview">{t("distroDetails.tabs.overview")}</TabsTrigger>
+          <TabsTrigger value="performance">{t("comparison.sections.performance")}</TabsTrigger>
           <TabsTrigger value="specs">{t("distroDetails.tabs.specs")}</TabsTrigger>
           <TabsTrigger value="links">{t("distroDetails.tabs.links")}</TabsTrigger>
         </TabsList>
+
+        {/* Performance */}
+        <TabsContent value="performance" className="space-y-6 animate-fade-in">
+          <div className="bg-card border border-border rounded-xl p-6">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <Zap className="w-6 h-6 text-yellow-500" />
+              {t("comparison.sections.performance")}
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
+              {/* RAM Idle */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <HardDrive className="w-4 h-4 text-muted-foreground" />
+                  <span className="font-medium">{t("comparison.sections.ramIdle")}</span>
+                </div>
+                {distro.ram_idle ? (
+                  <MetricBar 
+                    value={distro.ram_idle} 
+                    maxValue={2000} 
+                    isBest={distro.ram_idle < 600} // Exemplo de 'bom'
+                    formatValue={(v) => `${v} MB`}
+                  />
+                ) : (
+                  <span className="text-muted-foreground italic text-sm">Dados não disponíveis</span>
+                )}
+              </div>
+
+              {/* CPU Score */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <Cpu className="w-4 h-4 text-muted-foreground" />
+                  <span className="font-medium">{t("comparison.sections.cpuScore")}</span>
+                </div>
+                {distro.cpu_score ? (
+                  <MetricBar 
+                    value={distro.cpu_score} 
+                    maxValue={10} 
+                    isBest={distro.cpu_score >= 8}
+                    formatValue={(v) => `${v}/10`}
+                    delay={0.1}
+                  />
+                ) : (
+                  <span className="text-muted-foreground italic text-sm">Dados não disponíveis</span>
+                )}
+              </div>
+
+              {/* I/O Score */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <HardDrive className="w-4 h-4 text-muted-foreground" />
+                  <span className="font-medium">{t("comparison.sections.ioScore")}</span>
+                </div>
+                {distro.io_score ? (
+                  <MetricBar 
+                    value={distro.io_score} 
+                    maxValue={10} 
+                    isBest={distro.io_score >= 8}
+                    formatValue={(v) => `${v}/10`}
+                    delay={0.2}
+                  />
+                ) : (
+                  <span className="text-muted-foreground italic text-sm">Dados não disponíveis</span>
+                )}
+              </div>
+            </div>
+          </div>
+        </TabsContent>
 
         {/* Overview */}
         <TabsContent value="overview" className="space-y-6 animate-fade-in">
@@ -364,15 +434,29 @@ const DistroDetails = () => {
             
             <div className="space-y-3">
               {distro.homepage && (
-                <a
-                  href={distro.homepage}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between p-4 bg-muted rounded-lg hover:bg-muted/80 smooth-transition group"
-                >
-                  <span className="font-medium">{t("distroDetails.links.officialSite")}</span>
-                  <ExternalLink className="w-5 h-5 text-primary group-hover:translate-x-1 smooth-transition" />
-                </a>
+                <div className="flex items-center justify-between p-4 bg-muted rounded-lg hover:bg-muted/80 smooth-transition group">
+                  <a
+                    href={distro.homepage}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 flex items-center justify-between"
+                  >
+                    <span className="font-medium">{t("distroDetails.links.officialSite")}</span>
+                    <ExternalLink className="w-5 h-5 text-primary group-hover:translate-x-1 smooth-transition" />
+                  </a>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="ml-2 text-muted-foreground hover:text-foreground"
+                    onClick={() => {
+                      navigator.clipboard.writeText(distro.homepage);
+                      // Toast notification could be added here
+                    }}
+                    title="Copiar Link"
+                  >
+                     <Copy className="w-4 h-4" />
+                  </Button>
+                </div>
               )}
             </div>
           </div>

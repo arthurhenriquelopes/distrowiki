@@ -6,6 +6,7 @@ import { Calendar, Cpu, HardDrive, Rocket, Info } from "lucide-react";
 import { DesktopEnvBadge } from "@/components/DesktopEnvBadge";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { MetricBar } from "@/components/comparison/MetricBar";
 
 interface DistroCardListProps {
   distro: Distro;
@@ -39,8 +40,8 @@ const DistroCardList = ({
   return (
     <div className="relative bg-card border border-border rounded-xl p-5 card-hover group h-full flex flex-col">
       {showCheckbox && onSelectToggle && (
-        <div className="absolute top-4 right-4 z-10">
-          <Checkbox checked={isSelected} onCheckedChange={onSelectToggle} />
+        <div className="absolute top-4 right-4 z-10" onClick={(e) => e.stopPropagation()}>
+          <Checkbox checked={isSelected} onCheckedChange={onSelectToggle} className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground border-primary/50" />
         </div>
       )}
 
@@ -111,21 +112,13 @@ const DistroCardList = ({
                       <p>Quantidade de memória RAM usada após a inicialização. Menos é melhor para liberar recursos para seus aplicativos.</p>
                     </TooltipContent>
                   </Tooltip>
-                  <p className="text-xs font-semibold">
-                    {distro.idleRamUsage} MB
-                  </p>
                 </div>
-                <div className="w-full bg-muted rounded-full h-1.5">
-                  <div
-                    className="bg-blue-500 rounded-full h-1.5 transition-all duration-300"
-                    style={{
-                      width: `${Math.min(
-                        (distro.idleRamUsage / 2000) * 100,
-                        100
-                      )}%`,
-                    }}
-                  />
-                </div>
+                <MetricBar 
+                  value={distro.idleRamUsage} 
+                  maxValue={2000} 
+                  isBest={false}
+                  formatValue={(v) => `${v} MB`}
+                />
               </div>
             )}
 
@@ -144,14 +137,13 @@ const DistroCardList = ({
                       <p className="text-xs">Desempenho do processador medido por benchmark. Quanto maior, melhor para tarefas intensivas.</p>
                     </TooltipContent>
                   </Tooltip>
-                  <p className="text-xs font-semibold">{distro.cpuScore}/10</p>
                 </div>
-                <div className="w-full bg-muted rounded-full h-1.5">
-                  <div
-                    className="bg-green-500 rounded-full h-1.5 transition-all duration-300"
-                    style={{ width: `${(distro.cpuScore / 10) * 100}%` }}
-                  />
-                </div>
+                <MetricBar 
+                  value={distro.cpuScore} 
+                  maxValue={10} 
+                  isBest={false}
+                  formatValue={(v) => `${v}/10`}
+                />
               </div>
             )}
 
@@ -170,14 +162,13 @@ const DistroCardList = ({
                       <p className="text-xs">Velocidade de leitura/escrita em disco. Importante para boot, instalação de programas e transferência de arquivos.</p>
                     </TooltipContent>
                   </Tooltip>
-                  <p className="text-xs font-semibold">{distro.ioScore}/10</p>
                 </div>
-                <div className="w-full bg-muted rounded-full h-1.5">
-                  <div
-                    className="bg-purple-500 rounded-full h-1.5 transition-all duration-300"
-                    style={{ width: `${(distro.ioScore / 10) * 100}%` }}
-                  />
-                </div>
+                <MetricBar 
+                  value={distro.ioScore} 
+                  maxValue={10} 
+                  isBest={false}
+                  formatValue={(v) => `${v}/10`}
+                />
               </div>
             )}
 

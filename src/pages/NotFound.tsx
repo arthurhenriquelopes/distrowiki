@@ -73,7 +73,7 @@ const NotFound = () => {
             <Button 
               size="lg" 
               variant="ghost"
-              className="text-base font-medium text-foreground hover:text-primary border-b-2 border-foreground hover:border-primary rounded-none px-6 smooth-transition"
+              className="text-base font-medium text-foreground hover:text-primary hover:bg-transparent border-b-2 border-foreground hover:border-primary rounded-none px-6 smooth-transition"
             >
               <Home className="mr-2 h-5 w-5" />
               {t("notFound.backHome")}
