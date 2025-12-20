@@ -6,7 +6,7 @@ import { ArrowLeft, ExternalLink, X, Share2, Check, Info, Trophy, Zap, HardDrive
 import { DesktopEnvList } from "@/components/DesktopEnvBadge";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
 import ScoreBadge from "@/components/ScoreBadge";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   fetchDistrosByIds,
   getBestValue,
@@ -197,18 +197,20 @@ const Comparison = () => {
         transition={{ delay: 0.2 }}
       >
         <div 
-          className="grid gap-3 md:gap-4"
+          className="grid gap-2 sm:gap-3 md:gap-4"
           style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, 1fr)` }}
         >
           {selectedDistros.map((distro) => {
             const score = calculatePerformanceScore(distro);
             const isWinner = distro.id === winnerDistro.id && selectedDistros.length > 1;
+            // Primeiro nome para mobile (ex: "Arch Linux" -> "Arch")
+            const shortName = distro.name.split(' ')[0];
             
             return (
               <motion.div
                 key={distro.id}
                 className={cn(
-                  "relative rounded-xl p-4 border transition-all duration-300",
+                  "relative rounded-xl p-2 sm:p-4 border transition-all duration-300 min-w-0",
                   isWinner 
                     ? "bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/50 shadow-lg shadow-primary/10" 
                     : "bg-card/50 border-border/50 hover:border-border"
@@ -216,10 +218,15 @@ const Comparison = () => {
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                {/* Badge de vencedor */}
+                {/* Badge de vencedor - troféu no topo centralizado */}
                 {isWinner && (
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2">
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-xs font-medium shadow-lg">
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 z-10">
+                    {/* Mobile: só ícone */}
+                    <span className="sm:hidden inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary text-primary-foreground shadow-lg">
+                      <Trophy className="w-3 h-3" />
+                    </span>
+                    {/* Desktop: ícone + texto */}
+                    <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-xs font-medium shadow-lg">
                       <Trophy className="w-3 h-3" />
                       {t('comparison.best')}
                     </span>
@@ -238,13 +245,30 @@ const Comparison = () => {
                       navigate('/comparacao', { replace: true });
                     }
                   }}
-                  className="absolute top-2 right-2 p-1 rounded-full bg-background/80 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                  className="absolute top-1 right-1 sm:top-2 sm:right-2 p-0.5 sm:p-1 rounded-full bg-background/80 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors z-10"
                   aria-label={`Remover ${distro.name}`}
                 >
-                  <X className="w-3.5 h-3.5" />
+                  <X className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 </button>
 
-                <div className="flex items-center gap-3">
+                {/* Mobile: Layout vertical compacto */}
+                <div className="flex flex-col items-center sm:hidden pt-4 overflow-hidden">
+                  <img
+                    src={distro.logo || `/logos/${distro.id}.svg`}
+                    alt={distro.name}
+                    className="w-10 h-10 object-contain rounded-lg"
+                    onError={(e) => {
+                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(distro.name)}&background=random&size=40`;
+                    }}
+                  />
+                  <div className="w-full overflow-x-auto scrollbar-hide mt-1">
+                    <h2 className="font-bold text-xs text-center whitespace-nowrap">{shortName}</h2>
+                  </div>
+                  <ScoreBadge score={score} size="sm" />
+                </div>
+
+                {/* Desktop: Layout horizontal normal */}
+                <div className="hidden sm:flex items-center gap-3">
                   <img
                     src={distro.logo || `/logos/${distro.id}.svg`}
                     alt={distro.name}
@@ -262,10 +286,10 @@ const Comparison = () => {
                   <ScoreBadge score={score} size="md" />
                 </div>
                 
-                {/* Link para detalhes */}
+                {/* Link para detalhes - só desktop */}
                 <Link 
                   to={`/distro/${distro.id}`}
-                  className="mt-3 flex items-center justify-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
+                  className="hidden sm:flex mt-3 items-center justify-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
                 >
                   {t('comparison.sections.viewDetails')} <ExternalLink className="w-3 h-3" />
                 </Link>
@@ -278,19 +302,21 @@ const Comparison = () => {
       {/* Tabela de Comparação */}
       <div className="space-y-4">
         
-        {/* Seção: Descrição */}
-        <ComparisonSection title={t('comparison.sections.description')} icon={<Info className="w-4 h-4" />}>
-          <div 
-            className="grid gap-4"
-            style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, 1fr)` }}
-          >
-            {selectedDistros.map((distro) => (
-              <div key={distro.id} className="text-sm text-muted-foreground leading-relaxed">
-                {distro.description || "Descrição não disponível."}
-              </div>
-            ))}
-          </div>
-        </ComparisonSection>
+        {/* Seção: Descrição - escondida em mobile por questão de espaço */}
+        <div className="hidden sm:block">
+          <ComparisonSection title={t('comparison.sections.description')} icon={<Info className="w-4 h-4" />}>
+            <div 
+              className="grid gap-4"
+              style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, 1fr)` }}
+            >
+              {selectedDistros.map((distro) => (
+                <div key={distro.id} className="text-sm text-muted-foreground leading-relaxed line-clamp-4">
+                  {distro.description || "Descrição não disponível."}
+                </div>
+              ))}
+            </div>
+          </ComparisonSection>
+        </div>
 
         {/* Seção: Desempenho */}
         {performanceAvailable && (
@@ -431,14 +457,16 @@ const Comparison = () => {
         {/* Seção: Ambientes Gráficos */}
         <ComparisonSection title={t('comparison.sections.desktopEnv')} icon={<Monitor className="w-4 h-4" />}>
           <div 
-            className="grid gap-4"
+            className="grid gap-2 sm:gap-4"
             style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, 1fr)` }}
           >
             {selectedDistros.map((distro) => {
               const desktops = distro.desktopEnvironments || [];
               return (
-                <div key={distro.id} className="flex justify-center">
-                  <DesktopEnvList environments={desktops} size="md" />
+                <div key={distro.id} className="flex justify-center overflow-x-auto">
+                  <div className="flex-shrink-0">
+                    <DesktopEnvList environments={desktops} size="sm" />
+                  </div>
                 </div>
               );
             })}
@@ -605,10 +633,14 @@ const ComparisonRow = ({ label, tooltip, icon, children }: ComparisonRowProps) =
         )}
       </div>
       <div 
-        className="grid gap-4"
+        className="grid gap-1 sm:gap-4"
         style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, 1fr)` }}
       >
-        {children}
+        {React.Children.map(children, (child) => (
+          <div className="truncate text-xs sm:text-sm">
+            {child}
+          </div>
+        ))}
       </div>
     </div>
   );
