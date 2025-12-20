@@ -137,10 +137,10 @@ const Home = () => {
 
           <motion.div variants={fadeIn} className="pt-4 flex items-center justify-center gap-2 text-sm text-muted-foreground hidden sm:flex">
              <span>{t("home.trending") || "Em alta:"}</span>
-             <Link to="/comparacao/linux-mint+ubuntu" className="px-3 py-1 bg-muted/50 rounded-full hover:bg-primary/10 hover:text-primary transition-colors flex items-center gap-1 group">
+             <Link to="/comparacao/linuxmint+ubuntu" className="px-3 py-1 bg-muted/50 rounded-full hover:bg-primary/10 hover:text-primary transition-colors flex items-center gap-1 group">
                Mint vs Ubuntu <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
              </Link>
-             <Link to="/comparacao/pop-os+fedora" className="px-3 py-1 bg-muted/50 rounded-full hover:bg-primary/10 hover:text-primary transition-colors flex items-center gap-1 group">
+             <Link to="/comparacao/popos+fedora" className="px-3 py-1 bg-muted/50 rounded-full hover:bg-primary/10 hover:text-primary transition-colors flex items-center gap-1 group">
                Pop!_OS vs Fedora <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
              </Link>
           </motion.div>
