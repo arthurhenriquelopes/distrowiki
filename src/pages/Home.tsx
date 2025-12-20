@@ -26,11 +26,6 @@ const Home = () => {
 
   const { distros, loading } = useDistros();
 
-
-  const topDistros = [...distros]
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 3);
-
   const handleCompare = () => {
     if (!distro1 || !distro2) return;
 
@@ -226,88 +221,114 @@ const Home = () => {
           viewport={{ once: true }}
           variants={stagger}
         >
-          {distros
-            .map(d => ({ ...d, calculatedScore: calculatePerformanceScore(d) }))
-            .sort((a, b) => b.calculatedScore - a.calculatedScore)
-            .slice(0, 3)
-            .map((distro, index) => (
-            <motion.div key={distro.id} variants={fadeIn} className="h-full">
-              <Link
-                to={`/distro/${distro.id}`}
-                className="block h-full bg-gradient-to-br from-card to-muted/20 border border-border rounded-xl p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/10 hover:border-primary/30 relative overflow-hidden group"
-              >
-                {/* Background Glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                
-                {/* Ranking Badge */}
-                <div className={`absolute top-0 right-0 p-3 rounded-bl-xl font-bold flex flex-col items-center justify-center min-w-[50px] shadow-sm z-10 ${
-                  index === 0 ? 'bg-yellow-500/10 text-yellow-600 border-l border-b border-yellow-500/20' :
-                  index === 1 ? 'bg-slate-300/10 text-slate-500 border-l border-b border-slate-300/20' :
-                  'bg-amber-600/10 text-amber-700 border-l border-b border-amber-600/20'
-                }`}>
-                  <span className="text-xs uppercase text-[10px] opacity-70">Rank</span>
-                  <span className="text-xl">#{index + 1}</span>
-                </div>
-                
-                <div className="flex items-center gap-4 mb-6 relative z-10">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <img
-                      src={distro.logo}
-                      alt={`${distro.name} logo`}
-                      className="w-16 h-16 object-contain relative z-10 drop-shadow-md group-hover:drop-shadow-lg transition-all"
-                    />
+          {loading || distros.length === 0 ? (
+            // Loading skeleton
+            <>
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-full bg-card border border-border rounded-xl p-6 animate-pulse">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-16 h-16 bg-muted rounded-lg" />
+                    <div className="flex-1">
+                      <div className="h-5 w-24 bg-muted rounded mb-2" />
+                      <div className="h-3 w-16 bg-muted rounded" />
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-xl font-bold text-foreground truncate group-hover:text-primary transition-colors">{distro.name}</h3>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                       <span className="truncate">{distro.family || "Independent"}</span>
-                       {distro.desktopEnvironments?.[0] && (
-                         <>
-                           <span className="w-1 h-1 rounded-full bg-muted-foreground/50"></span>
-                           <span className="truncate max-w-[100px]">{distro.desktopEnvironments[0]}</span>
-                         </>
+                  <div className="h-10 bg-muted/50 rounded-lg mb-4" />
+                  <div className="flex gap-2 mb-4">
+                    <div className="h-6 w-16 bg-muted rounded-full" />
+                    <div className="h-6 w-24 bg-muted rounded-full" />
+                  </div>
+                  <div className="pt-4 border-t border-border/50 flex justify-between">
+                    <div className="h-4 w-16 bg-muted rounded" />
+                    <div className="h-8 w-12 bg-muted rounded" />
+                  </div>
+                </div>
+              ))}
+            </>
+          ) : (
+            distros
+              .map(d => ({ ...d, calculatedScore: calculatePerformanceScore(d) }))
+              .sort((a, b) => b.calculatedScore - a.calculatedScore)
+              .slice(0, 3)
+              .map((distro, index) => (
+              <motion.div key={distro.id} variants={fadeIn} className="h-full">
+                <Link
+                  to={`/distro/${distro.id}`}
+                  className="block h-full bg-gradient-to-br from-card to-muted/20 border border-border rounded-xl p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/10 hover:border-primary/30 relative overflow-hidden group"
+                >
+                  {/* Background Glow */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  
+                  {/* Ranking Badge */}
+                  <div className={`absolute top-0 right-0 p-3 rounded-bl-xl font-bold flex flex-col items-center justify-center min-w-[50px] shadow-sm z-10 ${
+                    index === 0 ? 'bg-yellow-500/10 text-yellow-600 border-l border-b border-yellow-500/20' :
+                    index === 1 ? 'bg-slate-300/10 text-slate-500 border-l border-b border-slate-300/20' :
+                    'bg-amber-600/10 text-amber-700 border-l border-b border-amber-600/20'
+                  }`}>
+                    <span className="text-xs uppercase text-[10px] opacity-70">Rank</span>
+                    <span className="text-xl">#{index + 1}</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-4 mb-6 relative z-10">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <img
+                        src={distro.logo}
+                        alt={`${distro.name} logo`}
+                        className="w-16 h-16 object-contain relative z-10 drop-shadow-md group-hover:drop-shadow-lg transition-all"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-xl font-bold text-foreground truncate group-hover:text-primary transition-colors">{distro.name}</h3>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                         <span className="truncate">{distro.family || "Independent"}</span>
+                         {distro.desktopEnvironments?.[0] && (
+                           <>
+                             <span className="w-1 h-1 rounded-full bg-muted-foreground/50"></span>
+                             <span className="truncate max-w-[100px]">{distro.desktopEnvironments[0]}</span>
+                           </>
+                         )}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Metrics */}
+                  <div className="space-y-3 relative z-10 mb-4">
+                    {/* RAM Usage */}
+                    {distro.idleRamUsage && (
+                      <div className="bg-muted/30 rounded-lg p-2.5 flex items-center justify-between group-hover:bg-muted/50 transition-colors">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <BarChart3 className="w-3.5 h-3.5" />
+                          <span>RAM Idle</span>
+                        </div>
+                        <span className="font-mono font-medium text-sm">{distro.idleRamUsage} MB</span>
+                      </div>
+                    )}
+                    
+                    {/* Category or Other Info */}
+                    <div className="flex gap-2">
+                       <span className="text-xs px-2.5 py-1 rounded-full bg-primary/5 text-primary border border-primary/10">
+                         {distro.category || "Desktop"}
+                       </span>
+                       {distro.lastRelease && (
+                         <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground border border-border">
+                           Updated: {new Date(distro.lastRelease).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}
+                         </span>
                        )}
                     </div>
                   </div>
-                </div>
-                
-                {/* Metrics */}
-                <div className="space-y-3 relative z-10 mb-4">
-                  {/* RAM Usage */}
-                  {distro.idleRamUsage && (
-                    <div className="bg-muted/30 rounded-lg p-2.5 flex items-center justify-between group-hover:bg-muted/50 transition-colors">
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <BarChart3 className="w-3.5 h-3.5" />
-                        <span>RAM Idle</span>
-                      </div>
-                      <span className="font-mono font-medium text-sm">{distro.idleRamUsage} MB</span>
-                    </div>
-                  )}
                   
-                  {/* Category or Other Info */}
-                  <div className="flex gap-2">
-                     <span className="text-xs px-2.5 py-1 rounded-full bg-primary/5 text-primary border border-primary/10">
-                       {distro.category || "Desktop"}
-                     </span>
-                     {distro.lastRelease && (
-                       <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground border border-border">
-                         Updated: {new Date(distro.lastRelease).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}
-                       </span>
-                     )}
+                  {/* Score Footer */}
+                  <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between relative z-10">
+                    <div className="text-sm text-muted-foreground">
+                      DistroScore
+                    </div>
+                    <ScoreBadge score={distro.calculatedScore} size="lg" />
                   </div>
-                </div>
-                
-                {/* Score Footer */}
-                <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between relative z-10">
-                  <div className="text-sm text-muted-foreground">
-                    DistroScore
-                  </div>
-                  <ScoreBadge score={distro.calculatedScore} size="lg" />
-                </div>
-              </Link>
-            </motion.div>
-          ))}
+                </Link>
+              </motion.div>
+            ))
+          )}
         </motion.div>
       </section>
 

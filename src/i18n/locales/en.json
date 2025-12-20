@@ -103,6 +103,10 @@
                     "title": "Time Saving",
                     "description": "Avoid testing dozens of distros. Find the ideal one faster."
                 },
+                "realData": {
+                    "title": "Real Data",
+                    "description": "Performance metrics obtained through standardized tests: RAM usage, CPU and I/O scores."
+                },
                 "desktop": {
                     "title": "Desktop Focus",
                     "description": "Specialized in desktop use, not servers or embedded systems."
@@ -117,6 +121,8 @@
                 }
             }
         },
+        "whatWeOffer": "What we offer",
+        "missionDescription": "DistroWiki was born from the frustration of not finding a simple and objective tool to compare Linux distributions. Our goal is to help you choose the right distro, whether you're a beginner exploring Linux for the first time or an enthusiast looking for a new option.",
         "methodology": {
             "title": "Scoring Methodology",
             "whatWeMeasure": {
@@ -136,7 +142,11 @@
             },
             "howWeScore": {
                 "title": "How we score",
-                "intro": "The overall score is calculated considering multiple factors:",
+                "intro": "The performance score is calculated based on three main metrics:",
+                "ram": "Idle RAM usage - the lower, the better for machines with limited resources.",
+                "cpu": "Processor performance score measured via standardized benchmark.",
+                "io": "Disk read/write speed, important for boot and package installation.",
+                "disclaimer": "⚠️ Important: Scores are just a metric and should not be the only factor in your decision. Also consider community, documentation, ease of use, and your specific use cases.",
                 "performance": "<strong>Performance (30%):</strong> Idle RAM, CPU and I/O benchmarks",
                 "stability": "<strong>Stability (25%):</strong> Critical bug frequency, LTS support",
                 "usability": "<strong>Usability (20%):</strong> Ease of installation and configuration",
@@ -151,6 +161,17 @@
                     "Scores are updated periodically, but don't reflect real-time changes.",
                     "The \"best distro\" depends on your specific use case. Use our filters!"
                 ]
+            }
+        },
+        "techStack": {
+            "title": "Technologies",
+            "items": {
+                "react": "User interface",
+                "typescript": "Type safety",
+                "vite": "Build & Dev Server",
+                "tailwind": "Styling",
+                "framer": "Animations",
+                "vercel": "Hosting"
             }
         },
         "roadmap": {
@@ -169,6 +190,7 @@
         "contribute": {
             "title": "How to Contribute",
             "subtitle": "DistroWiki is an open source project and depends on the community to grow and improve.",
+            "description": "DistroWiki is an open source project. Contributions are welcome, whether reporting bugs, suggesting improvements, or submitting pull requests.",
             "feedback": {
                 "title": "Feedback",
                 "description": "Report bugs, suggest features, or improve documentation"
@@ -181,11 +203,12 @@
                 "title": "Code",
                 "description": "Submit PRs, fix bugs, or implement new features"
             },
-            "visitGithub": "Visit GitHub"
+            "visitGithub": "View on GitHub",
+            "reportProblem": "Report Problem"
         },
         "license": {
             "title": "License and Privacy",
-            "description": "DistroWiki is licensed under <strong>MIT License</strong> - free for use, modification, and distribution.",
+            "description": "This project is distributed under the MIT license. You are free to use, modify, and distribute the code.",
             "privacy": "We don't collect personal data. We don't use tracking cookies. No ads."
         }
     },

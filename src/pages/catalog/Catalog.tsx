@@ -100,23 +100,28 @@ const Catalog = () => {
       );
     }
 
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case "score":
-          const scoreA = calculatePerformanceScore(a);
-          const scoreB = calculatePerformanceScore(b);
-          return scoreB - scoreA;
-        case "name":
-          return a.name.localeCompare(b.name);
-        case "release":
-          if (!a.releaseYear && !b.releaseYear) return 0;
-          if (!a.releaseYear) return 1;
-          if (!b.releaseYear) return -1;
-          return b.releaseYear - a.releaseYear;
-        default:
-          return 0;
-      }
-    });
+    // Cache scores before sort to avoid O(n log n) * 2 recalculations
+    if (sortBy === "score") {
+      const scoreCache = new Map<string, number>();
+      filtered.forEach(d => {
+        scoreCache.set(d.id, calculatePerformanceScore(d));
+      });
+      filtered.sort((a, b) => (scoreCache.get(b.id) || 0) - (scoreCache.get(a.id) || 0));
+    } else {
+      filtered.sort((a, b) => {
+        switch (sortBy) {
+          case "name":
+            return a.name.localeCompare(b.name);
+          case "release":
+            if (!a.releaseYear && !b.releaseYear) return 0;
+            if (!a.releaseYear) return 1;
+            if (!b.releaseYear) return -1;
+            return b.releaseYear - a.releaseYear;
+          default:
+            return 0;
+        }
+      });
+    }
 
     const selected = filtered.filter((d) => isSelected(d.id));
     const unselected = filtered.filter((d) => !isSelected(d.id));

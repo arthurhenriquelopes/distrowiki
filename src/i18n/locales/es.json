@@ -103,6 +103,10 @@
                     "title": "Ahorro de Tiempo",
                     "description": "Evita probar decenas de distros. Encuentra la ideal más rápido."
                 },
+                "realData": {
+                    "title": "Datos Reales",
+                    "description": "Métricas de rendimiento obtenidas a través de pruebas estandarizadas: uso de RAM, scores de CPU e I/O."
+                },
                 "desktop": {
                     "title": "Enfoque en Escritorio",
                     "description": "Especializado en uso de escritorio, no servidores o sistemas embebidos."
@@ -117,6 +121,8 @@
                 }
             }
         },
+        "whatWeOffer": "Lo que ofrecemos",
+        "missionDescription": "DistroWiki nació de la frustración de no encontrar una herramienta simple y objetiva para comparar distribuciones Linux. Nuestro objetivo es ayudarte a elegir la distro correcta, ya seas un principiante explorando Linux por primera vez o un entusiasta buscando una nueva opción.",
         "methodology": {
             "title": "Metodología de Puntuación",
             "whatWeMeasure": {
@@ -136,7 +142,11 @@
             },
             "howWeScore": {
                 "title": "Cómo puntuamos",
-                "intro": "El score general se calcula considerando múltiples factores:",
+                "intro": "El score de rendimiento se calcula con base en tres métricas principales:",
+                "ram": "Uso de RAM en idle - cuanto menor, mejor para máquinas con recursos limitados.",
+                "cpu": "Score de rendimiento del procesador medido via benchmark estandarizado.",
+                "io": "Velocidad de lectura/escritura en disco, importante para boot e instalación de paquetes.",
+                "disclaimer": "⚠️ Importante: Los scores son solo una métrica y no deben ser el único factor en tu decisión. Considera también la comunidad, documentación, facilidad de uso y tus casos de uso específicos.",
                 "performance": "<strong>Rendimiento (30%):</strong> RAM idle, benchmarks de CPU e I/O",
                 "stability": "<strong>Estabilidad (25%):</strong> Frecuencia de bugs críticos, soporte LTS",
                 "usability": "<strong>Usabilidad (20%):</strong> Facilidad de instalación y configuración",
@@ -151,6 +161,17 @@
                     "Las puntuaciones se actualizan periódicamente, pero no reflejan cambios en tiempo real.",
                     "La \"mejor distro\" depende de tu caso de uso específico. ¡Usa nuestros filtros!"
                 ]
+            }
+        },
+        "techStack": {
+            "title": "Tecnologías",
+            "items": {
+                "react": "Interfaz de usuario",
+                "typescript": "Tipado seguro",
+                "vite": "Build & Dev Server",
+                "tailwind": "Estilización",
+                "framer": "Animaciones",
+                "vercel": "Hospedaje"
             }
         },
         "roadmap": {
@@ -169,6 +190,7 @@
         "contribute": {
             "title": "Cómo Contribuir",
             "subtitle": "DistroWiki es un proyecto de código abierto y depende de la comunidad para crecer y mejorar.",
+            "description": "DistroWiki es un proyecto de código abierto. Las contribuciones son bienvenidas, ya sea reportando bugs, sugiriendo mejoras o enviando pull requests.",
             "feedback": {
                 "title": "Feedback",
                 "description": "Reporta bugs, sugiere features o mejora la documentación"
@@ -181,12 +203,13 @@
                 "title": "Código",
                 "description": "Envía PRs, corrige bugs o implementa nuevas funcionalidades"
             },
-            "visitGithub": "Visitar GitHub"
+            "visitGithub": "Ver en GitHub",
+            "reportProblem": "Reportar Problema"
         },
         "license": {
             "title": "Licencia y Privacidad",
-            "description": "DistroWiki está licenciado bajo <strong>Licencia MIT</strong> - libre para uso, modificación y distribución.",
-            "privacy": "No recolectamos datos personales. No usamos cookies de tracking. Sin anuncios."
+            "description": "Este proyecto se distribuye bajo la licencia MIT. Eres libre de usar, modificar y distribuir el código.",
+            "privacy": "No recolectamos datos personales. No usamos cookies de rastreo. Sin anuncios."
         }
     },
     "catalog": {

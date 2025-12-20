@@ -24,8 +24,8 @@ const About = () => {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
-    "name": "Sobre o DistroWiki",
-    "description": "Conheça o DistroWiki, plataforma open source para comparação objetiva e transparente de distribuições Linux",
+    "name": t("about.title"),
+    "description": t("about.subtitle"),
     "url": "https://distrowiki.site/sobre",
     "inLanguage": t('common.langCode') || "pt-BR",
     "mainEntity": {
@@ -36,7 +36,7 @@ const About = () => {
       "sameAs": [
         "https://github.com/arthurhenriquelopes/DistroWiki"
       ],
-      "description": "Plataforma open source para comparar distribuições Linux de forma objetiva, transparente e em português"
+      "description": t("about.subtitle")
     }
   };
 
@@ -53,8 +53,8 @@ const About = () => {
     },
     {
       icon: Database,
-      title: "Dados Reais",
-      description: "Métricas de performance obtidas através de testes padronizados: uso de RAM, scores de CPU e I/O.",
+      title: t("about.whyUseful.items.realData.title"),
+      description: t("about.whyUseful.items.realData.description"),
     },
     {
       icon: Code,
@@ -74,19 +74,19 @@ const About = () => {
   ];
 
   const techStack = [
-    { name: "React", description: "Interface de usuário" },
-    { name: "TypeScript", description: "Tipagem segura" },
-    { name: "Vite", description: "Build & Dev Server" },
-    { name: "Tailwind CSS", description: "Estilização" },
-    { name: "Framer Motion", description: "Animações" },
-    { name: "Vercel", description: "Hospedagem" },
+    { name: "React", description: t("about.techStack.items.react") },
+    { name: "TypeScript", description: t("about.techStack.items.typescript") },
+    { name: "Vite", description: t("about.techStack.items.vite") },
+    { name: "Tailwind CSS", description: t("about.techStack.items.tailwind") },
+    { name: "Framer Motion", description: t("about.techStack.items.framer") },
+    { name: "Vercel", description: t("about.techStack.items.vercel") },
   ];
 
   return (
     <div className="container mx-auto px-4 py-12 min-h-screen">
       <SEO
-        title="Sobre o DistroWiki"
-        description="Conheça o DistroWiki, plataforma open source para comparação objetiva e transparente de distribuições Linux."
+        title={t("about.title")}
+        description={t("about.subtitle")}
         canonical="https://distrowiki.site/sobre"
         keywords="sobre, distrowiki, open source, linux, comparação"
         structuredData={structuredData}
@@ -117,9 +117,7 @@ const About = () => {
           <Zap className="w-12 h-12 text-primary mx-auto mb-4" />
           <h2 className="text-3xl font-bold mb-4">{t("about.mission.title")}</h2>
           <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-            O DistroWiki nasceu da frustração de não encontrar uma ferramenta simples e objetiva para comparar distribuições Linux. 
-            Nosso objetivo é ajudar você a escolher a distro certa, seja você um iniciante explorando Linux pela primeira vez 
-            ou um entusiasta buscando uma nova opção.
+            {t("about.missionDescription")}
           </p>
         </div>
       </motion.section>
@@ -133,7 +131,7 @@ const About = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          O que oferecemos
+          {t("about.whatWeOffer")}
         </motion.h2>
         <motion.div 
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
@@ -160,25 +158,24 @@ const About = () => {
           <h2 className="text-2xl font-bold mb-6">{t("about.methodology.howWeScore.title")}</h2>
           <div className="space-y-4 text-muted-foreground">
             <p>
-              O score de performance é calculado com base em três métricas principais:
+              {t("about.methodology.howWeScore.intro")}
             </p>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
                 <span className="bg-primary/20 text-primary px-2 py-1 rounded text-sm font-mono">RAM</span>
-                <span>Uso de memória RAM em idle - quanto menor, melhor para máquinas com recursos limitados.</span>
+                <span>{t("about.methodology.howWeScore.ram")}</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="bg-primary/20 text-primary px-2 py-1 rounded text-sm font-mono">CPU</span>
-                <span>Score de desempenho do processador medido via benchmark padronizado.</span>
+                <span>{t("about.methodology.howWeScore.cpu")}</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="bg-primary/20 text-primary px-2 py-1 rounded text-sm font-mono">I/O</span>
-                <span>Velocidade de leitura/escrita em disco, importante para boot e instalação de pacotes.</span>
+                <span>{t("about.methodology.howWeScore.io")}</span>
               </li>
             </ul>
             <p className="text-sm bg-warning/10 border border-warning/20 rounded-lg p-4 mt-4">
-              <strong className="text-warning">⚠️ Importante:</strong> Os scores são apenas uma métrica e não devem ser o único fator na sua decisão. 
-              Considere também a comunidade, documentação, facilidade de uso e seus casos de uso específicos.
+              <strong className="text-warning">{t("about.methodology.howWeScore.disclaimer")}</strong>
             </p>
           </div>
         </div>
@@ -186,7 +183,7 @@ const About = () => {
 
       {/* Tech Stack */}
       <section className="mb-16">
-        <h2 className="text-2xl font-bold text-center mb-8">Tecnologias</h2>
+        <h2 className="text-2xl font-bold text-center mb-8">{t("about.techStack.title")}</h2>
         <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
           {techStack.map((tech) => (
             <div 
@@ -206,20 +203,19 @@ const About = () => {
           <Github className="w-16 h-16 text-primary mx-auto mb-6" />
           <h2 className="text-3xl font-bold mb-4">{t("about.contribute.title")}</h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            O DistroWiki é um projeto open source. Contribuições são bem-vindas, seja reportando bugs, 
-            sugerindo melhorias, ou enviando pull requests.
+            {t("about.contribute.description")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="https://github.com/arthurhenriquelopes/DistroWiki" target="_blank" rel="noopener noreferrer">
               <Button size="lg" className="text-base px-8">
                 <Github className="mr-2 h-5 w-5" />
-                Ver no GitHub
+                {t("about.contribute.visitGithub")}
               </Button>
             </a>
             <a href="https://github.com/arthurhenriquelopes/DistroWiki/issues" target="_blank" rel="noopener noreferrer">
               <Button size="lg" variant="outline" className="text-base px-8 border-2">
                 <ExternalLink className="mr-2 h-5 w-5" />
-                Reportar Problema
+                {t("about.contribute.reportProblem")}
               </Button>
             </a>
           </div>
@@ -231,11 +227,10 @@ const About = () => {
         <div className="max-w-2xl mx-auto">
           <h2 className="text-2xl font-bold mb-4">{t("about.license.title")}</h2>
           <p className="text-muted-foreground mb-4">
-            Este projeto é distribuído sob a licença <strong>MIT</strong>. 
-            Você é livre para usar, modificar e distribuir o código.
+            {t("about.license.description")}
           </p>
           <p className="text-sm text-muted-foreground">
-            Não coletamos dados pessoais. Não usamos cookies de rastreamento. Não exibimos anúncios.
+            {t("about.license.privacy")}
           </p>
         </div>
       </section>
@@ -244,3 +239,4 @@ const About = () => {
 };
 
 export default About;
+

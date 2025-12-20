@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useComparison } from "@/contexts/ComparisonContext";
+import { useDistros } from "@/hooks/useDistros";
 import { SEO } from "@/components/SEO";
 
 const DistroDetails = () => {
@@ -21,7 +22,6 @@ const DistroDetails = () => {
   const [distro, setDistro] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [allDistros, setAllDistros] = useState<any[]>([]);
   const [compareWith, setCompareWith] = useState<string>("");
   const { t } = useTranslation();
 
@@ -63,41 +63,7 @@ const DistroDetails = () => {
     fetchDistro();
   }, [id]);
 
-  useEffect(() => {
-    const fetchAllDistros = async () => {
-      try {
-        const apiBase = import.meta.env.VITE_API_BASE_ || 'https://distrowiki-api.vercel.app';
-        const response = await fetch(`${apiBase}/distros?page=1&page_size=100&sort_by=name&order=asc`);
-        
-        if (!response.ok) return;
-        
-        const data = await response.json();
-        const transformed = (data.distros || []).map((d: any) => ({
-          id: d.id,
-          name: d.name,
-          family: d.family || "Independent",
-          desktopEnvironments: d.desktop_environments || [],
-          lastRelease: d.latest_release_date || new Date().toISOString(),
-          score: d.rating || 0,
-          logo: `/logos/${d.id}.svg`,
-          website: d.homepage,
-          description: d.summary || d.description,
-          ramIdle: d.ram_idle || 0,
-          cpuScore: d.cpu_score || 0,
-          ioScore: d.io_score || 0,
-          releaseModel: d.release_model || "Unknown",
-          ltsSupport: d.lts_support || false,
-          packageManager: d.package_manager || "N/A",
-        }));
-        
-        setAllDistros(transformed);
-      } catch (err) {
-        console.error('Erro ao buscar distros:', err);
-      }
-    };
-
-    fetchAllDistros();
-  }, []);
+  const { distros: allDistros } = useDistros();
 
   const handleCompare = () => {
     if (!compareWith || !distro) return;
