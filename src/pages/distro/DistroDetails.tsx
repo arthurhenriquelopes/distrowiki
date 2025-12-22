@@ -7,6 +7,7 @@ import { ArrowLeft, ExternalLink, Loader2, GitCompare, HardDrive, Cpu, Zap, Copy
 import { MetricBar } from "@/components/comparison/MetricBar";
 import { DesktopEnvBadge } from "@/components/DesktopEnvBadge";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
+import { transformDistro } from "@/utils/apiTransform";
 import ScoreBadge from "@/components/ScoreBadge";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -43,12 +44,14 @@ const DistroDetails = () => {
         
         const data = await response.json();
         
-        // Mapear campos da API para formato esperado
+        const normalized = transformDistro(data);
+        
         const mappedData = {
           ...data,
+          ...normalized,
           package_manager: data['Package Management'] || data.package_management || data.package_manager || data.packageManager,
           office_manager: data['Office Suite'] || data.office_suite || data.office_manager || data.officeManager,
-          rating: calculatePerformanceScore(data),
+          rating: calculatePerformanceScore(normalized),
         };
         
         setDistro(mappedData);
