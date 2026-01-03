@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { User, Session } from '@supabase/supabase-js'
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 
 type AuthContextType = {
     user: User | null
@@ -22,9 +22,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
 
     useEffect(() => {
+        // Skip auth initialization if Supabase is not configured
+        if (!isSupabaseConfigured()) {
+            console.warn('[Auth] Supabase not configured - skipping auth initialization')
+            setLoading(false)
+            return
+        }
+
         supabase.auth.getSession().then(({ data: { session } }) => {
             setSession(session)
             setUser(session?.user ?? null)
+            setLoading(false)
+        }).catch((error) => {
+            console.error('[Auth] Error getting session:', error)
             setLoading(false)
         })
 
@@ -37,12 +47,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }, [])
 
     const signInWithGoogle = async () => {
+        if (!isSupabaseConfigured()) {
+            console.warn('[Auth] Cannot sign in - Supabase not configured')
+            return
+        }
         await supabase.auth.signInWithOAuth({
             provider: 'google',
         })
     }
 
     const signOut = async () => {
+        if (!isSupabaseConfigured()) return
         await supabase.auth.signOut()
     }
 
