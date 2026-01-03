@@ -390,10 +390,20 @@ const DistroDetails = () => {
                 <p className="text-lg font-semibold">{distro.based_on || distro.family || "Independente"}</p>
               </div>
 
-              {/* Category */}
+              {/* Release Type - NOVO */}
               <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">Categoria</p>
-                <p className="text-lg font-semibold">{distro.category || "Desktop"}</p>
+                <p className="text-sm text-muted-foreground mb-1">Tipo de Release</p>
+                <p className="text-lg font-semibold">
+                  <Badge variant={distro.release_type?.toLowerCase()?.includes('rolling') ? 'default' : 'secondary'}>
+                    {distro.release_type || "Point Release"}
+                  </Badge>
+                </p>
+              </div>
+
+              {/* Init System - NOVO */}
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm text-muted-foreground mb-1">Sistema de Init</p>
+                <p className="text-lg font-semibold">{distro.init_system || "systemd"}</p>
               </div>
 
               {/* Package Manager */}
@@ -402,10 +412,30 @@ const DistroDetails = () => {
                 <p className="text-lg font-semibold">{distro.package_management || distro.package_manager || "N/A"}</p>
               </div>
 
-              {/* Architecture */}
+              {/* Architecture - MELHORADO */}
               <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">Arquitetura</p>
-                <p className="text-lg font-semibold">{distro.architecture || "x86_64"}</p>
+                <p className="text-sm text-muted-foreground mb-1">Arquiteturas</p>
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {(Array.isArray(distro.architecture) ? distro.architecture : [distro.architecture || "x86_64"]).map((arch: string) => (
+                    <Badge key={arch} variant="outline" className="text-xs">{arch}</Badge>
+                  ))}
+                </div>
+              </div>
+
+              {/* File Systems - NOVO */}
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm text-muted-foreground mb-1">Sistemas de Arquivos</p>
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {(distro.file_systems?.length ? distro.file_systems : ["ext4"]).map((fs: string) => (
+                    <Badge key={fs} variant="outline" className="text-xs">{fs}</Badge>
+                  ))}
+                </div>
+              </div>
+
+              {/* Category */}
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm text-muted-foreground mb-1">Categoria</p>
+                <p className="text-lg font-semibold">{distro.category || "Desktop"}</p>
               </div>
 
               {/* Requirements */}
