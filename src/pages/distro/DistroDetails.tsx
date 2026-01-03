@@ -16,6 +16,10 @@ import { useComparison } from "@/contexts/ComparisonContext";
 import { useDistros } from "@/hooks/useDistros";
 import { SEO } from "@/components/SEO";
 
+import { ProposeEditModal } from "@/components/community/ProposeEditModal";
+import { VoteButtons } from "@/components/community/VoteButtons";
+import { Edit3 } from "lucide-react";
+
 const DistroDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -24,28 +28,29 @@ const DistroDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [compareWith, setCompareWith] = useState<string>("");
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { t } = useTranslation();
 
   // Buscar distro atual
   useEffect(() => {
     const fetchDistro = async () => {
       if (!id) return;
-      
+
       try {
         setLoading(true);
         setError(null);
-   
+
         const apiBase = import.meta.env.VITE_API_BASE_ || 'https://distrowiki-api.vercel.app';
         const response = await fetch(`${apiBase}/distros/${id}`);
-        
+
         if (!response.ok) {
           throw new Error(`Distribuição não encontrada`);
         }
-        
+
         const data = await response.json();
-        
+
         const normalized = transformDistro(data);
-        
+
         const mappedData = {
           ...data,
           ...normalized,
@@ -53,7 +58,7 @@ const DistroDetails = () => {
           office_manager: data['Office Suite'] || data.office_suite || data.office_manager || data.officeManager,
           rating: calculatePerformanceScore(normalized),
         };
-        
+
         setDistro(mappedData);
       } catch (err: any) {
         console.error('Erro ao buscar distro:', err);
@@ -71,8 +76,8 @@ const DistroDetails = () => {
   const handleCompare = () => {
     if (!compareWith || !distro) return;
 
-    const d1 = { 
-      ...distro, 
+    const d1 = {
+      ...distro,
       id: distro.id || id,
       score: distro.rating || 0,
       desktopEnvironments: distro.desktopEnvironments || distro.desktop_environments || [],
@@ -182,7 +187,7 @@ const DistroDetails = () => {
       </motion.div>
 
       {/* Header */}
-      <motion.div 
+      <motion.div
         className="bg-card border border-border rounded-xl p-8 mb-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -198,7 +203,10 @@ const DistroDetails = () => {
             }}
           />
           <div className="flex-1 text-center md:text-left">
-            <h1 className="text-4xl md:text-5xl font-bold mb-2">{distro.name}</h1>
+            <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
+              <h1 className="text-4xl md:text-5xl font-bold">{distro.name}</h1>
+              <VoteButtons distroName={distro.id || id || ''} layout="horizontal" size="sm" />
+            </div>
             <p className="text-xl text-muted-foreground mb-4">{distro.family || t("distroDetails.independent")}</p>
             <div className="flex flex-wrap gap-3 justify-center md:justify-start items-center">
               <ScoreBadge score={calculatePerformanceScore(distro)} size="lg" />
@@ -210,7 +218,17 @@ const DistroDetails = () => {
                   </Button>
                 </a>
               )}
-              
+
+              <Button variant="outline" className="gap-2" onClick={() => setIsEditModalOpen(true)}>
+                <Edit3 className="w-4 h-4" />
+                Sugerir Edição
+              </Button>
+
+              <ProposeEditModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                distroName={distro.name}
+              />
               {/* Select de Comparação */}
               <div className="flex gap-2 items-center">
                 <Select value={compareWith} onValueChange={setCompareWith}>
@@ -230,8 +248,8 @@ const DistroDetails = () => {
                       ))}
                   </SelectContent>
                 </Select>
-                <Button 
-                  onClick={handleCompare} 
+                <Button
+                  onClick={handleCompare}
                   disabled={!compareWith}
                   variant="outline"
                   className="gap-2"
@@ -261,7 +279,7 @@ const DistroDetails = () => {
               <Zap className="w-6 h-6 text-yellow-500" />
               {t("comparison.sections.performance")}
             </h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
               {/* RAM Idle */}
               <div className="space-y-2">
@@ -270,9 +288,9 @@ const DistroDetails = () => {
                   <span className="font-medium">{t("comparison.sections.ramIdle")}</span>
                 </div>
                 {distro.ram_idle ? (
-                  <MetricBar 
-                    value={distro.ram_idle} 
-                    maxValue={2000} 
+                  <MetricBar
+                    value={distro.ram_idle}
+                    maxValue={2000}
                     isBest={distro.ram_idle < 600} // Exemplo de 'bom'
                     formatValue={(v) => `${v} MB`}
                   />
@@ -288,9 +306,9 @@ const DistroDetails = () => {
                   <span className="font-medium">{t("comparison.sections.cpuScore")}</span>
                 </div>
                 {distro.cpu_score ? (
-                  <MetricBar 
-                    value={distro.cpu_score} 
-                    maxValue={10} 
+                  <MetricBar
+                    value={distro.cpu_score}
+                    maxValue={10}
                     isBest={distro.cpu_score >= 8}
                     formatValue={(v) => `${v}/10`}
                     delay={0.1}
@@ -307,9 +325,9 @@ const DistroDetails = () => {
                   <span className="font-medium">{t("comparison.sections.ioScore")}</span>
                 </div>
                 {distro.io_score ? (
-                  <MetricBar 
-                    value={distro.io_score} 
-                    maxValue={10} 
+                  <MetricBar
+                    value={distro.io_score}
+                    maxValue={10}
                     isBest={distro.io_score >= 8}
                     formatValue={(v) => `${v}/10`}
                     delay={0.2}
@@ -361,7 +379,7 @@ const DistroDetails = () => {
         <TabsContent value="specs" className="space-y-6 animate-fade-in">
           <div className="bg-card border border-border rounded-xl p-6">
             <h2 className="text-2xl font-bold mb-6">{t("distroDetails.specs.title")}</h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div>
@@ -400,7 +418,7 @@ const DistroDetails = () => {
         <TabsContent value="links" className="space-y-6 animate-fade-in">
           <div className="bg-card border border-border rounded-xl p-6">
             <h2 className="text-2xl font-bold mb-6">{t("distroDetails.links.title")}</h2>
-            
+
             <div className="space-y-3">
               {distro.homepage && (
                 <div className="flex items-center justify-between p-4 bg-muted rounded-lg hover:bg-muted/80 smooth-transition group">
@@ -423,7 +441,7 @@ const DistroDetails = () => {
                     }}
                     title="Copiar Link"
                   >
-                     <Copy className="w-4 h-4" />
+                    <Copy className="w-4 h-4" />
                   </Button>
                 </div>
               )}
