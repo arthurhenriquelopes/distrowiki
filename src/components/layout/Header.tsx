@@ -6,11 +6,14 @@ import { Button } from "../ui/button";
 import Logo from "../Logo";
 import { ThemeToggle } from "../theme-toggle";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useAuth } from "../../contexts/AuthContext";
+import { User as UserIcon, LogOut } from "lucide-react";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const { t } = useTranslation();
+  const { user, openLoginModal, signOut } = useAuth();
 
   const navLinks = [
     { path: "/", label: t("nav.home") },
@@ -32,11 +35,10 @@ const Header = () => {
             <Link
               key={link.path}
               to={link.path}
-              className={`text-sm font-medium smooth-transition ${
-                isActive(link.path)
-                  ? "text-primary"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
+              className={`text-sm font-medium smooth-transition ${isActive(link.path)
+                ? "text-primary"
+                : "text-muted-foreground hover:text-foreground"
+                }`}
             >
               {link.label}
             </Link>
@@ -52,6 +54,26 @@ const Header = () => {
           </a>
           <LanguageSwitcher />
           <ThemeToggle />
+
+          {user ? (
+            <div className="flex items-center gap-2">
+              <Link
+                to="/admin/dashboard"
+                className="text-muted-foreground hover:text-foreground p-2 rounded-lg hover:bg-muted transition-colors"
+                title="Painel Admin"
+              >
+                <UserIcon className="h-5 w-5" />
+              </Link>
+              <span className="text-sm font-medium hidden lg:block">{user.email?.split('@')[0]}</span>
+              <Button variant="ghost" size="icon" onClick={() => signOut()} title="Sair">
+                <LogOut className="h-5 w-5" />
+              </Button>
+            </div>
+          ) : (
+            <Button onClick={openLoginModal} variant="default" size="sm">
+              Login
+            </Button>
+          )}
         </nav>
 
         <button
@@ -72,11 +94,10 @@ const Header = () => {
                 key={link.path}
                 to={link.path}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`text-base font-medium smooth-transition ${
-                  isActive(link.path)
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
+                className={`text-base font-medium smooth-transition ${isActive(link.path)
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+                  }`}
               >
                 {link.label}
               </Link>
@@ -94,6 +115,20 @@ const Header = () => {
             <div className="flex items-center gap-2 pt-2">
               <LanguageSwitcher />
               <ThemeToggle />
+            </div>
+            <div className="pt-2 border-t border-border">
+              {user ? (
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">{user.email}</span>
+                  <Button variant="ghost" size="sm" onClick={() => { signOut(); setMobileMenuOpen(false); }}>
+                    Sair
+                  </Button>
+                </div>
+              ) : (
+                <Button className="w-full" onClick={() => { openLoginModal(); setMobileMenuOpen(false); }}>
+                  Login / Cadastrar
+                </Button>
+              )}
             </div>
           </nav>
         </div>
