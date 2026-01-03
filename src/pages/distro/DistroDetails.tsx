@@ -265,7 +265,7 @@ const DistroDetails = () => {
 
       {/* Tabs */}
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
           <TabsTrigger value="overview">{t("distroDetails.tabs.overview")}</TabsTrigger>
           <TabsTrigger value="performance">{t("comparison.sections.performance")}</TabsTrigger>
           <TabsTrigger value="specs">{t("distroDetails.tabs.specs")}</TabsTrigger>
@@ -287,11 +287,11 @@ const DistroDetails = () => {
                   <HardDrive className="w-4 h-4 text-muted-foreground" />
                   <span className="font-medium">{t("comparison.sections.ramIdle")}</span>
                 </div>
-                {distro.ram_idle ? (
+                {(distro.idle_ram_usage || distro.ram_idle || distro.idleRamUsage) ? (
                   <MetricBar
-                    value={distro.ram_idle}
+                    value={distro.idle_ram_usage || distro.ram_idle || distro.idleRamUsage}
                     maxValue={2000}
-                    isBest={distro.ram_idle < 600} // Exemplo de 'bom'
+                    isBest={(distro.idle_ram_usage || distro.ram_idle || distro.idleRamUsage) < 600}
                     formatValue={(v) => `${v} MB`}
                   />
                 ) : (
@@ -378,37 +378,64 @@ const DistroDetails = () => {
         {/* Specs */}
         <TabsContent value="specs" className="space-y-6 animate-fade-in">
           <div className="bg-card border border-border rounded-xl p-6">
-            <h2 className="text-2xl font-bold mb-6">{t("distroDetails.specs.title")}</h2>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <Cpu className="w-6 h-6 text-primary" />
+              {t("distroDetails.specs.title")}
+            </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.specs.basedOn")}</p>
-                  <p className="text-lg font-medium">{distro.based_on || t("common.na")}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.specs.category")}</p>
-                  <p className="text-lg font-medium">{distro.category || t("common.na")}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.specs.packageManager")}</p>
-                  <p className="text-lg font-medium">{distro.package_manager || t("common.na")}</p>
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Based On */}
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm text-muted-foreground mb-1">Baseado em</p>
+                <p className="text-lg font-semibold">{distro.based_on || distro.family || "Independente"}</p>
               </div>
 
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.specs.osType")}</p>
-                  <p className="text-lg font-medium">{distro.os_type || t("common.na")}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.specs.requirements")}</p>
-                  <p className="text-lg font-medium">{distro.requirements || t("common.na")}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.specs.officeManager")}</p>
-                  <p className="text-lg font-medium">{distro.office_manager || t("common.na")}</p>
-                </div>
+              {/* Category */}
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm text-muted-foreground mb-1">Categoria</p>
+                <p className="text-lg font-semibold">{distro.category || "Desktop"}</p>
+              </div>
+
+              {/* Package Manager */}
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm text-muted-foreground mb-1">Gerenciador de Pacotes</p>
+                <p className="text-lg font-semibold">{distro.package_management || distro.package_manager || "N/A"}</p>
+              </div>
+
+              {/* Architecture */}
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm text-muted-foreground mb-1">Arquitetura</p>
+                <p className="text-lg font-semibold">{distro.architecture || "x86_64"}</p>
+              </div>
+
+              {/* Requirements */}
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm text-muted-foreground mb-1">Requisitos</p>
+                <p className="text-lg font-semibold">{distro.requirements || "Médio"}</p>
+              </div>
+
+              {/* Image Size */}
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm text-muted-foreground mb-1">Tamanho da ISO</p>
+                <p className="text-lg font-semibold">{distro.image_size ? `${distro.image_size} GB` : "N/A"}</p>
+              </div>
+
+              {/* Office Suite */}
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm text-muted-foreground mb-1">Suite Office</p>
+                <p className="text-lg font-semibold">{distro.office_suite || distro.office_manager || "N/A"}</p>
+              </div>
+
+              {/* First Release */}
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm text-muted-foreground mb-1">Ano de Lançamento</p>
+                <p className="text-lg font-semibold">{distro.release_year || "N/A"}</p>
+              </div>
+
+              {/* Latest Release */}
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm text-muted-foreground mb-1">Última Versão</p>
+                <p className="text-lg font-semibold">{distro.latest_release_date || distro.lastRelease || "N/A"}</p>
               </div>
             </div>
           </div>
@@ -417,33 +444,90 @@ const DistroDetails = () => {
         {/* Links */}
         <TabsContent value="links" className="space-y-6 animate-fade-in">
           <div className="bg-card border border-border rounded-xl p-6">
-            <h2 className="text-2xl font-bold mb-6">{t("distroDetails.links.title")}</h2>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <ExternalLink className="w-6 h-6 text-primary" />
+              {t("distroDetails.links.title")}
+            </h2>
 
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Official Website */}
               {distro.homepage && (
-                <div className="flex items-center justify-between p-4 bg-muted rounded-lg hover:bg-muted/80 smooth-transition group">
-                  <a
-                    href={distro.homepage}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-between"
-                  >
-                    <span className="font-medium">{t("distroDetails.links.officialSite")}</span>
-                    <ExternalLink className="w-5 h-5 text-primary group-hover:translate-x-1 smooth-transition" />
-                  </a>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="ml-2 text-muted-foreground hover:text-foreground"
-                    onClick={() => {
-                      navigator.clipboard.writeText(distro.homepage);
-                      // Toast notification could be added here
-                    }}
-                    title="Copiar Link"
-                  >
-                    <Copy className="w-4 h-4" />
-                  </Button>
+                <a
+                  href={distro.homepage}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-primary/10 border border-transparent hover:border-primary/30 smooth-transition group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                      <ExternalLink className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-semibold">Site Oficial</p>
+                      <p className="text-sm text-muted-foreground">{new URL(distro.homepage).hostname}</p>
+                    </div>
+                  </div>
+                  <ArrowLeft className="w-5 h-5 text-muted-foreground rotate-180 group-hover:translate-x-1 transition-transform" />
+                </a>
+              )}
+
+              {/* DistroWatch */}
+              <a
+                href={`https://distrowatch.com/table.php?distribution=${distro.id || distro.name?.toLowerCase()}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-orange-500/10 border border-transparent hover:border-orange-500/30 smooth-transition group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center">
+                    <span className="text-orange-500 font-bold text-sm">DW</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold">DistroWatch</p>
+                    <p className="text-sm text-muted-foreground">Rankings e reviews</p>
+                  </div>
                 </div>
+                <ArrowLeft className="w-5 h-5 text-muted-foreground rotate-180 group-hover:translate-x-1 transition-transform" />
+              </a>
+
+              {/* Wikipedia */}
+              <a
+                href={`https://en.wikipedia.org/wiki/${encodeURIComponent(distro.name)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-blue-500/10 border border-transparent hover:border-blue-500/30 smooth-transition group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                    <span className="text-blue-500 font-bold text-sm">W</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold">Wikipedia</p>
+                    <p className="text-sm text-muted-foreground">História e detalhes</p>
+                  </div>
+                </div>
+                <ArrowLeft className="w-5 h-5 text-muted-foreground rotate-180 group-hover:translate-x-1 transition-transform" />
+              </a>
+
+              {/* Download */}
+              {distro.homepage && (
+                <a
+                  href={`${distro.homepage}/download`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-green-500/10 border border-transparent hover:border-green-500/30 smooth-transition group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center">
+                      <HardDrive className="w-5 h-5 text-green-500" />
+                    </div>
+                    <div>
+                      <p className="font-semibold">Download</p>
+                      <p className="text-sm text-muted-foreground">Baixar ISO</p>
+                    </div>
+                  </div>
+                  <ArrowLeft className="w-5 h-5 text-muted-foreground rotate-180 group-hover:translate-x-1 transition-transform" />
+                </a>
               )}
             </div>
           </div>
