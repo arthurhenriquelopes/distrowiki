@@ -55,8 +55,20 @@ const POPULARITY_BOOST: Record<string, number> = {
 export const calculatePerformanceScore = (distro: Distro): number => {
   const distroId = (distro.id || distro.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
-  // Base de popularidade (ou score neutro para distros desconhecidas)
-  const popularityBase = POPULARITY_BOOST[distroId] || 70;
+  // Usar popularity_rank do scraping se disponível, senão usar boost estático
+  let popularityBase: number;
+
+  // Prioridade: ranking da API > popularityRank > boost estático
+  const apiRanking = (distro as any).ranking || (distro as any).popularity_rank || distro.popularityRank;
+
+  if (apiRanking && apiRanking > 0 && apiRanking <= 100) {
+    // Converte ranking (1-100) para score (95-50)
+    // Rank 1 = 95 pontos, Rank 100 = 50 pontos
+    popularityBase = Math.max(50, 96 - (apiRanking * 0.45));
+  } else {
+    // Fallback para boost estático
+    popularityBase = POPULARITY_BOOST[distroId] || 70;
+  }
 
   // Calcular score técnico se houver dados disponíveis
   const technicalScore = calculateTechnicalScore(distro);
@@ -68,9 +80,9 @@ export const calculatePerformanceScore = (distro: Distro): number => {
     return Math.min(99, Math.max(50, popularityBase + variation));
   }
 
-  // Combina popularidade (60%) com score técnico (40%)
-  const POPULARITY_WEIGHT = 0.60;
-  const TECHNICAL_WEIGHT = 0.40;
+  // Combina popularidade (55%) com score técnico (45%) - mais peso em métricas técnicas
+  const POPULARITY_WEIGHT = 0.55;
+  const TECHNICAL_WEIGHT = 0.45;
 
   const combinedScore = (popularityBase * POPULARITY_WEIGHT) + (technicalScore * TECHNICAL_WEIGHT);
 

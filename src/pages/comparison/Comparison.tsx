@@ -600,6 +600,20 @@ const Comparison = () => {
               ))}
             </ComparisonRow>
 
+            <ComparisonRow label="Popularidade (Rank)">
+              {selectedDistros.map((distro) => {
+                const rank = (distro as any).ranking || (distro as any).popularity_rank || distro.popularityRank;
+                return (
+                  <span key={distro.id} className={cn(
+                    "text-sm font-bold",
+                    rank && rank <= 10 ? "text-yellow-500" : rank && rank <= 30 ? "text-green-500" : ""
+                  )}>
+                    {rank ? `#${rank}` : t('common.na')}
+                  </span>
+                );
+              })}
+            </ComparisonRow>
+
             <ComparisonRow label={t('comparison.sections.status')}>
               {selectedDistros.map((distro) => (
                 <span

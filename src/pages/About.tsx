@@ -91,9 +91,9 @@ const About = () => {
         keywords="sobre, distrowiki, open source, linux, comparação"
         structuredData={structuredData}
       />
-      
+
       {/* Hero */}
-      <motion.div 
+      <motion.div
         className="text-center mb-16"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -106,7 +106,7 @@ const About = () => {
       </motion.div>
 
       {/* Mission */}
-      <motion.section 
+      <motion.section
         className="mb-16"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -124,7 +124,7 @@ const About = () => {
 
       {/* What We Offer */}
       <section className="mb-16">
-        <motion.h2 
+        <motion.h2
           className="text-3xl font-bold text-center mb-10"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -133,7 +133,7 @@ const About = () => {
         >
           {t("about.whatWeOffer")}
         </motion.h2>
-        <motion.div 
+        <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           initial="initial"
           whileInView="animate"
@@ -155,27 +155,36 @@ const About = () => {
       {/* How It Works */}
       <section className="mb-16">
         <div className="bg-card border border-border rounded-xl p-8 max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold mb-6">{t("about.methodology.howWeScore.title")}</h2>
+          <h2 className="text-2xl font-bold mb-6">Como Calculamos o Score</h2>
           <div className="space-y-4 text-muted-foreground">
             <p>
-              {t("about.methodology.howWeScore.intro")}
+              Nosso sistema combina <strong>dados do DistroWatch</strong> com <strong>métricas técnicas</strong> para criar uma pontuação justa e transparente:
             </p>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
+                <span className="bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded text-sm font-mono">RANK</span>
+                <span>Popularidade no DistroWatch (55% do peso) - quanto menor o rank, maior a pontuação base</span>
+              </li>
+              <li className="flex items-start gap-3">
                 <span className="bg-primary/20 text-primary px-2 py-1 rounded text-sm font-mono">RAM</span>
-                <span>{t("about.methodology.howWeScore.ram")}</span>
+                <span>Uso de memória em idle - distros mais leves ganham mais pontos</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="bg-primary/20 text-primary px-2 py-1 rounded text-sm font-mono">CPU</span>
-                <span>{t("about.methodology.howWeScore.cpu")}</span>
+                <span>Benchmark de desempenho do processador</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="bg-primary/20 text-primary px-2 py-1 rounded text-sm font-mono">I/O</span>
-                <span>{t("about.methodology.howWeScore.io")}</span>
+                <span>Velocidade de leitura/escrita em disco</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="bg-green-500/20 text-green-500 px-2 py-1 rounded text-sm font-mono">FRESH</span>
+                <span>Distros com lançamentos recentes são valorizadas</span>
               </li>
             </ul>
             <p className="text-sm bg-warning/10 border border-warning/20 rounded-lg p-4 mt-4">
-              <strong className="text-warning">{t("about.methodology.howWeScore.disclaimer")}</strong>
+              <strong className="text-warning">⚠️ Importante:</strong> O score é uma referência, não uma verdade absoluta.
+              A melhor distro é aquela que atende suas necessidades específicas.
             </p>
           </div>
         </div>
@@ -186,7 +195,7 @@ const About = () => {
         <h2 className="text-2xl font-bold text-center mb-8">{t("about.techStack.title")}</h2>
         <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
           {techStack.map((tech) => (
-            <div 
+            <div
               key={tech.name}
               className="bg-card border border-border rounded-lg px-4 py-2 hover:border-primary/30 transition-colors"
             >

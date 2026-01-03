@@ -279,7 +279,10 @@ const Home = () => {
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-xl font-bold text-foreground truncate group-hover:text-primary transition-colors">{distro.name}</h3>
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-xl font-bold text-foreground truncate group-hover:text-primary transition-colors">{distro.name}</h3>
+                          <VoteButtons distroName={distro.id} layout="horizontal" size="sm" />
+                        </div>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <span className="truncate">{distro.family || "Independent"}</span>
                           {distro.desktopEnvironments?.[0] && (
@@ -319,10 +322,7 @@ const Home = () => {
                     </div>
 
                     {/* Score Footer */}
-                    <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between relative z-10">
-                      <div className="flex items-center gap-2">
-                        <VoteButtons distroName={distro.id} />
-                      </div>
+                    <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-end relative z-10">
                       <div className="flex flex-col items-end">
                         <span className="text-xs text-muted-foreground mb-1">Performance</span>
                         <ScoreBadge score={distro.calculatedScore} size="lg" />
