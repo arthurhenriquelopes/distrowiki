@@ -1,26 +1,103 @@
 import type { Distro } from "@/types";
 
 /**
- * Calcula o score de performance de uma distro baseado apenas nos dados reais.
+ * Distros famosas com boost de popularidade baseado em reconhecimento global.
+ * Tier 1: Distros extremamente populares (90+ base)
+ * Tier 2: Distros muito populares (85+ base)
+ * Tier 3: Distros populares (80+ base)
+ */
+const POPULARITY_BOOST: Record<string, number> = {
+  // Tier 1 - Legendary (base 92-95)
+  'ubuntu': 95,
+  'linuxmint': 94,
+  'debian': 93,
+  'fedora': 93,
+  'arch': 92,
+  'manjaro': 91,
+  'pop_os': 91,
+  'elementary': 90,
+
+  // Tier 2 - Very Popular (base 85-89)
+  'opensuse': 89,
+  'zorin': 89,
+  'kali': 88,
+  'endeavouros': 87,
+  'garuda': 87,
+  'mxlinux': 86,
+  'solus': 86,
+  'deepin': 85,
+  'kubuntu': 85,
+  'xubuntu': 85,
+  'lubuntu': 84,
+  'void': 84,
+
+  // Tier 3 - Popular (base 78-83)
+  'gentoo': 83,
+  'nixos': 83,
+  'arcolinux': 82,
+  'artix': 81,
+  'cachyos': 81,
+  'nobara': 81,
+  'peppermint': 80,
+  'lmde': 80,
+  'budgie': 79,
+  'antix': 78,
+  'sparky': 78,
+};
+
+/**
+ * Calcula o score de uma distro combinando:
+ * 1. Popularidade/Reputação (peso 60%)
+ * 2. Métricas técnicas quando disponíveis (peso 40%)
  * 
- * Fórmula balanceada com métricas disponíveis:
- * - CPU: Peso 30% - Maior CPU = melhor
- * - I/O: Peso 25% - Maior I/O = melhor
- * - RAM: Peso 25% - Menor RAM = melhor
- * - Freshness: Peso 20% - Mais recente = melhor
+ * Garante que distros famosas fiquem no topo com scores 90+
  */
 export const calculatePerformanceScore = (distro: Distro): number => {
+  const distroId = (distro.id || distro.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+  // Base de popularidade (ou score neutro para distros desconhecidas)
+  const popularityBase = POPULARITY_BOOST[distroId] || 70;
+
+  // Calcular score técnico se houver dados disponíveis
+  const technicalScore = calculateTechnicalScore(distro);
+
+  // Se não tiver dados técnicos, usa apenas popularidade
+  if (technicalScore === null) {
+    // Adiciona pequena variação para não ter scores idênticos
+    const variation = (distroId.charCodeAt(0) % 5) - 2; // -2 a +2
+    return Math.min(99, Math.max(50, popularityBase + variation));
+  }
+
+  // Combina popularidade (60%) com score técnico (40%)
+  const POPULARITY_WEIGHT = 0.60;
+  const TECHNICAL_WEIGHT = 0.40;
+
+  const combinedScore = (popularityBase * POPULARITY_WEIGHT) + (technicalScore * TECHNICAL_WEIGHT);
+
+  // Garante que distros tier 1 não caiam muito por métricas técnicas ruins
+  const minScore = popularityBase * 0.9; // Não pode cair mais que 10% da base
+
+  const finalScore = Math.max(minScore, combinedScore);
+
+  return Math.min(99, Math.round(finalScore * 10) / 10);
+};
+
+/**
+ * Calcula score técnico baseado em CPU, RAM, I/O e Freshness.
+ * Retorna null se não houver dados suficientes.
+ */
+const calculateTechnicalScore = (distro: Distro): number | null => {
   const cpuScore = distro.cpuScore || 0;
   const ioScore = distro.ioScore || 0;
   const ramIdle = distro.idleRamUsage || 0;
   const lastRelease = distro.lastRelease;
 
-  // Se não tiver nenhum dado de performance, retorna 0
-  if (!cpuScore && !ioScore && !ramIdle) {
-    return 0;
+  // Precisa de pelo menos uma métrica técnica
+  if (!cpuScore && !ioScore && !ramIdle && !lastRelease) {
+    return null;
   }
 
-  // Ranges calibrados para os dados reais
+  // Ranges calibrados
   const RAM_MIN = 250;
   const RAM_MAX = 1500;
   const CPU_MIN = 5;
@@ -28,82 +105,65 @@ export const calculatePerformanceScore = (distro: Distro): number => {
   const IO_MIN = 5;
   const IO_MAX = 10;
 
+  let totalWeight = 0;
+  let weightedScore = 0;
+
   // RAM Score (invertido - menor RAM = maior score)
-  let ramScore = 50;
   if (ramIdle > 0) {
+    let ramScore: number;
     if (ramIdle <= RAM_MIN) {
       ramScore = 100;
     } else if (ramIdle >= RAM_MAX) {
-      ramScore = 30;
+      ramScore = 50;
     } else {
       const normalized = (RAM_MAX - ramIdle) / (RAM_MAX - RAM_MIN);
-      ramScore = 30 + (normalized * 70);
+      ramScore = 50 + (normalized * 50);
     }
+    weightedScore += ramScore * 0.25;
+    totalWeight += 0.25;
   }
 
-  // CPU Score - normalizado para 0-100
-  let cpuNormScore = 50;
+  // CPU Score
   if (cpuScore > 0) {
     const normalized = Math.min(1, Math.max(0, (cpuScore - CPU_MIN) / (CPU_MAX - CPU_MIN)));
-    cpuNormScore = 30 + (normalized * 70);
+    const cpuNormScore = 50 + (normalized * 50);
+    weightedScore += cpuNormScore * 0.30;
+    totalWeight += 0.30;
   }
 
-  // I/O Score - normalizado para 0-100
-  let ioNormScore = 50;
+  // I/O Score
   if (ioScore > 0) {
     const normalized = Math.min(1, Math.max(0, (ioScore - IO_MIN) / (IO_MAX - IO_MIN)));
-    ioNormScore = 30 + (normalized * 70);
+    const ioNormScore = 50 + (normalized * 50);
+    weightedScore += ioNormScore * 0.25;
+    totalWeight += 0.25;
   }
 
-  // Release Freshness Score
-  let freshnessScore = 50;
+  // Freshness Score
   if (lastRelease) {
     const releaseDate = new Date(lastRelease);
     const now = new Date();
     const monthsOld = (now.getTime() - releaseDate.getTime()) / (1000 * 60 * 60 * 24 * 30);
 
+    let freshnessScore: number;
     if (monthsOld <= 3) {
       freshnessScore = 100;
     } else if (monthsOld <= 6) {
-      freshnessScore = 85;
+      freshnessScore = 90;
     } else if (monthsOld <= 12) {
-      freshnessScore = 70;
+      freshnessScore = 80;
     } else if (monthsOld <= 24) {
-      freshnessScore = 55;
+      freshnessScore = 70;
     } else {
-      freshnessScore = 40;
+      freshnessScore = 60;
     }
+    weightedScore += freshnessScore * 0.20;
+    totalWeight += 0.20;
   }
 
-  // Pesos das métricas
-  const CPU_WEIGHT = 0.30;
-  const IO_WEIGHT = 0.25;
-  const RAM_WEIGHT = 0.25;
-  const FRESHNESS_WEIGHT = 0.20;
-
-  // Score ponderado - só conta métricas com dados disponíveis
-  let totalWeight = 0;
-  let weightedScore = 0;
-
-  if (ramIdle > 0) {
-    weightedScore += ramScore * RAM_WEIGHT;
-    totalWeight += RAM_WEIGHT;
-  }
-  if (cpuScore > 0) {
-    weightedScore += cpuNormScore * CPU_WEIGHT;
-    totalWeight += CPU_WEIGHT;
-  }
-  if (ioScore > 0) {
-    weightedScore += ioNormScore * IO_WEIGHT;
-    totalWeight += IO_WEIGHT;
-  }
-  if (lastRelease) {
-    weightedScore += freshnessScore * FRESHNESS_WEIGHT;
-    totalWeight += FRESHNESS_WEIGHT;
+  if (totalWeight === 0) {
+    return null;
   }
 
-  // Normaliza
-  const finalScore = totalWeight > 0 ? weightedScore / totalWeight : 0;
-
-  return Math.min(100, Math.round(finalScore * 10) / 10);
+  return weightedScore / totalWeight;
 };
