@@ -21,7 +21,7 @@ import { useTranslation } from "react-i18next";
 
 // Helper para formatar datas relativas (usa i18n)
 const formatRelativeDate = (
-  dateString: string | undefined | null, 
+  dateString: string | undefined | null,
   t: (key: string, options?: Record<string, unknown>) => string
 ): string => {
   if (!dateString) return "N/A";
@@ -29,7 +29,7 @@ const formatRelativeDate = (
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  
+
   if (diffDays < 0) return t('comparison.relativeDate.future');
   if (diffDays === 0) return t('comparison.relativeDate.today');
   if (diffDays === 1) return t('comparison.relativeDate.yesterday');
@@ -56,7 +56,7 @@ const Comparison = () => {
       // Compactar quando scrollar mais de 200px
       setIsCompact(window.scrollY > 200);
     };
-    
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -74,7 +74,7 @@ const Comparison = () => {
       try {
         const ids = distroIds.split('+');
         const loadedDistros = await fetchDistrosByIds(ids);
-        
+
         if (loadedDistros.length >= 2) {
           replaceSelection(loadedDistros);
         }
@@ -104,11 +104,11 @@ const Comparison = () => {
     selectedDistros.forEach(d => map.set(d.id, calculatePerformanceScore(d)));
     return map;
   }, [selectedDistros]);
-  
+
   // Encontrar o vencedor geral (maior score) usando cache
   const winnerDistro = React.useMemo(() => {
     if (selectedDistros.length === 0) return null;
-    return selectedDistros.reduce((prev, current) => 
+    return selectedDistros.reduce((prev, current) =>
       (scoreMap.get(current.id) || 0) > (scoreMap.get(prev.id) || 0) ? current : prev
     );
   }, [selectedDistros, scoreMap]);
@@ -196,9 +196,9 @@ const Comparison = () => {
         keywords={`comparação, ${selectedDistros.map(d => d.name).join(', ')}, linux, benchmark`}
         structuredData={structuredData}
       />
-      
+
       {/* Header */}
-      <motion.div 
+      <motion.div
         className="mb-8"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -211,7 +211,7 @@ const Comparison = () => {
               {t('comparison.backToCatalog')}
             </Button>
           </Link>
-          
+
           <div className="flex items-center gap-2">
             {/* Botão Adicionar Distro */}
             {selectedDistros.length < 4 && (
@@ -222,9 +222,9 @@ const Comparison = () => {
                 </Button>
               </Link>
             )}
-            
+
             {/* Botão Desktop - só desktop */}
-            <Button 
+            <Button
               variant={showDesktop ? "default" : "outline"}
               size="sm"
               onClick={() => setShowDesktop(!showDesktop)}
@@ -233,9 +233,9 @@ const Comparison = () => {
               {showDesktop ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               Desktop
             </Button>
-            
-            <Button 
-              variant="outline" 
+
+            <Button
+              variant="outline"
               size="sm"
               onClick={handleShare}
               className="gap-2"
@@ -254,7 +254,7 @@ const Comparison = () => {
             </Button>
           </div>
         </div>
-        
+
         <h1 className="text-3xl sm:text-4xl font-bold mb-2 tracking-tight">{t('comparison.title')}</h1>
         <p className="text-muted-foreground">
           {t('comparison.comparing', { count: selectedDistros.length })}
@@ -262,13 +262,13 @@ const Comparison = () => {
       </motion.div>
 
       {/* Cards de Distro - Header Sticky */}
-      <motion.div 
+      <motion.div
         className="sticky top-16 z-40 -mx-4 px-4 sm:mx-0 sm:px-4 py-4 bg-background/80 backdrop-blur-xl border-b border-border/50 mb-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
       >
-        <div 
+        <div
           className="grid gap-2 sm:gap-3 md:gap-4"
           style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, 1fr)` }}
         >
@@ -277,14 +277,14 @@ const Comparison = () => {
             const isWinner = distro.id === winnerDistro.id && selectedDistros.length > 1;
             // Primeiro nome para mobile (ex: "Arch Linux" -> "Arch")
             const shortName = distro.name.split(' ')[0];
-            
+
             return (
               <motion.div
                 key={distro.id}
                 className={cn(
                   "relative rounded-xl p-2 sm:p-4 border transition-all duration-300 min-w-0",
-                  isWinner 
-                    ? "bg-gradient-to-br from-primary/15 via-primary/5 to-transparent border-primary ring-2 ring-primary/30 shadow-xl shadow-primary/20" 
+                  isWinner
+                    ? "bg-gradient-to-br from-primary/15 via-primary/5 to-transparent border-primary ring-2 ring-primary/30 shadow-xl shadow-primary/20"
                     : "bg-card/30 border-border/40 opacity-80 hover:opacity-100 hover:border-border"
                 )}
                 whileHover={{ scale: 1.01 }}
@@ -304,7 +304,7 @@ const Comparison = () => {
                     </span>
                   </div>
                 )}
-                
+
                 {/* Botão remover */}
                 <button
                   onClick={() => {
@@ -400,10 +400,10 @@ const Comparison = () => {
                         </div>
                         <ScoreBadge score={score} size={isCompact ? "sm" : "md"} />
                       </div>
-                      
+
                       {/* Link para detalhes - só no modo expandido */}
                       {!isCompact && (
-                        <Link 
+                        <Link
                           to={`/distro/${distro.id}`}
                           className="mt-2 flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
                         >
@@ -421,11 +421,11 @@ const Comparison = () => {
 
       {/* Tabela de Comparação */}
       <div className="space-y-4">
-        
+
         {/* Seção: Descrição - escondida em mobile por questão de espaço */}
         <div className="hidden sm:block">
           <ComparisonSection title={t('comparison.sections.description')} icon={<Info className="w-4 h-4" />}>
-            <div 
+            <div
               className="grid gap-4"
               style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, 1fr)` }}
             >
@@ -443,7 +443,7 @@ const Comparison = () => {
           <ComparisonSection title={t('comparison.sections.performance')} icon={<Zap className="w-4 h-4" />} highlight>
             <div className="space-y-4">
               {/* RAM Idle */}
-              <ComparisonRow 
+              <ComparisonRow
                 label={t('comparison.sections.ramIdle')}
                 tooltip={t('comparison.sections.ramIdleTooltip')}
                 icon={<HardDrive className="w-3.5 h-3.5" />}
@@ -453,10 +453,10 @@ const Comparison = () => {
                   const best = getBestValue(selectedDistros, "idleRamUsage", true);
                   const isBest = !!(value && isBestValue(value, best));
                   return (
-                    <MetricBar 
+                    <MetricBar
                       key={distro.id}
-                      value={value} 
-                      maxValue={2000} 
+                      value={value}
+                      maxValue={2000}
                       isBest={isBest}
                       formatValue={(v) => `${v} MB`}
                     />
@@ -465,7 +465,7 @@ const Comparison = () => {
               </ComparisonRow>
 
               {/* CPU Score */}
-              <ComparisonRow 
+              <ComparisonRow
                 label={t('comparison.sections.cpuScore')}
                 tooltip={t('comparison.sections.cpuScoreTooltip')}
                 icon={<Cpu className="w-3.5 h-3.5" />}
@@ -475,10 +475,10 @@ const Comparison = () => {
                   const best = getBestValue(selectedDistros, "cpuScore");
                   const isBest = !!(value && isBestValue(value, best));
                   return (
-                    <MetricBar 
+                    <MetricBar
                       key={distro.id}
-                      value={value} 
-                      maxValue={10} 
+                      value={value}
+                      maxValue={10}
                       isBest={isBest}
                       formatValue={(v) => `${v}/10`}
                       delay={0.1}
@@ -488,7 +488,7 @@ const Comparison = () => {
               </ComparisonRow>
 
               {/* I/O Score */}
-              <ComparisonRow 
+              <ComparisonRow
                 label={t('comparison.sections.ioScore')}
                 tooltip={t('comparison.sections.ioScoreTooltip')}
                 icon={<HardDrive className="w-3.5 h-3.5" />}
@@ -498,10 +498,10 @@ const Comparison = () => {
                   const best = getBestValue(selectedDistros, "ioScore");
                   const isBest = !!(value && isBestValue(value, best));
                   return (
-                    <MetricBar 
+                    <MetricBar
                       key={distro.id}
-                      value={value} 
-                      maxValue={10} 
+                      value={value}
+                      maxValue={10}
                       isBest={isBest}
                       formatValue={(v) => `${v}/10`}
                       delay={0.2}
@@ -524,7 +524,7 @@ const Comparison = () => {
 
         {/* Seção: Ambientes Gráficos */}
         <ComparisonSection title={t('comparison.sections.desktopEnv')} icon={<Monitor className="w-4 h-4" />}>
-          <div 
+          <div
             className="grid gap-2 sm:gap-4"
             style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, 1fr)` }}
           >
@@ -579,12 +579,12 @@ const Comparison = () => {
                   </TooltipTrigger>
                   <TooltipContent>
                     <p className="text-xs">
-                      {distro.lastRelease 
-                        ? new Date(distro.lastRelease).toLocaleDateString(undefined, { 
-                            day: '2-digit', 
-                            month: 'long', 
-                            year: 'numeric' 
-                          })
+                      {distro.lastRelease
+                        ? new Date(distro.lastRelease).toLocaleDateString(undefined, {
+                          day: '2-digit',
+                          month: 'long',
+                          year: 'numeric'
+                        })
                         : t('common.dateNA') || "Data não disponível"}
                     </p>
                   </TooltipContent>
@@ -602,8 +602,8 @@ const Comparison = () => {
 
             <ComparisonRow label={t('comparison.sections.status')}>
               {selectedDistros.map((distro) => (
-                <span 
-                  key={distro.id} 
+                <span
+                  key={distro.id}
                   className={cn(
                     "text-sm font-medium",
                     distro.status === 'Active' && "text-green-500"
@@ -627,12 +627,40 @@ const Comparison = () => {
               ))}
             </ComparisonRow>
 
+            <ComparisonRow label="Tipo de Release">
+              {selectedDistros.map((distro) => (
+                <span key={distro.id} className="text-sm font-medium">
+                  {(distro as any).release_type || distro.releaseType || distro.releaseModel || "Point Release"}
+                </span>
+              ))}
+            </ComparisonRow>
+
+            <ComparisonRow label="Sistema Init">
+              {selectedDistros.map((distro) => (
+                <span key={distro.id} className="text-sm font-medium font-mono">
+                  {(distro as any).init_system || distro.initSystem || "systemd"}
+                </span>
+              ))}
+            </ComparisonRow>
+
             <ComparisonRow label={t('comparison.sections.architecture')}>
               {selectedDistros.map((distro) => (
                 <span key={distro.id} className="text-sm font-medium font-mono">
                   {distro.architecture || t('common.na')}
                 </span>
               ))}
+            </ComparisonRow>
+
+            <ComparisonRow label="File Systems">
+              {selectedDistros.map((distro) => {
+                const fs = (distro as any).file_systems || distro.fileSystems || ["ext4"];
+                const fsList = Array.isArray(fs) ? fs.slice(0, 3).join(", ") : fs;
+                return (
+                  <span key={distro.id} className="text-sm font-medium font-mono">
+                    {fsList}
+                  </span>
+                );
+              })}
             </ComparisonRow>
 
             <ComparisonRow label={t('comparison.sections.origin')} icon={<MapPin className="w-3.5 h-3.5" />}>
@@ -667,21 +695,21 @@ interface ComparisonSectionProps {
   defaultCollapsed?: boolean;
 }
 
-const ComparisonSection = ({ 
-  title, 
-  icon, 
-  children, 
+const ComparisonSection = ({
+  title,
+  icon,
+  children,
   highlight,
-  defaultCollapsed = false 
+  defaultCollapsed = false
 }: ComparisonSectionProps) => {
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
-  
+
   return (
     <motion.div
       className={cn(
         "rounded-xl border overflow-hidden",
-        highlight 
-          ? "bg-gradient-to-br from-primary/5 via-transparent to-transparent border-primary/20" 
+        highlight
+          ? "bg-gradient-to-br from-primary/5 via-transparent to-transparent border-primary/20"
           : "bg-card/30 border-border/50"
       )}
       initial={{ opacity: 0, y: 20 }}
@@ -697,14 +725,14 @@ const ComparisonSection = ({
         <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground font-heading">
           {title}
         </h3>
-        <ChevronDown 
+        <ChevronDown
           className={cn(
             "w-4 h-4 text-muted-foreground transition-transform duration-200",
             isCollapsed && "-rotate-90"
-          )} 
+          )}
         />
       </button>
-      
+
       {/* Conteúdo colapsável */}
       <AnimatePresence initial={false}>
         {!isCollapsed && (
@@ -733,7 +761,7 @@ interface ComparisonRowProps {
 
 const ComparisonRow = ({ label, tooltip, icon, children }: ComparisonRowProps) => {
   const { selectedDistros } = useComparison();
-  
+
   return (
     <div className="py-2 border-b border-border/30 last:border-0">
       <div className="flex items-center gap-1.5 mb-2">
@@ -754,7 +782,7 @@ const ComparisonRow = ({ label, tooltip, icon, children }: ComparisonRowProps) =
           <span className="text-xs text-muted-foreground font-rounded">{label}</span>
         )}
       </div>
-      <div 
+      <div
         className="grid gap-1 sm:gap-4"
         style={{ gridTemplateColumns: `repeat(${selectedDistros.length}, 1fr)` }}
       >
