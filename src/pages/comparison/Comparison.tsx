@@ -26,6 +26,15 @@ const formatRelativeDate = (
 ): string => {
   if (!dateString) return "N/A";
   const date = new Date(dateString);
+
+  // Validate date - return N/A for invalid dates
+  if (isNaN(date.getTime())) return "N/A";
+
+  // Check for epoch date (01/01/1970) which indicates missing data
+  if (date.getFullYear() === 1970 && date.getMonth() === 0 && date.getDate() === 1) {
+    return "N/A";
+  }
+
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
