@@ -46,52 +46,58 @@ const POPULARITY_BOOST: Record<string, number> = {
 };
 
 /**
- * Calcula o score de uma distro combinando:
- * 1. Popularidade/Reputação (peso 60%)
- * 2. Métricas técnicas quando disponíveis (peso 40%)
- * 
- * Garante que distros famosas fiquem no topo com scores 90+
+ * Calcula o score de uma distro usando média dos 5 atributos do radar chart:
+ * RAM, CPU, I/O, Popularidade, Atualizações (20% cada)
  */
 export const calculatePerformanceScore = (distro: Distro): number => {
   const distroId = (distro.id || distro.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
-  // Usar popularity_rank do scraping se disponível, senão usar boost estático
-  let popularityBase: number;
+  // Normalizar RAM (menor é melhor)
+  let ramScore = 50; // default
+  if (distro.idleRamUsage && distro.idleRamUsage > 0) {
+    // 200MB = 100pts, 2000MB = 0pts
+    ramScore = Math.max(0, Math.min(100, 100 - ((distro.idleRamUsage - 200) / 18)));
+  }
 
-  // Prioridade: ranking da API > popularityRank > boost estático
-  const apiRanking = (distro as any).ranking || (distro as any).popularity_rank || distro.popularityRank;
+  // Normalizar CPU (0-10 scale)
+  let cpuScore = 50; // default
+  if (distro.cpuScore && distro.cpuScore > 0) {
+    cpuScore = Math.min(100, distro.cpuScore * 10);
+  }
 
-  if (apiRanking && apiRanking > 0 && apiRanking <= 100) {
-    // Converte ranking (1-100) para score (95-50)
-    // Rank 1 = 95 pontos, Rank 100 = 50 pontos
-    popularityBase = Math.max(50, 96 - (apiRanking * 0.45));
-  } else {
+  // Normalizar I/O (0-10 scale)
+  let ioScore = 50; // default
+  if (distro.ioScore && distro.ioScore > 0) {
+    ioScore = Math.min(100, distro.ioScore * 10);
+  }
+
+  // Normalizar Popularidade (ranking 1-100)
+  let popularityScore = 50; // default
+  const ranking = (distro as any).ranking || distro.popularityRank;
+  if (ranking && ranking > 0 && ranking <= 100) {
+    // Rank 1 = 100pts, Rank 100 = 1pt
+    popularityScore = Math.max(1, 101 - ranking);
+  } else if (POPULARITY_BOOST[distroId]) {
     // Fallback para boost estático
-    popularityBase = POPULARITY_BOOST[distroId] || 70;
+    popularityScore = POPULARITY_BOOST[distroId];
   }
 
-  // Calcular score técnico se houver dados disponíveis
-  const technicalScore = calculateTechnicalScore(distro);
-
-  // Se não tiver dados técnicos, usa apenas popularidade
-  if (technicalScore === null) {
-    // Adiciona pequena variação para não ter scores idênticos
-    const variation = (distroId.charCodeAt(0) % 5) - 2; // -2 a +2
-    return Math.min(99, Math.max(50, popularityBase + variation));
+  // Normalizar Freshness (4pts por mês)
+  let freshnessScore = 50; // default
+  if (distro.lastRelease) {
+    const date = new Date(distro.lastRelease);
+    if (!isNaN(date.getTime())) {
+      const now = new Date();
+      const daysSince = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+      const monthsSince = Math.floor(daysSince / 30);
+      freshnessScore = Math.max(4, 100 - (monthsSince * 4));
+    }
   }
 
-  // Combina popularidade (55%) com score técnico (45%) - mais peso em métricas técnicas
-  const POPULARITY_WEIGHT = 0.55;
-  const TECHNICAL_WEIGHT = 0.45;
+  // Média simples dos 5 atributos (20% cada)
+  const avgScore = (ramScore + cpuScore + ioScore + popularityScore + freshnessScore) / 5;
 
-  const combinedScore = (popularityBase * POPULARITY_WEIGHT) + (technicalScore * TECHNICAL_WEIGHT);
-
-  // Garante que distros tier 1 não caiam muito por métricas técnicas ruins
-  const minScore = popularityBase * 0.9; // Não pode cair mais que 10% da base
-
-  const finalScore = Math.max(minScore, combinedScore);
-
-  return Math.min(99, Math.round(finalScore * 10) / 10);
+  return Math.min(99, Math.round(avgScore * 10) / 10);
 };
 
 /**

@@ -67,13 +67,12 @@ function normalizeFreshness(lastRelease: string | undefined): number {
 
     const now = new Date();
     const daysSince = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+    const monthsSince = Math.floor(daysSince / 30);
 
-    // More recent is better: 0 days = 100, 365+ days = 20
-    if (daysSince <= 30) return 100;
-    if (daysSince <= 90) return 85;
-    if (daysSince <= 180) return 70;
-    if (daysSince <= 365) return 55;
-    return 30;
+    // More granular: ~4 points per month, max 24 months
+    // 0 months = 100, 1 month = 96, 6 months = 76, 12 months = 52, 24+ months = 4
+    const score = Math.max(4, 100 - (monthsSince * 4));
+    return Math.min(100, score);
 }
 
 export function ComparisonRadarChart({ distros }: ComparisonRadarChartProps) {
