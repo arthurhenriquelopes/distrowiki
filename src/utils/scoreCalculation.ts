@@ -72,14 +72,12 @@ export const calculatePerformanceScore = (distro: Distro): number => {
   }
 
   // Normalizar Popularidade (ranking 1-100)
-  let popularityScore = 50; // default
+  // Sem fallbacks artificiais - apenas dados reais
+  let popularityScore = 50; // default quando não há dados
   const ranking = (distro as any).ranking || distro.popularityRank;
   if (ranking && ranking > 0 && ranking <= 100) {
     // Rank 1 = 100pts, Rank 100 = 1pt
     popularityScore = Math.max(1, 101 - ranking);
-  } else if (POPULARITY_BOOST[distroId]) {
-    // Fallback para boost estático
-    popularityScore = POPULARITY_BOOST[distroId];
   }
 
   // Normalizar Freshness (4pts por mês)
