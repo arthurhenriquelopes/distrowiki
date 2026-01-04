@@ -2,11 +2,12 @@ import { Distro } from "@/types";
 import { Link } from "react-router-dom";
 import ScoreBadge from "@/components/ScoreBadge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Calendar, Cpu, HardDrive, Rocket, Info, Trophy } from "lucide-react";
+import { Calendar, Cpu, HardDrive, Rocket, Info, Trophy, RefreshCw, Clock } from "lucide-react";
 import { DesktopEnvBadge } from "@/components/DesktopEnvBadge";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { MetricBar } from "@/components/comparison/MetricBar";
+import { useTranslation } from "react-i18next";
 
 interface DistroCardListProps {
   distro: Distro;
@@ -23,6 +24,7 @@ const DistroCardList = ({
   showCheckbox = true,
   showSpecs = true,
 }: DistroCardListProps) => {
+  const { t } = useTranslation();
   const formatFamily = (family: string): string => {
     if (
       family.toLowerCase().includes("independente") ||
@@ -65,10 +67,10 @@ const DistroCardList = ({
               {(distro.popularityRank || distro.ranking) && (distro.popularityRank || distro.ranking) <= 100 && (
                 <span
                   className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold ${(distro.popularityRank || distro.ranking) <= 10
-                      ? 'bg-yellow-500/20 text-yellow-400'
-                      : (distro.popularityRank || distro.ranking) <= 30
-                        ? 'bg-emerald-500/20 text-emerald-400'
-                        : 'bg-primary/20 text-primary'
+                    ? 'bg-yellow-500/20 text-yellow-400'
+                    : (distro.popularityRank || distro.ranking) <= 30
+                      ? 'bg-emerald-500/20 text-emerald-400'
+                      : 'bg-primary/20 text-primary'
                     }`}
                   title="DistroWatch Ranking"
                 >
@@ -90,10 +92,10 @@ const DistroCardList = ({
               <span className="truncate">{distro.category}</span>
             </div>
           )}
-          {distro.releaseYear && (
+          {distro.releaseModel && (
             <div className="flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5" />
-              <span>{distro.releaseYear}</span>
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>{distro.releaseModel === 'Rolling' ? t('catalog.card.rolling') : t('catalog.card.fixed')}</span>
             </div>
           )}
         </div>
@@ -203,9 +205,11 @@ const DistroCardList = ({
 
         <div className="flex items-center justify-between gap-3 mt-auto pt-3 border-t border-border">
           <div className="flex items-center text-xs text-muted-foreground gap-1.5 min-w-0">
-            <Calendar className="w-3.5 h-3.5 flex-shrink-0" />
+            <Clock className="w-3.5 h-3.5 flex-shrink-0" />
             <span className="truncate">
-              {distro.lastRelease || "Data indisponível"}
+              {distro.lastRelease
+                ? `${t('catalog.card.updatedAt')} ${new Date(distro.lastRelease).toLocaleDateString()}`
+                : t('catalog.card.dateUnavailable')}
             </span>
           </div>
 

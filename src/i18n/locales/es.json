@@ -236,6 +236,12 @@
             "sortName": "Nombre (A-Z)",
             "sortRelease": "Lanzamiento (reciente)",
             "clearAll": "Limpiar filtros"
+        },
+        "card": {
+            "rolling": "Rolling Release",
+            "fixed": "Release Fija",
+            "updatedAt": "Actualizado el",
+            "dateUnavailable": "Fecha no disponible"
         }
     },
     "comparison": {
