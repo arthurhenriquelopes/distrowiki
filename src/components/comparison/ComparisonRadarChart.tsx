@@ -41,14 +41,16 @@ function normalizeRAM(ram: number | undefined): number {
 
 function normalizeCPU(cpu: number | undefined): number {
     if (!cpu) return 50;
-    // Higher CPU score is better: assume 0-100 range
-    return Math.min(100, Math.max(0, cpu));
+    // CPU score is on 0-10 scale, convert to 0-100
+    // Higher is better
+    return Math.min(100, Math.max(0, cpu * 10));
 }
 
 function normalizeIO(io: number | undefined): number {
     if (!io) return 50;
-    // Higher I/O score is better: assume 0-100 range
-    return Math.min(100, Math.max(0, io));
+    // I/O score is on 0-10 scale, convert to 0-100
+    // Higher is better
+    return Math.min(100, Math.max(0, io * 10));
 }
 
 function normalizePopularity(rank: number | undefined): number {
