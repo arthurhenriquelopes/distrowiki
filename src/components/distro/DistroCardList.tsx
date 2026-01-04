@@ -95,7 +95,16 @@ const DistroCardList = ({
           {distro.releaseModel && (
             <div className="flex items-center gap-1">
               <RefreshCw className="w-3.5 h-3.5" />
-              <span>{distro.releaseModel === 'Rolling' ? t('catalog.card.rolling') : t('catalog.card.fixed')}</span>
+              <span>
+                {distro.releaseModel.toLowerCase().includes('rolling')
+                  ? t('catalog.card.rolling')
+                  : distro.releaseModel.toLowerCase().includes('point') ||
+                    distro.releaseModel.toLowerCase().includes('lts') ||
+                    distro.releaseModel.toLowerCase().includes('fixed') ||
+                    distro.releaseModel.toLowerCase().includes('standard')
+                    ? t('catalog.card.fixed')
+                    : distro.releaseModel}
+              </span>
             </div>
           )}
         </div>

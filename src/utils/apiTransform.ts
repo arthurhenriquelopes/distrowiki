@@ -51,7 +51,7 @@ export function transformDistro(apiDistro: DistroAPI): Distro {
     architecture: apiDistro.architecture?.join(", "),
 
     // Release info
-    releaseModel: apiDistro.release_model || "Unknown",
+    releaseModel: apiDistro.release_type || apiDistro.release_model || undefined,
     ltsSupport: apiDistro.lts_support || false,
 
     // Metadata
