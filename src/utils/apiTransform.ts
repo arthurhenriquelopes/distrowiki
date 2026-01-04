@@ -17,48 +17,49 @@ export function transformDistro(apiDistro: DistroAPI): Distro {
     name: apiDistro.name,
     family: apiDistro.family || "Independent",
     logo: `/logos/${apiDistro.id}.svg`,
-    
+
     // Desktop environments
     desktopEnvironments: desktopEnvs,
-    
-    // Dates
-    lastRelease: apiDistro.latest_release_date || new Date().toISOString(),
+
+    // Dates - don't fallback to current date for missing data
+    lastRelease: apiDistro.latest_release_date || undefined,
     releaseYear: apiDistro.release_year ?? undefined,
-    
+
     // Score
     score: apiDistro.rating || 0,
-    
+
     // Performance metrics
     idleRamUsage: apiDistro.idle_ram_usage ?? apiDistro.ram_idle ?? undefined,
     cpuScore: apiDistro.cpu_score ?? undefined,
     ioScore: apiDistro.io_score ?? undefined,
-    
+
     // URLs
     website: apiDistro.homepage || "",
     homepage: apiDistro.homepage,
-    
+
     // Description
     description: apiDistro.summary || apiDistro.description || "",
-    
+
     // Base system
     baseSystem: apiDistro.based_on || apiDistro.family || "Independent",
     basedOn: apiDistro.based_on,
-    
+
     // Package management
     packageManager: apiDistro.package_management || apiDistro.package_manager,
-    
+
     // Architecture (join array to string)
     architecture: apiDistro.architecture?.join(", "),
-    
+
     // Release info
     releaseModel: apiDistro.release_model || "Unknown",
     ltsSupport: apiDistro.lts_support || false,
-    
+
     // Metadata
     origin: apiDistro.origin,
     category: apiDistro.category,
     status: apiDistro.status,
     ranking: apiDistro.ranking,
+    popularityRank: apiDistro.popularity_rank,
     requirements: apiDistro.requirements || undefined,
     osType: apiDistro.os_type,
   };
