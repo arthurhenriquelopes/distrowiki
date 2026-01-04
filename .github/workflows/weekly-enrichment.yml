@@ -1,6 +1,7 @@
 # DistroWiki - Weekly Data Enrichment
 # Este workflow automatiza o enriquecimento semanal dos dados das distros
 # Roda todo domingo às 6h UTC (3h Brasília)
+# ATUALIZADO: Agora roda scraping diretamente no runner (não via API)
 
 name: Weekly Data Enrichment
 
@@ -15,163 +16,104 @@ on:
       enrichment_type:
         description: 'Tipo de enriquecimento'
         required: true
-        default: 'all'
+        default: 'dates'
         type: choice
         options:
+          - dates          # Só datas de release (via DistroWatch scraping)
+          - performance    # Só métricas de performance (via API)
           - all            # Todas as distros
-          - performance    # Só métricas de performance (RAM, CPU, I/O)
-          - dates          # Só datas de release
 
 jobs:
-  enrich-distros:
+  enrich-dates:
+    # Job para atualizar datas via Playwright scraping
     runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.enrichment_type != 'performance' }}
+    timeout-minutes: 90
     
     steps:
       - name: 📋 Log início do job
         run: |
-          echo "🚀 Iniciando enriquecimento semanal"
+          echo "🚀 Iniciando scraping de datas de release"
           echo "Data: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
           echo "Trigger: ${{ github.event_name }}"
-          echo "Tipo: ${{ github.event.inputs.enrichment_type || 'all' }}"
+          echo "Tipo: ${{ github.event.inputs.enrichment_type || 'dates' }}"
 
-      # Step 1: Atualizar datas de release (via DistroWatch scraping)
-      # Só roda se: all OU dates (NÃO roda se for performance)
-      - name: 📅 Atualizar datas de release
-        if: ${{ github.event.inputs.enrichment_type != 'performance' }}
-        run: |
-          echo "🔍 Scraping datas de release do DistroWatch..."
+      - name: 📥 Checkout distrowiki-api
+        uses: actions/checkout@v4
+        with:
+          repository: arthurhenriquelopes/distrowiki-api
+          token: ${{ secrets.GITHUB_TOKEN }}
           
-          response=$(curl -s -w "\n%{http_code}" -X POST \
-            "${{ secrets.API_BASE_URL }}/enrich-sheets/" \
-            -H "Content-Type: application/json" \
-            -H "X-API-Key: ${{ secrets.API_KEY }}" \
-            -d '{"fields": ["Latest Release"]}')
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
           
-          http_code=$(echo "$response" | tail -n1)
-          body=$(echo "$response" | sed '$d')
+      - name: 📦 Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
           
-          echo "HTTP Code: $http_code"
-          echo "Response: $body"
+      - name: 🎭 Instalar Playwright
+        run: |
+          pip install playwright
+          playwright install chromium
+          playwright install-deps chromium
           
-          if [ "$http_code" -ne 200 ]; then
-            echo "❌ Falha ao atualizar datas"
-            exit 1
-          fi
+      - name: 📅 Scraping de datas de release
+        env:
+          GCP_PRIVATE_KEY: ${{ secrets.GCP_PRIVATE_KEY }}
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          GCP_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}
+          GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+          GOOGLE_SHEET_NAME: ${{ secrets.GOOGLE_SHEET_NAME }}
+        run: |
+          echo "🔍 Iniciando DistroWatch scraping..."
+          python scripts/enrich_distrowatch.py
           
-          echo "✅ Datas atualizadas com sucesso"
-
-      # Step 2: Atualizar métricas de performance em batches
-      # Só roda se: all OU performance (NÃO roda se for dates)
-      - name: 🤖 Atualizar métricas de performance (batch 1-5)
-        if: ${{ github.event.inputs.enrichment_type != 'dates' }}
+      - name: ✅ Sucesso
         run: |
-          echo "🤖 Enriquecendo batch 1 (distros 0-4)..."
-          curl -s -X POST "${{ secrets.API_BASE_URL }}/enrich-sheets/batch" \
-            -H "Content-Type: application/json" \
-            -H "X-API-Key: ${{ secrets.API_KEY }}" \
-            -d '{"offset": 0, "limit": 5, "fields": ["CPU Score", "I/O Score"]}'
-          echo ""
+          echo "✅ Scraping de datas concluído!"
+          echo "Data: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
 
-      - name: 🤖 Atualizar métricas (batch 6-10)
-        if: ${{ github.event.inputs.enrichment_type != 'dates' }}
+  enrich-performance:
+    # Job para métricas de performance (mantém API calls)
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.enrichment_type == 'performance' || github.event.inputs.enrichment_type == 'all' }}
+    
+    steps:
+      - name: 📋 Log início
         run: |
-          sleep 5
-          echo "🤖 Enriquecendo batch 2 (distros 5-9)..."
-          curl -s -X POST "${{ secrets.API_BASE_URL }}/enrich-sheets/batch" \
-            -H "Content-Type: application/json" \
-            -H "X-API-Key: ${{ secrets.API_KEY }}" \
-            -d '{"offset": 5, "limit": 5, "fields": ["CPU Score", "I/O Score"]}'
-          echo ""
-
-      - name: 🤖 Atualizar métricas (batch 11-15)
-        if: ${{ github.event.inputs.enrichment_type != 'dates' }}
+          echo "🤖 Iniciando enriquecimento de performance"
+          
+      - name: 🤖 Atualizar métricas em batches
         run: |
-          sleep 5
-          echo "🤖 Enriquecendo batch 3 (distros 10-14)..."
-          curl -s -X POST "${{ secrets.API_BASE_URL }}/enrich-sheets/batch" \
-            -H "Content-Type: application/json" \
-            -H "X-API-Key: ${{ secrets.API_KEY }}" \
-            -d '{"offset": 10, "limit": 5, "fields": ["CPU Score", "I/O Score"]}'
-          echo ""
-
-      - name: 🤖 Atualizar métricas (batch 16-20)
-        if: ${{ github.event.inputs.enrichment_type != 'dates' }}
-        run: |
-          sleep 5
-          echo "🤖 Enriquecendo batch 4 (distros 15-19)..."
-          curl -s -X POST "${{ secrets.API_BASE_URL }}/enrich-sheets/batch" \
-            -H "Content-Type: application/json" \
-            -H "X-API-Key: ${{ secrets.API_KEY }}" \
-            -d '{"offset": 15, "limit": 5, "fields": ["CPU Score", "I/O Score"]}'
-          echo ""
-
-      - name: 🤖 Atualizar métricas (batch 21-40)
-        if: ${{ github.event.inputs.enrichment_type != 'dates' }}
-        run: |
-          for offset in 20 25 30 35; do
-            sleep 5
-            echo "🤖 Enriquecendo batch offset=$offset..."
+          for offset in 0 5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95; do
+            echo "🤖 Batch offset=$offset..."
             curl -s -X POST "${{ secrets.API_BASE_URL }}/enrich-sheets/batch" \
               -H "Content-Type: application/json" \
               -H "X-API-Key: ${{ secrets.API_KEY }}" \
-              -d "{\"offset\": $offset, \"limit\": 5, \"fields\": [\"CPU Score\", \"I/O Score\"]}"
-            echo ""
+              -d "{\"offset\": $offset, \"limit\": 5, \"fields\": [\"CPU Score\", \"I/O Score\"]}" || true
+            sleep 3
           done
-
-      - name: 🤖 Atualizar métricas (batch 41-60)
-        if: ${{ github.event.inputs.enrichment_type != 'dates' }}
-        run: |
-          for offset in 40 45 50 55; do
-            sleep 5
-            echo "🤖 Enriquecendo batch offset=$offset..."
-            curl -s -X POST "${{ secrets.API_BASE_URL }}/enrich-sheets/batch" \
-              -H "Content-Type: application/json" \
-              -H "X-API-Key: ${{ secrets.API_KEY }}" \
-              -d "{\"offset\": $offset, \"limit\": 5, \"fields\": [\"CPU Score\", \"I/O Score\"]}"
-            echo ""
-          done
-
-      - name: 🤖 Atualizar métricas (batch 61-80)
-        if: ${{ github.event.inputs.enrichment_type != 'dates' }}
-        run: |
-          for offset in 60 65 70 75; do
-            sleep 5
-            echo "🤖 Enriquecendo batch offset=$offset..."
-            curl -s -X POST "${{ secrets.API_BASE_URL }}/enrich-sheets/batch" \
-              -H "Content-Type: application/json" \
-              -H "X-API-Key: ${{ secrets.API_KEY }}" \
-              -d "{\"offset\": $offset, \"limit\": 5, \"fields\": [\"CPU Score\", \"I/O Score\"]}"
-            echo ""
-          done
-
-      - name: 🤖 Atualizar métricas (batch 81-100)
-        if: ${{ github.event.inputs.enrichment_type != 'dates' }}
-        run: |
-          for offset in 80 85 90 95; do
-            sleep 5
-            echo "🤖 Enriquecendo batch offset=$offset..."
-            curl -s -X POST "${{ secrets.API_BASE_URL }}/enrich-sheets/batch" \
-              -H "Content-Type: application/json" \
-              -H "X-API-Key: ${{ secrets.API_KEY }}" \
-              -d "{\"offset\": $offset, \"limit\": 5, \"fields\": [\"CPU Score\", \"I/O Score\"]}"
-            echo ""
-          done
-
-      # Step 3: Forçar refresh do cache
-      - name: 🔄 Limpar cache da API
-        run: |
-          echo "🔄 Forçando refresh do cache..."
           
-          curl -s -X GET \
-            "${{ secrets.API_BASE_URL }}/distros?force_refresh=true" \
+      - name: 🔄 Limpar cache
+        run: |
+          curl -s -X GET "${{ secrets.API_BASE_URL }}/distros?force_refresh=true" \
             -H "X-API-Key: ${{ secrets.API_KEY }}" > /dev/null || true
-          
           echo "✅ Cache invalidado"
 
-      - name: ✅ Resumo
+  summary:
+    runs-on: ubuntu-latest
+    needs: [enrich-dates, enrich-performance]
+    if: always()
+    
+    steps:
+      - name: 📊 Resumo
         run: |
           echo "========================================"
           echo "✅ Enriquecimento semanal concluído!"
           echo "========================================"
           echo "Data: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-          echo "Tipo executado: ${{ github.event.inputs.enrichment_type || 'all' }}"
+          echo "Jobs executados: dates=${{ needs.enrich-dates.result }}, perf=${{ needs.enrich-performance.result }}"
