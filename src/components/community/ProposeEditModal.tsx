@@ -54,7 +54,7 @@ export function ProposeEditModal({ isOpen, onClose, distroName }: ProposeEditMod
         setLoading(true)
         try {
             const token = (await supabase.auth.getSession()).data.session?.access_token
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/community/propose-edit`, {
+            const res = await fetch(`${(import.meta.env.VITE_API_URL || '').replace(/\/$/, '')}/community/propose-edit`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

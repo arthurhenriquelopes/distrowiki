@@ -30,7 +30,7 @@ const Dashboard = () => {
                 setLoading(false)
                 return
             }
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/community/admin/edits`, {
+            const res = await fetch(`${(import.meta.env.VITE_API_URL || '').replace(/\/$/, '')}/community/admin/edits`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             if (res.status === 403) {
@@ -162,7 +162,7 @@ const Dashboard = () => {
     async function handleReview(id: string, action: 'approve' | 'reject') {
         try {
             const token = (await supabase.auth.getSession()).data.session?.access_token
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/community/admin/edits/${id}/review`, {
+            const res = await fetch(`${(import.meta.env.VITE_API_URL || '').replace(/\/$/, '')}/community/admin/edits/${id}/review`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -31,7 +31,7 @@ export function VoteButtons({
 
         const fetchVotes = async () => {
             try {
-                const apiUrl = import.meta.env.VITE_API_URL
+                const apiUrl = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
                 if (!apiUrl) {
                     console.warn('VITE_API_URL not set')
                     return
@@ -95,7 +95,7 @@ export function VoteButtons({
                 throw new Error('No auth token')
             }
 
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/community/vote`, {
+            const res = await fetch(`${(import.meta.env.VITE_API_URL || '').replace(/\/$/, '')}/community/vote`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
