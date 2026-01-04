@@ -18,6 +18,7 @@ import { SEO } from "@/components/SEO";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { ComparisonRadarChart } from "@/components/comparison/ComparisonRadarChart";
 
 // Helper para formatar datas relativas (usa i18n)
 const formatRelativeDate = (
@@ -427,6 +428,9 @@ const Comparison = () => {
           })}
         </div>
       </motion.div>
+
+      {/* Radar Chart Visual Summary */}
+      <ComparisonRadarChart distros={selectedDistros} />
 
       {/* Tabela de Comparação */}
       <div className="space-y-4">

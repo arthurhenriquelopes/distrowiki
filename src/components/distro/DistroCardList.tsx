@@ -2,7 +2,7 @@ import { Distro } from "@/types";
 import { Link } from "react-router-dom";
 import ScoreBadge from "@/components/ScoreBadge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Calendar, Cpu, HardDrive, Rocket, Info } from "lucide-react";
+import { Calendar, Cpu, HardDrive, Rocket, Info, Trophy } from "lucide-react";
 import { DesktopEnvBadge } from "@/components/DesktopEnvBadge";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -58,9 +58,25 @@ const DistroCardList = ({
             }}
           />
           <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-bold text-foreground mb-1 line-clamp-2">
-              {distro.name}
-            </h3>
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="text-lg font-bold text-foreground line-clamp-2">
+                {distro.name}
+              </h3>
+              {(distro.popularityRank || distro.ranking) && (distro.popularityRank || distro.ranking) <= 100 && (
+                <span
+                  className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold ${(distro.popularityRank || distro.ranking) <= 10
+                      ? 'bg-yellow-500/20 text-yellow-400'
+                      : (distro.popularityRank || distro.ranking) <= 30
+                        ? 'bg-emerald-500/20 text-emerald-400'
+                        : 'bg-primary/20 text-primary'
+                    }`}
+                  title="DistroWatch Ranking"
+                >
+                  <Trophy className="w-2.5 h-2.5" />
+                  #{distro.popularityRank || distro.ranking}
+                </span>
+              )}
+            </div>
             <p className="text-xs text-muted-foreground">
               {formatFamily(distro.family)}
             </p>
@@ -113,9 +129,9 @@ const DistroCardList = ({
                     </TooltipContent>
                   </Tooltip>
                 </div>
-                <MetricBar 
-                  value={distro.idleRamUsage} 
-                  maxValue={2000} 
+                <MetricBar
+                  value={distro.idleRamUsage}
+                  maxValue={2000}
                   isBest={false}
                   formatValue={(v) => `${v} MB`}
                 />
@@ -138,9 +154,9 @@ const DistroCardList = ({
                     </TooltipContent>
                   </Tooltip>
                 </div>
-                <MetricBar 
-                  value={distro.cpuScore} 
-                  maxValue={10} 
+                <MetricBar
+                  value={distro.cpuScore}
+                  maxValue={10}
                   isBest={false}
                   formatValue={(v) => `${v}/10`}
                 />
@@ -163,9 +179,9 @@ const DistroCardList = ({
                     </TooltipContent>
                   </Tooltip>
                 </div>
-                <MetricBar 
-                  value={distro.ioScore} 
-                  maxValue={10} 
+                <MetricBar
+                  value={distro.ioScore}
+                  maxValue={10}
                   isBest={false}
                   formatValue={(v) => `${v}/10`}
                 />
