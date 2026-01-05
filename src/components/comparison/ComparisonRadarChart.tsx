@@ -9,6 +9,7 @@ import {
     Tooltip,
 } from 'recharts';
 import type { Distro } from '@/types';
+import { calculatePerformanceScore } from '@/utils/scoreCalculation';
 
 interface ComparisonRadarChartProps {
     distros: Distro[];
@@ -170,13 +171,8 @@ export function ComparisonRadarChart({ distros }: ComparisonRadarChartProps) {
             {/* Score Summary */}
             <div className="flex justify-center gap-6 mt-4 pt-4 border-t border-border/50">
                 {distros.map((distro, index) => {
-                    // Calculate average score
-                    const ramScore = normalizeRAM(distro.idleRamUsage);
-                    const cpuScore = normalizeCPU(distro.cpuScore);
-                    const ioScore = normalizeIO(distro.ioScore);
-                    const popScore = normalizePopularity(distro.ranking || distro.popularityRank);
-                    const freshScore = normalizeFreshness(distro.lastRelease);
-                    const avgScore = Math.round((ramScore + cpuScore + ioScore + popScore + freshScore) / 5);
+                    // Use the same score calculation as the comparison cards
+                    const avgScore = calculatePerformanceScore(distro);
 
                     return (
                         <div key={distro.id} className="text-center">
@@ -184,7 +180,7 @@ export function ComparisonRadarChart({ distros }: ComparisonRadarChartProps) {
                                 className="text-3xl font-bold"
                                 style={{ color: COLORS[index % COLORS.length] }}
                             >
-                                {avgScore}
+                                {Math.round(avgScore)}
                             </div>
                             <div className="text-xs text-muted-foreground">Pontos</div>
                         </div>
