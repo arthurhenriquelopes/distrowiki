@@ -105,7 +105,14 @@ export function VoteButtons({
             })
 
             if (!res.ok) {
-                throw new Error('Vote failed')
+                const errorData = await res.json().catch(() => ({}))
+                console.error('Vote API Error:', {
+                    status: res.status,
+                    statusText: res.statusText,
+                    detail: errorData.detail || errorData,
+                    tokenPreview: token ? `${token.substring(0, 20)}...` : 'none'
+                })
+                throw new Error(`Vote failed: ${errorData.detail || res.statusText}`)
             }
         } catch (error) {
             // Revert on error
