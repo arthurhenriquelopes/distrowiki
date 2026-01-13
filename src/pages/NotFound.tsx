@@ -19,11 +19,11 @@ const NotFound = () => {
       <SEO
         title="Página Não Encontrada - 404"
         description="A página que você procura não existe. Volte para a página inicial e explore o catálogo de distribuições Linux."
-        canonical={`https://distrowiki.site${location.pathname}`}
+        canonical={`https://www.distrowiki.site${location.pathname}`}
       />
       <div className="absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none"></div>
-      
-      <motion.div 
+
+      <motion.div
         className="text-center px-4 relative z-10"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -31,7 +31,7 @@ const NotFound = () => {
       >
         <div className="relative flex items-center justify-center mb-8 h-[300px]">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
-          <motion.h1 
+          <motion.h1
             className="text-[140px] md:text-[180px] font-bold gradient-text absolute z-0 leading-none"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -39,10 +39,10 @@ const NotFound = () => {
           >
             404
           </motion.h1>
-          
-          <motion.img 
-            src="/404/tux404.svg" 
-            alt="Tux perdido - Erro 404" 
+
+          <motion.img
+            src="/404/tux404.svg"
+            alt="Tux perdido - Erro 404"
             className="w-[358px] h-[358px] relative z-10"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -70,8 +70,8 @@ const NotFound = () => {
           transition={{ duration: 0.5, delay: 0.4 }}
         >
           <Link to="/">
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               variant="ghost"
               className="text-base font-medium text-foreground hover:text-primary hover:bg-transparent border-b-2 border-foreground hover:border-primary rounded-none px-6 smooth-transition"
             >

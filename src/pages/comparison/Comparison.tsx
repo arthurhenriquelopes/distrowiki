@@ -143,7 +143,7 @@ const Comparison = () => {
         <SEO
           title="Comparar Distribuições Linux"
           description="Compare até 4 distribuições Linux lado a lado. Analise desempenho, uso de recursos e especificações técnicas."
-          canonical="https://distrowiki.site/comparacao"
+          canonical="https://www.distrowiki.site/comparacao"
         />
         <div className="text-center space-y-6 max-w-2xl mx-auto animate-fade-in">
           <h1 className="text-4xl font-bold">{t('comparison.noSelection.title')}</h1>
@@ -163,7 +163,7 @@ const Comparison = () => {
 
   const comparisonTitle = `Comparar ${selectedDistros.map(d => d.name).join(' vs ')}`;
   const comparisonDescription = `Comparação detalhada entre ${selectedDistros.map(d => d.name).join(', ')}. Analise métricas de desempenho, uso de RAM, benchmarks e especificações técnicas.`;
-  const comparisonUrl = `https://distrowiki.site/comparacao/${selectedDistros.map(d => d.id).join('+')}`;
+  const comparisonUrl = `https://www.distrowiki.site/comparacao/${selectedDistros.map(d => d.id).join('+')}`;
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -177,7 +177,7 @@ const Comparison = () => {
       "name": distro.name,
       "applicationCategory": "Operating System",
       "operatingSystem": "Linux",
-      "url": `https://distrowiki.site/distro/${distro.id}`,
+      "url": `https://www.distrowiki.site/distro/${distro.id}`,
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": (scoreMap.get(distro.id) || 0).toFixed(1),

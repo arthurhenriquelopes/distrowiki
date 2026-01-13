@@ -57,11 +57,11 @@ const Home = () => {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "DistroWiki",
-    "url": "https://distrowiki.site",
+    "url": "https://www.distrowiki.site",
     "description": "Plataforma open source para comparar distribuições Linux de forma objetiva e transparente",
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://distrowiki.site/catalogo?q={search_term_string}",
+      "target": "https://www.distrowiki.site/catalogo?q={search_term_string}",
       "query-input": "required name=search_term_string"
     },
     "inLanguage": t('common.langCode') || "pt-BR",
@@ -70,7 +70,7 @@ const Home = () => {
       "name": "DistroWiki",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://distrowiki.site/logo/logo.svg"
+        "url": "https://www.distrowiki.site/logo/logo.svg"
       }
     }
   };

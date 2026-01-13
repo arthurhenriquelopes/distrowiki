@@ -40,7 +40,7 @@ const DistroDetails = () => {
         setLoading(true);
         setError(null);
 
-        const apiBase = import.meta.env.VITE_API_BASE_ || 'https://distrowiki-api.vercel.app';
+        const apiBase = import.meta.env.VITE_API_BASE_ || 'https://www.distrowiki-api.vercel.app';
         const response = await fetch(`${apiBase}/distros/${id}`);
 
         if (!response.ok) {
@@ -110,7 +110,7 @@ const DistroDetails = () => {
         <SEO
           title={t("distroDetails.notFound")}
           description="A distribuição Linux solicitada não foi encontrada no catálogo."
-          canonical={`https://distrowiki.site/distro/${id}`}
+          canonical={`https://www.distrowiki.site/distro/${id}`}
         />
         <Link to="/catalogo">
           <Button variant="ghost" className="mb-6">
@@ -139,8 +139,8 @@ const DistroDetails = () => {
     "applicationCategory": "Operating System",
     "operatingSystem": "Linux",
     "description": distroDescription,
-    "url": `https://distrowiki.site/distro/${distro.id}`,
-    "image": `https://distrowiki.site/logos/${distro.id}.svg`,
+    "url": `https://www.distrowiki.site/distro/${distro.id}`,
+    "image": `https://www.distrowiki.site/logos/${distro.id}.svg`,
     "offers": {
       "@type": "Offer",
       "price": "0",
@@ -167,9 +167,9 @@ const DistroDetails = () => {
       <SEO
         title={`${distro.name} - Análise Completa`}
         description={distroDescription}
-        canonical={`https://distrowiki.site/distro/${distro.id}`}
+        canonical={`https://www.distrowiki.site/distro/${distro.id}`}
         keywords={`${distro.name}, ${distro.family}, linux, distro, ${(distro.desktopEnvironments || distro.desktop_environments || []).join(', ')}`}
-        ogImage={`https://distrowiki.site/logos/${distro.id}.svg`}
+        ogImage={`https://www.distrowiki.site/logos/${distro.id}.svg`}
         structuredData={structuredData}
       />
       {/* Back Button */}

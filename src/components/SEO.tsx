@@ -14,15 +14,15 @@ interface SEOProps {
 export const SEO = ({
   title = 'DistroWiki - Comparação de Distribuições Linux para Desktop',
   description = 'Plataforma open source para comparar distribuições Linux de forma objetiva e transparente. Encontre a melhor distro para suas necessidades.',
-  canonical = 'https://distrowiki.site/',
+  canonical = 'https://www.distrowiki.site/',
   ogType = 'website',
-  ogImage = 'https://distrowiki.site/social-share-banner.png',
+  ogImage = 'https://www.distrowiki.site/social-share-banner.png',
   ogImageAlt = 'DistroWiki - Comparação de Distribuições Linux',
   keywords = 'linux, distribuições linux, distros, comparação, open source, desktop, ubuntu, fedora, arch',
   structuredData
 }: SEOProps) => {
-  const fullTitle = title === 'DistroWiki - Comparação de Distribuições Linux para Desktop' 
-    ? title 
+  const fullTitle = title === 'DistroWiki - Comparação de Distribuições Linux para Desktop'
+    ? title
     : `${title} | DistroWiki`;
 
   return (

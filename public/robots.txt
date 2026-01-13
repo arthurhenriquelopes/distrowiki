@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://distrowiki.site/sitemap.xml
+Sitemap: https://www.distrowiki.site/sitemap.xml

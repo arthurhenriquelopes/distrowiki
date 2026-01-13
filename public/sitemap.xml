@@ -2,25 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Main Pages -->
   <url>
-    <loc>https://distrowiki.site/</loc>
+    <loc>https://www.distrowiki.site/</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://distrowiki.site/catalogo</loc>
+    <loc>https://www.distrowiki.site/catalogo</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://distrowiki.site/comparacao</loc>
+    <loc>https://www.distrowiki.site/comparacao</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://distrowiki.site/sobre</loc>
+    <loc>https://www.distrowiki.site/sobre</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -28,73 +28,73 @@
   
   <!-- Popular Distro Pages -->
   <url>
-    <loc>https://distrowiki.site/distro/ubuntu</loc>
+    <loc>https://www.distrowiki.site/distro/ubuntu</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://distrowiki.site/distro/fedora</loc>
+    <loc>https://www.distrowiki.site/distro/fedora</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://distrowiki.site/distro/debian</loc>
+    <loc>https://www.distrowiki.site/distro/debian</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://distrowiki.site/distro/arch</loc>
+    <loc>https://www.distrowiki.site/distro/arch</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://distrowiki.site/distro/linux-mint</loc>
+    <loc>https://www.distrowiki.site/distro/linux-mint</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://distrowiki.site/distro/manjaro</loc>
+    <loc>https://www.distrowiki.site/distro/manjaro</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://distrowiki.site/distro/pop-os</loc>
+    <loc>https://www.distrowiki.site/distro/pop-os</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://distrowiki.site/distro/opensuse</loc>
+    <loc>https://www.distrowiki.site/distro/opensuse</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://distrowiki.site/distro/elementary</loc>
+    <loc>https://www.distrowiki.site/distro/elementary</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://distrowiki.site/distro/zorin</loc>
+    <loc>https://www.distrowiki.site/distro/zorin</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://distrowiki.site/distro/endeavouros</loc>
+    <loc>https://www.distrowiki.site/distro/endeavouros</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://distrowiki.site/distro/mx-linux</loc>
+    <loc>https://www.distrowiki.site/distro/mx-linux</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -102,25 +102,25 @@
   
   <!-- Popular Comparisons -->
   <url>
-    <loc>https://distrowiki.site/comparacao/ubuntu+fedora</loc>
+    <loc>https://www.distrowiki.site/comparacao/ubuntu+fedora</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://distrowiki.site/comparacao/ubuntu+linux-mint</loc>
+    <loc>https://www.distrowiki.site/comparacao/ubuntu+linux-mint</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://distrowiki.site/comparacao/arch+manjaro</loc>
+    <loc>https://www.distrowiki.site/comparacao/arch+manjaro</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://distrowiki.site/comparacao/ubuntu+pop-os</loc>
+    <loc>https://www.distrowiki.site/comparacao/ubuntu+pop-os</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>

@@ -16,18 +16,18 @@ interface UseDistrosReturn {
   refetch: () => void;
 }
 
-const API_BASE = import.meta.env.VITE_API_BASE_ || "https://distrowiki-api.vercel.app";
+const API_BASE = import.meta.env.VITE_API_BASE_ || "https://www.distrowiki-api.vercel.app";
 
 async function fetchDistros(options: UseDistrosOptions): Promise<Distro[]> {
   const { page = 1, pageSize = 100, sortBy = "name", order = "asc" } = options;
-  
+
   const url = `${API_BASE}/distros?page=${page}&page_size=${pageSize}&sort_by=${sortBy}&order=${order}`;
   const response = await fetch(url);
-  
+
   if (!response.ok) {
     throw new Error(`Erro ao buscar distribuições: ${response.status}`);
   }
-  
+
   const data = await response.json();
   return transformDistros(data.distros || []);
 }
@@ -37,7 +37,7 @@ async function fetchDistros(options: UseDistrosOptions): Promise<Distro[]> {
  */
 export function useDistros(options: UseDistrosOptions = {}): UseDistrosReturn {
   const { page = 1, pageSize = 100, sortBy = "name", order = "asc" } = options;
-  
+
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["distros", page, pageSize, sortBy, order],
     queryFn: () => fetchDistros({ page, pageSize, sortBy, order }),

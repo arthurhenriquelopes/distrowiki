@@ -136,7 +136,7 @@ const Catalog = () => {
     }
   };
 
-  const catalogDescription = filteredAndSortedDistros.length > 0 
+  const catalogDescription = filteredAndSortedDistros.length > 0
     ? `Explore ${filteredAndSortedDistros.length} distribuições Linux. Compare características, desempenho e encontre a distro ideal para suas necessidades.`
     : "Explore o catálogo completo de distribuições Linux. Compare características, desempenho e encontre a distro ideal.";
 
@@ -145,7 +145,7 @@ const Catalog = () => {
     "@type": "CollectionPage",
     "name": "Catálogo de Distribuições Linux",
     "description": catalogDescription,
-    "url": "https://distrowiki.site/catalogo",
+    "url": "https://www.distrowiki.site/catalogo",
     "inLanguage": t('common.langCode') || "pt-BR",
     "numberOfItems": distros.length,
     "itemListElement": filteredAndSortedDistros.slice(0, 10).map((distro, index) => ({
@@ -156,7 +156,7 @@ const Catalog = () => {
         "name": distro.name,
         "applicationCategory": "Operating System",
         "operatingSystem": "Linux",
-        "url": `https://distrowiki.site/distro/${distro.id}`
+        "url": `https://www.distrowiki.site/distro/${distro.id}`
       }
     }))
   };
@@ -166,7 +166,7 @@ const Catalog = () => {
       <SEO
         title="Catálogo de Distribuições Linux"
         description={catalogDescription}
-        canonical="https://distrowiki.site/catalogo"
+        canonical="https://www.distrowiki.site/catalogo"
         keywords="linux, distribuições, catálogo, ubuntu, fedora, arch, debian, opensuse, manjaro"
         structuredData={structuredData}
       />
@@ -205,13 +205,12 @@ const Catalog = () => {
 
       {loading && (
         <div
-          className={`grid gap-6 mb-12 ${
-            viewMode === "grid"
+          className={`grid gap-6 mb-12 ${viewMode === "grid"
               ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
               : viewMode === "terminal"
-              ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-              : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-          }`}
+                ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+            }`}
         >
           {Array.from({ length: 12 }).map((_, i) => (
             <DistroCardSkeleton key={i} viewMode={viewMode} />
@@ -266,13 +265,12 @@ const Catalog = () => {
           )}
 
           <motion.div
-            className={`grid gap-6 mb-12 ${
-              viewMode === "grid"
+            className={`grid gap-6 mb-12 ${viewMode === "grid"
                 ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
                 : viewMode === "terminal"
-                ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-            }`}
+                  ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                  : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+              }`}
           >
             {filteredAndSortedDistros.length > 0 ? (
               filteredAndSortedDistros.map((distro) => (
@@ -289,16 +287,16 @@ const Catalog = () => {
               ))
             ) : (
               <div className="col-span-full py-16 text-center">
-                 <div className="w-24 h-24 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-6">
-                   <AlertCircle className="w-10 h-10 text-muted-foreground" />
-                 </div>
-                 <h3 className="text-xl font-bold mb-2">{t("catalog.noResultsTitle") || "Nenhuma distribuição encontrada"}</h3>
-                 <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                   {t("catalog.noResultsDesc") || "Tente ajustar seus filtros ou busca para encontrar o que procura."}
-                 </p>
-                 <Button onClick={handleClearAllFilters} variant="outline">
-                   {t("catalog.filters.clearAll")}
-                 </Button>
+                <div className="w-24 h-24 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <AlertCircle className="w-10 h-10 text-muted-foreground" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">{t("catalog.noResultsTitle") || "Nenhuma distribuição encontrada"}</h3>
+                <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                  {t("catalog.noResultsDesc") || "Tente ajustar seus filtros ou busca para encontrar o que procura."}
+                </p>
+                <Button onClick={handleClearAllFilters} variant="outline">
+                  {t("catalog.filters.clearAll")}
+                </Button>
               </div>
             )}
           </motion.div>
@@ -307,9 +305,9 @@ const Catalog = () => {
             <motion.div className="fixed bottom-8 right-8 z-50">
               <Link to={`/comparacao/${selectedDistros.map(d => d.id).join('+')}`}>
                 <Button size="lg" className="shadow-2xl gap-2">
-                <GitCompare className="w-5 h-5" />
-                {t("catalog.compare", { count: selectedDistros.length })}
-              </Button>
+                  <GitCompare className="w-5 h-5" />
+                  {t("catalog.compare", { count: selectedDistros.length })}
+                </Button>
               </Link>
             </motion.div>
           )}

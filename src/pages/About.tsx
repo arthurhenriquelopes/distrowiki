@@ -26,13 +26,13 @@ const About = () => {
     "@type": "AboutPage",
     "name": t("about.title"),
     "description": t("about.subtitle"),
-    "url": "https://distrowiki.site/sobre",
+    "url": "https://www.distrowiki.site/sobre",
     "inLanguage": t('common.langCode') || "pt-BR",
     "mainEntity": {
       "@type": "Organization",
       "name": "DistroWiki",
-      "url": "https://distrowiki.site",
-      "logo": "https://distrowiki.site/logo/logo.svg",
+      "url": "https://www.distrowiki.site",
+      "logo": "https://www.distrowiki.site/logo/logo.svg",
       "sameAs": [
         "https://github.com/arthurhenriquelopes/DistroWiki"
       ],
@@ -87,7 +87,7 @@ const About = () => {
       <SEO
         title={t("about.title")}
         description={t("about.subtitle")}
-        canonical="https://distrowiki.site/sobre"
+        canonical="https://www.distrowiki.site/sobre"
         keywords="sobre, distrowiki, open source, linux, comparação"
         structuredData={structuredData}
       />
