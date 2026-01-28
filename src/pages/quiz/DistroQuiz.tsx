@@ -159,28 +159,6 @@ const DistroQuiz = () => {
           filter: (d: Distro) => true
         }
       ]
-    },
-    {
-      id: "apps",
-      text: t('quiz.questions.apps'),
-      options: [
-        {
-          label: "Loja de Aplicativos (GUI)",
-          value: "GUI",
-          desc: "Instalar programas como no celular.",
-          filter: (d: Distro) => {
-            // Assume que distros beginner friendly têm loja
-            const name = d.name.toLowerCase();
-            const fam = (d.family || "").toLowerCase();
-            return name.includes("mint") || name.includes("ubuntu") || name.includes("pop") || name.includes("zorin") || name.includes("deepin") || name.includes("manjaro") || name.includes("fedora");
-          }
-        },
-        {
-          label: "Terminal / Linha de Comando",
-          value: "CLI",
-          filter: (d: Distro) => true
-        }
-      ]
     }
   ];
 
