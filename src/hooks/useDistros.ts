@@ -16,7 +16,7 @@ interface UseDistrosReturn {
   refetch: () => void;
 }
 
-const API_BASE = import.meta.env.VITE_API_BASE_ || "https://www.distrowiki-api.vercel.app";
+const API_BASE = import.meta.env.VITE_API_BASE_ || "https://distrowiki-api.vercel.app";
 
 async function fetchDistros(options: UseDistrosOptions): Promise<Distro[]> {
   const { page = 1, pageSize = 100, sortBy = "name", order = "asc" } = options;
