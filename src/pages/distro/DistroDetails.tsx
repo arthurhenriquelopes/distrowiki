@@ -423,15 +423,19 @@ const DistroDetails = () => {
                     <p className="text-lg font-semibold">{distro.based_on || distro.family || "Independente"}</p>
                   </div>
 
-                  {/* Release Type */}
-                  <div className="bg-muted/30 rounded-lg p-4">
-                    <p className="text-sm text-muted-foreground mb-1">Tipo de Release</p>
-                    <p className="text-lg font-semibold">
-                      <Badge variant={distro.release_type?.toLowerCase()?.includes('rolling') ? 'default' : 'secondary'}>
-                        {distro.release_type || "Point Release"}
-                      </Badge>
-                    </p>
-                  </div>
+              {/* Release Type */}
+              <div className="bg-muted/30 rounded-lg p-4">
+                <p className="text-sm text-muted-foreground mb-1">Tipo de Release</p>
+                <p className="text-lg font-semibold">
+                  <Badge variant={(distro.release_type || distro.releaseModel || "").toLowerCase().includes('rolling') ? 'default' : 'secondary'}>
+                    {(distro.release_type || distro.releaseModel || "").toLowerCase().includes('rolling')
+                      ? t('catalog.card.rolling')
+                      : (distro.release_type || distro.releaseModel || "").toLowerCase().match(/point|lts|fixed|standard/)
+                        ? t('catalog.card.fixed')
+                        : (distro.release_type || distro.releaseModel || "Point Release")}
+                  </Badge>
+                </p>
+              </div>
 
                   {/* Init System */}
                   <div className="bg-muted/30 rounded-lg p-4">
