@@ -365,7 +365,12 @@
         "questions": {
             "experience": "Qual seu nível de experiência com computadores?",
             "hardware": "Como é o seu computador?",
-            "usage": "Para que você vai usar o Linux?"
+            "usage": "Para que você vai usar o Linux?",
+            "release": "Como você prefere receber atualizações?",
+            "interface": "Qual estilo visual você prefere?",
+            "family": "Você tem preferência por alguma base?",
+            "purpose": "Qual será o foco principal de uso?",
+            "apps": "Como você prefere instalar programas?"
         }
     },
     "features": {

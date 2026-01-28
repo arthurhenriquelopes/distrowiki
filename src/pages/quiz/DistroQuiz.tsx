@@ -16,11 +16,10 @@ const DistroQuiz = () => {
   const [step, setStep] = useState(0);
   const [filters, setFilters] = useState<Record<string, any>>({});
 
-  // Definir perguntas dinamicamente baseadas nos dados
   const questions = [
     {
       id: "release",
-      text: "Como você prefere receber atualizações?",
+      text: t('quiz.questions.release'),
       options: [
         { 
           label: "Estabilidade Total (Versões Fixas / LTS)", 
@@ -28,7 +27,7 @@ const DistroQuiz = () => {
           desc: "Ideal para trabalho e servidores. Muda pouco ao longo do tempo.",
           filter: (d: Distro) => {
             const model = (d.releaseModel || d.releaseType || "").toLowerCase();
-            return model.includes("fixed") || model.includes("lts") || model.includes("stable");
+            return model.includes("fixed") || model.includes("lts") || model.includes("stable") || model.includes("point");
           }
         },
         { 
@@ -41,43 +40,41 @@ const DistroQuiz = () => {
           }
         },
         { 
-          label: "Meio Termo (Semi-Rolling / Atualizado)", 
-          value: "Semi", 
-          desc: "Base estável com aplicativos atualizados.",
-          filter: (d: Distro) => true // Aceita todos, mas prioriza popularidade depois
+          label: "Sem preferência", 
+          value: "Any", 
+          desc: "Qualquer modelo serve.",
+          filter: (d: Distro) => true
         }
       ]
     },
     {
       id: "interface",
-      text: "Qual estilo visual você prefere?",
+      text: t('quiz.questions.interface'),
       options: [
         { 
           label: "Estilo Windows (Barra inferior, Menu Iniciar)", 
           value: "Windows",
           filter: (d: Distro) => d.desktopEnvironments.some(de => 
-            ["KDE", "Plasma", "Cinnamon", "Xfce", "MATE", "LXQt"].some(k => de.includes(k))
+            ["KDE", "Plasma", "Cinnamon", "Xfce", "MATE", "LXQt"].some(k => de.toLowerCase().includes(k.toLowerCase()))
           )
         },
         { 
           label: "Estilo macOS / Moderno (Docks, Gestos)", 
           value: "Mac",
           filter: (d: Distro) => d.desktopEnvironments.some(de => 
-            ["GNOME", "Pantheon", "Budgie", "Cosmic"].some(k => de.includes(k))
+            ["GNOME", "Pantheon", "Budgie", "Cosmic", "Deepin"].some(k => de.toLowerCase().includes(k.toLowerCase()))
           )
         },
         { 
-          label: "Minimalista / Performance Máxima", 
-          value: "Minimal",
-          filter: (d: Distro) => d.desktopEnvironments.some(de => 
-            ["Xfce", "LXQt", "i3", "Openbox", "Mate"].some(k => de.includes(k))
-          )
+          label: "Sem preferência", 
+          value: "Any",
+          filter: (d: Distro) => true
         }
       ]
     },
     {
       id: "family",
-      text: "Você tem preferência por alguma base?",
+      text: t('quiz.questions.family'),
       options: [
         { 
           label: "Base Debian/Ubuntu (.deb)", 
@@ -92,11 +89,11 @@ const DistroQuiz = () => {
         { 
           label: "Base Arch (Pacman/AUR)", 
           value: "Arch",
-          desc: "Acesso ao AUR (repositório gigante), rápido e leve.",
+          desc: "Acesso ao AUR, rápido e leve.",
           filter: (d: Distro) => {
             const fam = (d.family || "").toLowerCase();
             const based = (d.basedOn || "").toLowerCase();
-            return fam.includes("arch") || based.includes("arch") || d.name.includes("Manjaro") || d.name.includes("Endeavour");
+            return fam.includes("arch") || based.includes("arch") || d.name.toLowerCase().includes("manjaro") || d.name.toLowerCase().includes("endeavour");
           }
         },
         { 
@@ -109,62 +106,102 @@ const DistroQuiz = () => {
           }
         },
         { 
-          label: "Sem preferência / Não sei", 
+          label: "Sem preferência", 
           value: "Any",
+          filter: (d: Distro) => true
+        }
+      ]
+    },
+    {
+      id: "purpose",
+      text: t('quiz.questions.purpose'),
+      options: [
+        {
+          label: "Jogos",
+          value: "Gaming",
+          desc: "Drivers NVIDIA e Steam pré-configurados.",
+          filter: (d: Distro) => {
+            const name = d.name.toLowerCase();
+            const cat = (d.category || "").toLowerCase();
+            return cat.includes("game") || name.includes("nobara") || name.includes("pop") || name.includes("bazzite") || name.includes("garuda");
+          }
+        },
+        {
+          label: "Programação / Desenvolvimento",
+          value: "Dev",
+          desc: "Ferramentas atualizadas e estabilidade.",
+          filter: (d: Distro) => true // Programação roda bem em quase tudo, não vamos restringir demais.
+        },
+        {
+          label: "Dia a Dia (Navegador, Office)",
+          value: "Daily",
+          filter: (d: Distro) => true
+        }
+      ]
+    },
+    {
+      id: "hardware",
+      text: t('quiz.questions.hardware'),
+      options: [
+        {
+          label: "PC Antigo / Fraco (< 4GB RAM)",
+          value: "LowSpec",
+          desc: "Interfaces leves para reviver o PC.",
+          filter: (d: Distro) => {
+            const ram = d.idleRamUsage || 1000;
+            // Se RAM Idle < 600 ou usa Xfce/Mate/LXQt
+            return ram < 700 || d.desktopEnvironments.some(de => ["Xfce", "LXQt", "MATE", "Openbox", "i3"].some(k => de.toLowerCase().includes(k.toLowerCase())));
+          }
+        },
+        {
+          label: "PC Moderno (> 4GB RAM)",
+          value: "HighSpec",
+          filter: (d: Distro) => true
+        }
+      ]
+    },
+    {
+      id: "apps",
+      text: t('quiz.questions.apps'),
+      options: [
+        {
+          label: "Loja de Aplicativos (GUI)",
+          value: "GUI",
+          desc: "Instalar programas como no celular.",
+          filter: (d: Distro) => {
+            // Assume que distros beginner friendly têm loja
+            const name = d.name.toLowerCase();
+            const fam = (d.family || "").toLowerCase();
+            return name.includes("mint") || name.includes("ubuntu") || name.includes("pop") || name.includes("zorin") || name.includes("deepin") || name.includes("manjaro") || name.includes("fedora");
+          }
+        },
+        {
+          label: "Terminal / Linha de Comando",
+          value: "CLI",
           filter: (d: Distro) => true
         }
       ]
     }
   ];
 
-  // Calcular pontuação de match para cada distro
+  // Filtro Estrito (Eliminatório)
   const rankedDistros = useMemo(() => {
-    if (Object.keys(filters).length === 0) return allDistros;
-
-    const scored = allDistros.map(distro => {
-      let matchScore = 0;
-      let totalQuestionsAnswered = 0;
-
-      // Q1: Release Model
-      if (filters["release"]) {
-        totalQuestionsAnswered++;
-        const model = (distro.releaseModel || distro.releaseType || "").toLowerCase();
-        if (filters["release"] === "Fixed" && (model.includes("fixed") || model.includes("lts") || model.includes("stable"))) matchScore += 3;
-        else if (filters["release"] === "Rolling" && model.includes("rolling")) matchScore += 3;
-        else if (filters["release"] === "Semi") matchScore += 1; // Meio termo ganha ponto em tudo
-      }
-
-      // Q2: Interface
-      if (filters["interface"]) {
-        totalQuestionsAnswered++;
-        const deList = (distro.desktopEnvironments || []).map(d => d.toLowerCase());
-        const hasDE = (names: string[]) => deList.some(de => names.some(n => de.includes(n.toLowerCase())));
-
-        if (filters["interface"] === "Windows" && hasDE(["KDE", "Plasma", "Cinnamon", "Xfce", "MATE", "LXQt"])) matchScore += 3;
-        else if (filters["interface"] === "Mac" && hasDE(["GNOME", "Pantheon", "Budgie", "Cosmic", "Deepin"])) matchScore += 3;
-        else if (filters["interface"] === "Minimal" && hasDE(["Xfce", "LXQt", "i3", "Openbox", "Mate", "Window Manager"])) matchScore += 3;
-      }
-
-      // Q3: Family
-      if (filters["family"]) {
-        totalQuestionsAnswered++;
-        const fam = (distro.family || "").toLowerCase();
-        const based = (distro.basedOn || "").toLowerCase();
+    let current = [...allDistros];
+    
+    Object.keys(filters).forEach((questionId) => {
+      const questionIndex = questions.findIndex(q => q.id === questionId);
+      if (questionIndex >= 0) {
+        const selectedOptionValue = filters[questionId];
+        const option = questions[questionIndex].options.find(o => o.value === selectedOptionValue);
         
-        if (filters["family"] === "Debian" && (fam.includes("debian") || fam.includes("ubuntu") || based.includes("debian") || based.includes("ubuntu"))) matchScore += 3;
-        else if (filters["family"] === "Arch" && (fam.includes("arch") || based.includes("arch"))) matchScore += 3;
-        else if (filters["family"] === "Fedora" && (fam.includes("fedora") || fam.includes("red") || fam.includes("suse"))) matchScore += 3;
-        else if (filters["family"] === "Any") matchScore += 1;
+        if (option && option.filter) {
+          current = current.filter(option.filter);
+        }
       }
-
-      return { ...distro, matchScore };
     });
 
-    // Filtra apenas distros com alguma relevância e ordena
-    return scored
-      .filter(d => d.matchScore > 0)
-      .sort((a, b) => b.matchScore - a.matchScore || (b.score || 0) - (a.score || 0));
-
+    // Ordenar por popularidade/score como critério de desempate
+    return current.sort((a, b) => (b.score || 0) - (a.score || 0));
   }, [allDistros, filters]);
 
   const handleAnswer = (questionId: string, value: string) => {
