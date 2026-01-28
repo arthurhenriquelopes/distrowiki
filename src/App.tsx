@@ -14,6 +14,7 @@ import { Loader2 } from "lucide-react";
 const Home = lazy(() => import("./pages/Home"));
 const Catalog = lazy(() => import("./pages/catalog/Catalog"));
 const Comparison = lazy(() => import("./pages/comparison/Comparison"));
+const DistroQuiz = lazy(() => import("./pages/quiz/DistroQuiz"));
 const DistroDetails = lazy(() => import("./pages/distro/DistroDetails"));
 const About = lazy(() => import("./pages/About"));
 const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
@@ -40,9 +41,9 @@ const App = () => (
                   <Routes>
                     <Route element={<Layout />}>
                       <Route path="/" element={<Home />} />
-                      <Route path="/catalogo" element={<Catalog />} />
-                      <Route path="/comparacao" element={<Comparison />} />
-                      <Route path="/comparacao/:distroIds" element={<Comparison />} />
+                                          <Route path="/catalogo" element={<Catalog />} />
+                                          <Route path="/quiz" element={<DistroQuiz />} />
+                                          <Route path="/comparacao" element={<Comparison />} />                      <Route path="/comparacao/:distroIds" element={<Comparison />} />
                       <Route path="/distro/:id" element={<DistroDetails />} />
                       <Route path="/sobre" element={<About />} />
                       <Route path="/admin/dashboard" element={<Dashboard />} />

@@ -215,6 +215,7 @@
     "catalog": {
         "title": "Catálogo de Distribuições",
         "loading": "Carregando...",
+        "loadingTerminal": "Carregando distros...",
         "explore": "Explore {{count}} distribuições Linux",
         "search": {
             "placeholder": "Buscar distribuições Linux...",
@@ -242,6 +243,9 @@
             "fixed": "Release Fixa",
             "updatedAt": "Atualizado em",
             "dateUnavailable": "Data indisponível"
+        },
+        "terminal": {
+            "totalFound": "total {{count}} distribuições Linux encontradas"
         }
     },
     "comparison": {
@@ -339,9 +343,54 @@
         "pathAttempted": "Caminho tentado:"
     },
     "common": {
+        "loading": "Carregando...",
         "na": "N/A",
         "langCode": "pt-BR",
         "descriptionNA": "Descrição não disponível.",
         "dateNA": "Data não disponível"
+    },
+    "distro": {
+        "base": {
+            "independent": "Base Independente",
+            "basedOn": "Baseado em {{base}}"
+        }
+    },
+    "quiz": {
+        "title": "Encontre sua Distro Ideal",
+        "subtitle": "Responda algumas perguntas e te diremos qual Linux instalar.",
+        "start": "Começar Quiz",
+        "next": "Próxima",
+        "result": "Seu Resultado",
+        "retake": "Refazer Quiz",
+        "questions": {
+            "experience": "Qual seu nível de experiência com computadores?",
+            "hardware": "Como é o seu computador?",
+            "usage": "Para que você vai usar o Linux?"
+        }
+    },
+    "features": {
+        "terminal": {
+            "title": "Testar no Terminal",
+            "placeholder": "Digite 'neofetch' ou 'help'...",
+            "help": "Comandos disponíveis: neofetch, whoami, cat /etc/os-release"
+        },
+        "gallery": {
+            "title": "Galeria de Screenshots"
+        },
+        "reviews": {
+            "title": "Avaliações da Comunidade",
+            "noReviews": "Ainda não há avaliações. Seja o primeiro!",
+            "writeReview": "Escrever avaliação"
+        },
+        "gaming": {
+            "ready": "Pronto para Jogos",
+            "description": "Drivers e suporte Steam inclusos."
+        },
+        "hardware": {
+            "title": "Hardware Recomendado",
+            "ssd": "SSD SATA/NVMe",
+            "ram": "Memória RAM"
+        },
+        "edit": "Sugerir Edição"
     }
 }

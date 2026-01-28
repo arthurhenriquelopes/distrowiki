@@ -30,10 +30,10 @@ const DistroCardList = ({
       family.toLowerCase().includes("independente") ||
       family.toLowerCase().includes("independent")
     ) {
-      return "Base Independente";
+      return t("distro.base.independent");
     }
     const baseName = family.split(/[/(]/)[0].trim();
-    return `Baseado em ${baseName.charAt(0).toUpperCase() + baseName.slice(1)}`;
+    return t("distro.base.basedOn", { base: baseName.charAt(0).toUpperCase() + baseName.slice(1) });
   };
 
   const hasPerformanceData =
@@ -134,12 +134,12 @@ const DistroCardList = ({
                     <TooltipTrigger asChild>
                       <p className="text-xs text-muted-foreground flex items-center gap-1 cursor-help">
                         <HardDrive className="w-3 h-3" />
-                        RAM Idle
+                        {t("comparison.sections.ramIdle")}
                         <Info className="w-3 h-3" />
                       </p>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Quantidade de memória RAM usada após a inicialização. Menos é melhor para liberar recursos para seus aplicativos.</p>
+                      <p>{t("comparison.sections.ramIdleTooltip")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -159,12 +159,12 @@ const DistroCardList = ({
                     <TooltipTrigger asChild>
                       <p className="text-xs text-muted-foreground flex items-center gap-1 cursor-help">
                         <Cpu className="w-3 h-3" />
-                        CPU Score
+                        {t("comparison.sections.cpuScore")}
                         <Info className="w-3 h-3 opacity-50" />
                       </p>
                     </TooltipTrigger>
                     <TooltipContent className="max-w-xs">
-                      <p className="text-xs">Desempenho do processador medido por benchmark. Quanto maior, melhor para tarefas intensivas.</p>
+                      <p className="text-xs">{t("comparison.sections.cpuScoreTooltip")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -184,12 +184,12 @@ const DistroCardList = ({
                     <TooltipTrigger asChild>
                       <p className="text-xs text-muted-foreground flex items-center gap-1 cursor-help">
                         <HardDrive className="w-3 h-3" />
-                        I/O Score
+                        {t("comparison.sections.ioScore")}
                         <Info className="w-3 h-3 opacity-50" />
                       </p>
                     </TooltipTrigger>
                     <TooltipContent className="max-w-xs">
-                      <p className="text-xs">Velocidade de leitura/escrita em disco. Importante para boot, instalação de programas e transferência de arquivos.</p>
+                      <p className="text-xs">{t("comparison.sections.ioScoreTooltip")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -205,7 +205,7 @@ const DistroCardList = ({
             {distro.requirements && (
               <div className="flex justify-between items-center pt-1">
                 <span className="text-xs text-muted-foreground">
-                  Requisitos
+                  {t("comparison.sections.requirements")}
                 </span>
                 <span className="text-xs font-medium">
                   {distro.requirements}

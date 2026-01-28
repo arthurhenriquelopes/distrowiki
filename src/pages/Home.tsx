@@ -115,10 +115,14 @@ const Home = () => {
           </motion.p>
 
           <motion.div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center items-center pt-1 sm:pt-4 px-4 sm:px-0" variants={fadeIn}>
-            <Link to="/catalogo" className="w-full sm:w-auto">
-              <Button size="default" className="w-full sm:w-auto text-sm sm:text-base px-4 sm:px-8 h-10 sm:h-11 group shadow-lg shadow-primary/20">
+            <Link to="/catalogo">
+              <Button size="lg" className="h-12 px-8 text-lg font-semibold shadow-lg hover:shadow-primary/20 transition-all duration-300">
                 {t("home.exploreCatalog")}
-                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 smooth-transition" />
+              </Button>
+            </Link>
+            <Link to="/quiz">
+              <Button variant="outline" size="lg" className="h-12 px-8 text-lg font-semibold">
+                {t("quiz.start")}
               </Button>
             </Link>
             <Button

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ExternalLink, Loader2, GitCompare, HardDrive, Cpu, Zap, Copy, Check } from "lucide-react";
+import { ArrowLeft, ExternalLink, Loader2, GitCompare, HardDrive, Cpu, Zap, Copy, Check, Gamepad2, Star } from "lucide-react";
 import { MetricBar } from "@/components/comparison/MetricBar";
 import { DesktopEnvBadge } from "@/components/DesktopEnvBadge";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
@@ -19,6 +19,9 @@ import { SEO } from "@/components/SEO";
 import { ProposeEditModal } from "@/components/community/ProposeEditModal";
 import { VoteButtons } from "@/components/community/VoteButtons";
 import { Edit3 } from "lucide-react";
+import ScreenshotGallery from "@/components/distro/ScreenshotGallery";
+import TerminalSim from "@/components/distro/TerminalSim";
+import HardwareRecommendations from "@/components/distro/HardwareRecommendations";
 
 const DistroDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -132,6 +135,11 @@ const DistroDetails = () => {
   const distroDescription = distro.summary || distro.description || `${distro.name} é uma distribuição Linux ${distro.family ? `baseada em ${distro.family}` : 'independente'}. Explore características técnicas, métricas de desempenho e mais informações.`;
   const distroScore = calculatePerformanceScore(distro);
 
+  const isGamingReady = distro.category?.toLowerCase().includes('game') || 
+                        distro.name.toLowerCase().includes('nobara') ||
+                        distro.name.toLowerCase().includes('pop') ||
+                        distro.name.toLowerCase().includes('bazzite');
+
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -186,40 +194,54 @@ const DistroDetails = () => {
         </Link>
       </motion.div>
 
-      {/* Header */}
-      <motion.div
-        className="bg-card border border-border rounded-xl p-8 mb-8"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-      >
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
-          <img
-            src={`/logos/${distro.id || id}.svg`}
-            alt={`${distro.name} logo`}
-            className="w-32 h-32 object-contain"
-            onError={(e) => {
-              e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(distro.name)}&background=random&size=128`;
-            }}
-          />
-          <div className="flex-1 text-center md:text-left">
-            <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
-              <h1 className="text-4xl md:text-5xl font-bold">{distro.name}</h1>
+      <div className="grid lg:grid-cols-[350px_1fr] gap-8">
+        {/* Sidebar */}
+        <motion.div
+          className="space-y-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <div className="bg-card border border-border rounded-xl p-6 flex flex-col items-center text-center shadow-sm">
+            <img
+              src={`/logos/${distro.id || id}.svg`}
+              alt={`${distro.name} logo`}
+              className="w-32 h-32 object-contain mb-4"
+              onError={(e) => {
+                e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(distro.name)}&background=random&size=128`;
+              }}
+            />
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <h1 className="text-3xl font-bold">{distro.name}</h1>
               <VoteButtons distroName={distro.id || id || ''} layout="horizontal" size="sm" />
             </div>
-            <p className="text-xl text-muted-foreground mb-4">{distro.family || t("distroDetails.independent")}</p>
-            <div className="flex flex-wrap gap-3 justify-center md:justify-start items-center">
-              <ScoreBadge score={calculatePerformanceScore(distro)} size="lg" />
+            
+            <p className="text-lg text-muted-foreground mb-4">{distro.family || t("distroDetails.independent")}</p>
+            
+            <div className="flex gap-2 mb-4 justify-center">
+                <ScoreBadge score={calculatePerformanceScore(distro)} size="lg" />
+            </div>
+
+            <div className="flex flex-wrap gap-2 justify-center mb-6">
+                {isGamingReady && (
+                    <Badge variant="secondary" className="gap-1 bg-purple-500/10 text-purple-400 border-purple-500/20">
+                        <Gamepad2 className="w-3 h-3" />
+                        {t('features.gaming.ready')}
+                    </Badge>
+                )}
+            </div>
+
+            <div className="grid w-full gap-3">
               {distro.homepage && (
                 <a href={distro.homepage} target="_blank" rel="noopener noreferrer">
-                  <Button className="gap-2">
+                  <Button className="w-full gap-2">
                     <ExternalLink className="w-4 h-4" />
                     {t("distroDetails.officialSite")}
                   </Button>
                 </a>
               )}
 
-              <Button variant="outline" className="gap-2" onClick={() => setIsEditModalOpen(true)}>
+              <Button variant="outline" className="w-full gap-2" onClick={() => setIsEditModalOpen(true)}>
                 <Edit3 className="w-4 h-4" />
                 Sugerir Edição
               </Button>
@@ -229,10 +251,11 @@ const DistroDetails = () => {
                 onClose={() => setIsEditModalOpen(false)}
                 distroName={distro.name}
               />
+              
               {/* Select de Comparação */}
-              <div className="flex gap-2 items-center">
+              <div className="flex flex-col gap-2 w-full pt-2 border-t border-border">
                 <Select value={compareWith} onValueChange={setCompareWith}>
-                  <SelectTrigger className="w-[200px] h-10">
+                  <SelectTrigger className="w-full h-10">
                     <SelectValue placeholder={t("distroDetails.compareWith")} />
                   </SelectTrigger>
                   <SelectContent className="max-h-[300px]">
@@ -252,7 +275,7 @@ const DistroDetails = () => {
                   onClick={handleCompare}
                   disabled={!compareWith}
                   variant="outline"
-                  className="gap-2"
+                  className="w-full gap-2"
                 >
                   <GitCompare className="w-4 h-4" />
                   {t("distroDetails.compare")}
@@ -260,309 +283,332 @@ const DistroDetails = () => {
               </div>
             </div>
           </div>
-        </div>
-      </motion.div>
 
-      {/* Tabs */}
-      <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
-          <TabsTrigger value="overview">{t("distroDetails.tabs.overview")}</TabsTrigger>
-          <TabsTrigger value="performance">{t("comparison.sections.performance")}</TabsTrigger>
-          <TabsTrigger value="specs">{t("distroDetails.tabs.specs")}</TabsTrigger>
-          <TabsTrigger value="links">{t("distroDetails.tabs.links")}</TabsTrigger>
-        </TabsList>
+          <HardwareRecommendations />
+        </motion.div>
 
-        {/* Performance */}
-        <TabsContent value="performance" className="space-y-6 animate-fade-in">
-          <div className="bg-card border border-border rounded-xl p-6">
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-              <Zap className="w-6 h-6 text-yellow-500" />
-              {t("comparison.sections.performance")}
-            </h2>
+        {/* Main Content */}
+        <div className="space-y-8">
+          <Tabs defaultValue="overview" className="space-y-6">
+            <TabsList className="w-full justify-start overflow-x-auto">
+              <TabsTrigger value="overview">{t("distroDetails.tabs.overview")}</TabsTrigger>
+              <TabsTrigger value="performance">{t("comparison.sections.performance")}</TabsTrigger>
+              <TabsTrigger value="specs">{t("distroDetails.tabs.specs")}</TabsTrigger>
+              <TabsTrigger value="links">{t("distroDetails.tabs.links")}</TabsTrigger>
+              <TabsTrigger value="reviews">{t('features.reviews.title')}</TabsTrigger>
+            </TabsList>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
-              {/* RAM Idle */}
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 mb-1">
-                  <HardDrive className="w-4 h-4 text-muted-foreground" />
-                  <span className="font-medium">{t("comparison.sections.ramIdle")}</span>
-                </div>
-                {(distro.idle_ram_usage || distro.ram_idle || distro.idleRamUsage) ? (
-                  <MetricBar
-                    value={distro.idle_ram_usage || distro.ram_idle || distro.idleRamUsage}
-                    maxValue={2000}
-                    isBest={(distro.idle_ram_usage || distro.ram_idle || distro.idleRamUsage) < 600}
-                    formatValue={(v) => `${v} MB`}
-                  />
-                ) : (
-                  <span className="text-muted-foreground italic text-sm">Dados não disponíveis</span>
-                )}
-              </div>
-
-              {/* CPU Score */}
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 mb-1">
-                  <Cpu className="w-4 h-4 text-muted-foreground" />
-                  <span className="font-medium">{t("comparison.sections.cpuScore")}</span>
-                </div>
-                {distro.cpu_score ? (
-                  <MetricBar
-                    value={distro.cpu_score}
-                    maxValue={10}
-                    isBest={distro.cpu_score >= 8}
-                    formatValue={(v) => `${v}/10`}
-                    delay={0.1}
-                  />
-                ) : (
-                  <span className="text-muted-foreground italic text-sm">Dados não disponíveis</span>
-                )}
-              </div>
-
-              {/* I/O Score */}
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 mb-1">
-                  <HardDrive className="w-4 h-4 text-muted-foreground" />
-                  <span className="font-medium">{t("comparison.sections.ioScore")}</span>
-                </div>
-                {distro.io_score ? (
-                  <MetricBar
-                    value={distro.io_score}
-                    maxValue={10}
-                    isBest={distro.io_score >= 8}
-                    formatValue={(v) => `${v}/10`}
-                    delay={0.2}
-                  />
-                ) : (
-                  <span className="text-muted-foreground italic text-sm">Dados não disponíveis</span>
-                )}
-              </div>
-            </div>
-          </div>
-        </TabsContent>
-
-        {/* Overview */}
-        <TabsContent value="overview" className="space-y-6 animate-fade-in">
-          <div className="bg-card border border-border rounded-xl p-6">
-            <h2 className="text-2xl font-bold mb-4">{t("distroDetails.overview.about", { name: distro.name })}</h2>
-            <p className="text-muted-foreground leading-relaxed mb-6">
-              {distro.summary || distro.description || t("distroDetails.overview.noDescription")}
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.overview.family")}</p>
-                <p className="font-medium">{distro.family || t("distroDetails.independent")}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.overview.origin")}</p>
-                <p className="font-medium">{distro.origin || t("common.na")}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.overview.status")}</p>
-                <p className="font-medium">{distro.status || t("common.na")}</p>
-              </div>
-            </div>
-          </div>
-
-          {(distro.desktopEnvironments || distro.desktop_environments) && (distro.desktopEnvironments || distro.desktop_environments).length > 0 && (
-            <div className="bg-card border border-border rounded-xl p-6">
-              <h3 className="text-xl font-bold mb-4">{t("distroDetails.overview.desktopEnv")}</h3>
-              <div className="flex flex-wrap gap-2">
-                {(distro.desktopEnvironments || distro.desktop_environments).map((de: string) => (
-                  <DesktopEnvBadge key={de} name={de} size="md" />
-                ))}
-              </div>
-            </div>
-          )}
-        </TabsContent>
-
-        {/* Specs */}
-        <TabsContent value="specs" className="space-y-6 animate-fade-in">
-          <div className="bg-card border border-border rounded-xl p-6">
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-              <Cpu className="w-6 h-6 text-primary" />
-              {t("distroDetails.specs.title")}
-            </h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Based On */}
-              <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">Baseado em</p>
-                <p className="text-lg font-semibold">{distro.based_on || distro.family || "Independente"}</p>
-              </div>
-
-              {/* Release Type - NOVO */}
-              <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">Tipo de Release</p>
-                <p className="text-lg font-semibold">
-                  <Badge variant={distro.release_type?.toLowerCase()?.includes('rolling') ? 'default' : 'secondary'}>
-                    {distro.release_type || "Point Release"}
-                  </Badge>
+            {/* Overview */}
+            <TabsContent value="overview" className="space-y-8 animate-fade-in">
+              <div className="bg-card border border-border rounded-xl p-6">
+                <h2 className="text-2xl font-bold mb-4">{t("distroDetails.overview.about", { name: distro.name })}</h2>
+                <p className="text-muted-foreground leading-relaxed mb-6">
+                  {distro.summary || distro.description || t("distroDetails.overview.noDescription")}
                 </p>
-              </div>
-
-              {/* Init System - NOVO */}
-              <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">Sistema de Init</p>
-                <p className="text-lg font-semibold">{distro.init_system || "systemd"}</p>
-              </div>
-
-              {/* Package Manager */}
-              <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">Gerenciador de Pacotes</p>
-                <p className="text-lg font-semibold">{distro.package_management || distro.package_manager || "N/A"}</p>
-              </div>
-
-              {/* Architecture - MELHORADO */}
-              <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">Arquiteturas</p>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {(Array.isArray(distro.architecture) ? distro.architecture : [distro.architecture || "x86_64"]).map((arch: string) => (
-                    <Badge key={arch} variant="outline" className="text-xs">{arch}</Badge>
-                  ))}
-                </div>
-              </div>
-
-              {/* File Systems - NOVO */}
-              <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">Sistemas de Arquivos</p>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {(distro.file_systems?.length ? distro.file_systems : ["ext4"]).map((fs: string) => (
-                    <Badge key={fs} variant="outline" className="text-xs">{fs}</Badge>
-                  ))}
-                </div>
-              </div>
-
-              {/* Category */}
-              <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">Categoria</p>
-                <p className="text-lg font-semibold">{distro.category || "Desktop"}</p>
-              </div>
-
-              {/* Requirements */}
-              <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">Requisitos</p>
-                <p className="text-lg font-semibold">{distro.requirements || "Médio"}</p>
-              </div>
-
-              {/* Image Size */}
-              <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">Tamanho da ISO</p>
-                <p className="text-lg font-semibold">{distro.image_size ? `${distro.image_size} GB` : "N/A"}</p>
-              </div>
-
-              {/* Office Suite */}
-              <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">Suite Office</p>
-                <p className="text-lg font-semibold">{distro.office_suite || distro.office_manager || "N/A"}</p>
-              </div>
-
-              {/* First Release */}
-              <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">Ano de Lançamento</p>
-                <p className="text-lg font-semibold">{distro.release_year || "N/A"}</p>
-              </div>
-
-              {/* Latest Release */}
-              <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">Última Versão</p>
-                <p className="text-lg font-semibold">{distro.latest_release_date || distro.lastRelease || "N/A"}</p>
-              </div>
-            </div>
-          </div>
-        </TabsContent>
-
-        {/* Links */}
-        <TabsContent value="links" className="space-y-6 animate-fade-in">
-          <div className="bg-card border border-border rounded-xl p-6">
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-              <ExternalLink className="w-6 h-6 text-primary" />
-              {t("distroDetails.links.title")}
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Official Website */}
-              {distro.homepage && (
-                <a
-                  href={distro.homepage}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-primary/10 border border-transparent hover:border-primary/30 smooth-transition group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <ExternalLink className="w-5 h-5 text-primary" />
-                    </div>
-                    <div>
-                      <p className="font-semibold">Site Oficial</p>
-                      <p className="text-sm text-muted-foreground">{new URL(distro.homepage).hostname}</p>
-                    </div>
-                  </div>
-                  <ArrowLeft className="w-5 h-5 text-muted-foreground rotate-180 group-hover:translate-x-1 transition-transform" />
-                </a>
-              )}
-
-              {/* DistroWatch */}
-              <a
-                href={`https://distrowatch.com/table.php?distribution=${distro.id || distro.name?.toLowerCase()}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-orange-500/10 border border-transparent hover:border-orange-500/30 smooth-transition group"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center">
-                    <span className="text-orange-500 font-bold text-sm">DW</span>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.overview.family")}</p>
+                    <p className="font-medium">{distro.family || t("distroDetails.independent")}</p>
                   </div>
                   <div>
-                    <p className="font-semibold">DistroWatch</p>
-                    <p className="text-sm text-muted-foreground">Rankings e reviews</p>
-                  </div>
-                </div>
-                <ArrowLeft className="w-5 h-5 text-muted-foreground rotate-180 group-hover:translate-x-1 transition-transform" />
-              </a>
-
-              {/* Wikipedia */}
-              <a
-                href={`https://en.wikipedia.org/wiki/${encodeURIComponent(distro.name)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-blue-500/10 border border-transparent hover:border-blue-500/30 smooth-transition group"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                    <span className="text-blue-500 font-bold text-sm">W</span>
+                    <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.overview.origin")}</p>
+                    <p className="font-medium">{distro.origin || t("common.na")}</p>
                   </div>
                   <div>
-                    <p className="font-semibold">Wikipedia</p>
-                    <p className="text-sm text-muted-foreground">História e detalhes</p>
+                    <p className="text-sm text-muted-foreground mb-1">{t("distroDetails.overview.status")}</p>
+                    <p className="font-medium">{distro.status || t("common.na")}</p>
                   </div>
                 </div>
-                <ArrowLeft className="w-5 h-5 text-muted-foreground rotate-180 group-hover:translate-x-1 transition-transform" />
-              </a>
+              </div>
 
-              {/* Download */}
-              {distro.homepage && (
-                <a
-                  href={`${distro.homepage}/download`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-green-500/10 border border-transparent hover:border-green-500/30 smooth-transition group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center">
-                      <HardDrive className="w-5 h-5 text-green-500" />
+              {(distro.desktopEnvironments || distro.desktop_environments) && (distro.desktopEnvironments || distro.desktop_environments).length > 0 && (
+                <div className="bg-card border border-border rounded-xl p-6">
+                  <h3 className="text-xl font-bold mb-4">{t("distroDetails.overview.desktopEnv")}</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {(distro.desktopEnvironments || distro.desktop_environments).map((de: string) => (
+                      <DesktopEnvBadge key={de} name={de} size="md" />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <ScreenshotGallery distro={distro} />
+
+              <section className="bg-card border border-border rounded-xl p-6">
+                  <h3 className="text-xl font-bold mb-4">{t('features.terminal.title')}</h3>
+                  <TerminalSim distro={distro} />
+              </section>
+            </TabsContent>
+
+            {/* Performance */}
+            <TabsContent value="performance" className="space-y-6 animate-fade-in">
+              <div className="bg-card border border-border rounded-xl p-6">
+                <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                  <Zap className="w-6 h-6 text-yellow-500" />
+                  {t("comparison.sections.performance")}
+                </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
+                  {/* RAM Idle */}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 mb-1">
+                      <HardDrive className="w-4 h-4 text-muted-foreground" />
+                      <span className="font-medium">{t("comparison.sections.ramIdle")}</span>
                     </div>
-                    <div>
-                      <p className="font-semibold">Download</p>
-                      <p className="text-sm text-muted-foreground">Baixar ISO</p>
+                    {(distro.idle_ram_usage || distro.ram_idle || distro.idleRamUsage) ? (
+                      <MetricBar
+                        value={distro.idle_ram_usage || distro.ram_idle || distro.idleRamUsage}
+                        maxValue={2000}
+                        isBest={(distro.idle_ram_usage || distro.ram_idle || distro.idleRamUsage) < 600}
+                        formatValue={(v) => `${v} MB`}
+                      />
+                    ) : (
+                      <span className="text-muted-foreground italic text-sm">Dados não disponíveis</span>
+                    )}
+                  </div>
+
+                  {/* CPU Score */}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Cpu className="w-4 h-4 text-muted-foreground" />
+                      <span className="font-medium">{t("comparison.sections.cpuScore")}</span>
+                    </div>
+                    {distro.cpu_score ? (
+                      <MetricBar
+                        value={distro.cpu_score}
+                        maxValue={10}
+                        isBest={distro.cpu_score >= 8}
+                        formatValue={(v) => `${v}/10`}
+                        delay={0.1}
+                      />
+                    ) : (
+                      <span className="text-muted-foreground italic text-sm">Dados não disponíveis</span>
+                    )}
+                  </div>
+
+                  {/* I/O Score */}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 mb-1">
+                      <HardDrive className="w-4 h-4 text-muted-foreground" />
+                      <span className="font-medium">{t("comparison.sections.ioScore")}</span>
+                    </div>
+                    {distro.io_score ? (
+                      <MetricBar
+                        value={distro.io_score}
+                        maxValue={10}
+                        isBest={distro.io_score >= 8}
+                        formatValue={(v) => `${v}/10`}
+                        delay={0.2}
+                      />
+                    ) : (
+                      <span className="text-muted-foreground italic text-sm">Dados não disponíveis</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+
+            {/* Specs */}
+            <TabsContent value="specs" className="space-y-6 animate-fade-in">
+              <div className="bg-card border border-border rounded-xl p-6">
+                <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                  <Cpu className="w-6 h-6 text-primary" />
+                  {t("distroDetails.specs.title")}
+                </h2>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {/* Based On */}
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <p className="text-sm text-muted-foreground mb-1">Baseado em</p>
+                    <p className="text-lg font-semibold">{distro.based_on || distro.family || "Independente"}</p>
+                  </div>
+
+                  {/* Release Type */}
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <p className="text-sm text-muted-foreground mb-1">Tipo de Release</p>
+                    <p className="text-lg font-semibold">
+                      <Badge variant={distro.release_type?.toLowerCase()?.includes('rolling') ? 'default' : 'secondary'}>
+                        {distro.release_type || "Point Release"}
+                      </Badge>
+                    </p>
+                  </div>
+
+                  {/* Init System */}
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <p className="text-sm text-muted-foreground mb-1">Sistema de Init</p>
+                    <p className="text-lg font-semibold">{distro.init_system || "systemd"}</p>
+                  </div>
+
+                  {/* Package Manager */}
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <p className="text-sm text-muted-foreground mb-1">Gerenciador de Pacotes</p>
+                    <p className="text-lg font-semibold">{distro.package_management || distro.package_manager || "N/A"}</p>
+                  </div>
+
+                  {/* Architecture */}
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <p className="text-sm text-muted-foreground mb-1">Arquiteturas</p>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {(Array.isArray(distro.architecture) ? distro.architecture : [distro.architecture || "x86_64"]).map((arch: string) => (
+                        <Badge key={arch} variant="outline" className="text-xs">{arch}</Badge>
+                      ))}
                     </div>
                   </div>
-                  <ArrowLeft className="w-5 h-5 text-muted-foreground rotate-180 group-hover:translate-x-1 transition-transform" />
-                </a>
-              )}
-            </div>
-          </div>
-        </TabsContent>
-      </Tabs>
+
+                  {/* File Systems */}
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <p className="text-sm text-muted-foreground mb-1">Sistemas de Arquivos</p>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {(distro.file_systems?.length ? distro.file_systems : ["ext4"]).map((fs: string) => (
+                        <Badge key={fs} variant="outline" className="text-xs">{fs}</Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Category */}
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <p className="text-sm text-muted-foreground mb-1">Categoria</p>
+                    <p className="text-lg font-semibold">{distro.category || "Desktop"}</p>
+                  </div>
+
+                  {/* Requirements */}
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <p className="text-sm text-muted-foreground mb-1">Requisitos</p>
+                    <p className="text-lg font-semibold">{distro.requirements || "Médio"}</p>
+                  </div>
+
+                  {/* Image Size */}
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <p className="text-sm text-muted-foreground mb-1">Tamanho da ISO</p>
+                    <p className="text-lg font-semibold">{distro.image_size ? `${distro.image_size} GB` : "N/A"}</p>
+                  </div>
+
+                  {/* Office Suite */}
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <p className="text-sm text-muted-foreground mb-1">Suite Office</p>
+                    <p className="text-lg font-semibold">{distro.office_suite || distro.office_manager || "N/A"}</p>
+                  </div>
+
+                  {/* First Release */}
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <p className="text-sm text-muted-foreground mb-1">Ano de Lançamento</p>
+                    <p className="text-lg font-semibold">{distro.release_year || "N/A"}</p>
+                  </div>
+
+                  {/* Latest Release */}
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <p className="text-sm text-muted-foreground mb-1">Última Versão</p>
+                    <p className="text-lg font-semibold">{distro.latest_release_date || distro.lastRelease || "N/A"}</p>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+
+            {/* Links */}
+            <TabsContent value="links" className="space-y-6 animate-fade-in">
+              <div className="bg-card border border-border rounded-xl p-6">
+                <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                  <ExternalLink className="w-6 h-6 text-primary" />
+                  {t("distroDetails.links.title")}
+                </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Official Website */}
+                  {distro.homepage && (
+                    <a
+                      href={distro.homepage}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-primary/10 border border-transparent hover:border-primary/30 smooth-transition group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                          <ExternalLink className="w-5 h-5 text-primary" />
+                        </div>
+                        <div>
+                          <p className="font-semibold">Site Oficial</p>
+                          <p className="text-sm text-muted-foreground">{new URL(distro.homepage).hostname}</p>
+                        </div>
+                      </div>
+                      <ArrowLeft className="w-5 h-5 text-muted-foreground rotate-180 group-hover:translate-x-1 transition-transform" />
+                    </a>
+                  )}
+
+                  {/* DistroWatch */}
+                  <a
+                    href={`https://distrowatch.com/table.php?distribution=${distro.id || distro.name?.toLowerCase()}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-orange-500/10 border border-transparent hover:border-orange-500/30 smooth-transition group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center">
+                        <span className="text-orange-500 font-bold text-sm">DW</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold">DistroWatch</p>
+                        <p className="text-sm text-muted-foreground">Rankings e reviews</p>
+                      </div>
+                    </div>
+                    <ArrowLeft className="w-5 h-5 text-muted-foreground rotate-180 group-hover:translate-x-1 transition-transform" />
+                  </a>
+
+                  {/* Wikipedia */}
+                  <a
+                    href={`https://en.wikipedia.org/wiki/${encodeURIComponent(distro.name)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-blue-500/10 border border-transparent hover:border-blue-500/30 smooth-transition group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                        <span className="text-blue-500 font-bold text-sm">W</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold">Wikipedia</p>
+                        <p className="text-sm text-muted-foreground">História e detalhes</p>
+                      </div>
+                    </div>
+                    <ArrowLeft className="w-5 h-5 text-muted-foreground rotate-180 group-hover:translate-x-1 transition-transform" />
+                  </a>
+
+                  {/* Download */}
+                  {distro.homepage && (
+                    <a
+                      href={`${distro.homepage}/download`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-green-500/10 border border-transparent hover:border-green-500/30 smooth-transition group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center">
+                          <HardDrive className="w-5 h-5 text-green-500" />
+                        </div>
+                        <div>
+                          <p className="font-semibold">Download</p>
+                          <p className="text-sm text-muted-foreground">Baixar ISO</p>
+                        </div>
+                      </div>
+                      <ArrowLeft className="w-5 h-5 text-muted-foreground rotate-180 group-hover:translate-x-1 transition-transform" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </TabsContent>
+
+            {/* Reviews */}
+            <TabsContent value="reviews" className="mt-6 animate-fade-in">
+                <div className="bg-card border border-border rounded-xl p-8 text-center space-y-4">
+                    <div className="flex justify-center gap-1 text-yellow-500 mb-2">
+                        {[1,2,3,4,5].map(i => <Star key={i} className="w-6 h-6 fill-current opacity-20" />)}
+                    </div>
+                    <h3 className="text-xl font-medium">{t('features.reviews.noReviews')}</h3>
+                    <Button>{t('features.reviews.writeReview')}</Button>
+                </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
     </div>
   );
 };

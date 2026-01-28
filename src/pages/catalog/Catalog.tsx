@@ -26,7 +26,7 @@ const Catalog = () => {
   const [viewMode, setViewMode] = useLocalStorage<"list" | "grid" | "terminal">("catalog-view-mode", "list");
   const { t } = useTranslation();
 
-  // Usar hook customizado para buscar distros
+  // use custom hook to fetch distros
   const { distros, loading, error } = useDistros();
 
   const families = Array.from(new Set(distros.map((d) => d.family)));
@@ -185,8 +185,8 @@ const Catalog = () => {
             </div>
             <p className="text-sm text-gray-400">
               {loading
-                ? "Loading distros..."
-                : `total ${distros.length} Linux distributions found`}
+                ? t("catalog.loadingTerminal")
+                : t("catalog.terminal.totalFound", { count: distros.length })}
             </p>
           </div>
         ) : (
@@ -290,9 +290,9 @@ const Catalog = () => {
                 <div className="w-24 h-24 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-6">
                   <AlertCircle className="w-10 h-10 text-muted-foreground" />
                 </div>
-                <h3 className="text-xl font-bold mb-2">{t("catalog.noResultsTitle") || "Nenhuma distribuição encontrada"}</h3>
+                <h3 className="text-xl font-bold mb-2">{t("catalog.noResultsTitle")}</h3>
                 <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                  {t("catalog.noResultsDesc") || "Tente ajustar seus filtros ou busca para encontrar o que procura."}
+                  {t("catalog.noResultsDesc")}
                 </p>
                 <Button onClick={handleClearAllFilters} variant="outline">
                   {t("catalog.filters.clearAll")}
