@@ -31,6 +31,9 @@ const DistroCardGrid = ({
           <img
             src={`/logos/${distro.id}.svg`}
             alt={`${distro.name} logo`}
+            width={64}
+            height={64}
+            loading="lazy"
             className="w-16 h-16 object-contain"
             onError={(e) => {
               e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(distro.name)}&background=random&size=64`;
