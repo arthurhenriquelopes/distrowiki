@@ -4,6 +4,7 @@ import ScoreBadge from "@/components/ScoreBadge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
 import { Trophy } from "lucide-react";
+import { usePrefetchDistro } from "@/hooks/useDistroDetail";
 
 interface DistroCardGridProps {
   distro: Distro;
@@ -18,8 +19,14 @@ const DistroCardGrid = ({
   onSelectToggle,
   showCheckbox = true,
 }: DistroCardGridProps) => {
+  const prefetchDistro = usePrefetchDistro();
+
   return (
-    <div className="relative bg-card border border-border rounded-xl p-4 card-hover group flex flex-col h-[200px]">
+    <div
+      className="relative glass-card rounded-xl p-4 hover-lift group flex flex-col h-[200px]"
+      onMouseEnter={() => prefetchDistro(distro.id)}
+      onFocus={() => prefetchDistro(distro.id)}
+    >
       {showCheckbox && onSelectToggle && (
         <div className="absolute top-3 right-3 z-10" onClick={(e) => e.stopPropagation()}>
           <Checkbox checked={isSelected} onCheckedChange={onSelectToggle} className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground border-primary/50" />

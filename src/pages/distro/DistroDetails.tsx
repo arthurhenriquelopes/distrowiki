@@ -1,19 +1,19 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink, Loader2, GitCompare, HardDrive, Cpu, Zap, Copy, Check, Gamepad2, Star } from "lucide-react";
 import { MetricBar } from "@/components/comparison/MetricBar";
 import { DesktopEnvBadge } from "@/components/DesktopEnvBadge";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
-import { transformDistro } from "@/utils/apiTransform";
 import ScoreBadge from "@/components/ScoreBadge";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useComparison } from "@/contexts/ComparisonContext";
 import { useDistros } from "@/hooks/useDistros";
+import { useDistroDetail } from "@/hooks/useDistroDetail";
 import { SEO } from "@/components/SEO";
 
 import { ProposeEditModal } from "@/components/community/ProposeEditModal";
@@ -27,52 +27,13 @@ const DistroDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { replaceSelection } = useComparison();
-  const [distro, setDistro] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [compareWith, setCompareWith] = useState<string>("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { t } = useTranslation();
 
-  // Buscar distro atual
-  useEffect(() => {
-    const fetchDistro = async () => {
-      if (!id) return;
+  // Fetch via React Query (supports prefetch from catalog cards)
+  const { distro, loading, error } = useDistroDetail(id);
 
-      try {
-        setLoading(true);
-        setError(null);
-
-        const apiBase = import.meta.env.VITE_API_BASE_ || 'https://distrowiki-api.vercel.app';
-        const response = await fetch(`${apiBase}/distros/${id}`);
-
-        if (!response.ok) {
-          throw new Error(`Distribuição não encontrada`);
-        }
-
-        const data = await response.json();
-
-        const normalized = transformDistro(data);
-
-        const mappedData = {
-          ...data,
-          ...normalized,
-          package_manager: data['Package Management'] || data.package_management || data.package_manager || data.packageManager,
-          office_manager: data['Office Suite'] || data.office_suite || data.office_manager || data.officeManager,
-          rating: calculatePerformanceScore(normalized),
-        };
-
-        setDistro(mappedData);
-      } catch (err: any) {
-        console.error('Erro ao buscar distro:', err);
-        setError(err.message || 'Erro ao carregar distribuição');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDistro();
-  }, [id]);
 
   const { distros: allDistros } = useDistros();
 
@@ -98,10 +59,48 @@ const DistroDetails = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-12 min-h-screen flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="w-12 h-12 animate-spin text-primary" />
-          <p className="text-lg text-muted-foreground">{t("distroDetails.loading")}</p>
+      <div className="container mx-auto px-4 py-12 min-h-screen animate-pulse">
+        {/* Back button skeleton */}
+        <div className="h-9 w-32 bg-muted rounded-lg mb-6" />
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Sidebar skeleton */}
+          <div className="lg:col-span-1 space-y-4">
+            <div className="glass-card rounded-xl p-6 flex flex-col items-center gap-4">
+              <div className="w-24 h-24 bg-muted rounded-xl" />
+              <div className="h-6 w-40 bg-muted rounded" />
+              <div className="h-4 w-24 bg-muted rounded" />
+              <div className="h-12 w-20 bg-muted rounded-full mt-2" />
+            </div>
+            <div className="glass-card rounded-xl p-4 space-y-3">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex justify-between">
+                  <div className="h-4 w-20 bg-muted rounded" />
+                  <div className="h-4 w-28 bg-muted rounded" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Content skeleton */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="flex gap-2">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="h-10 w-28 bg-muted rounded-lg" />
+              ))}
+            </div>
+            <div className="glass-card rounded-xl p-6 space-y-4">
+              <div className="h-5 w-3/4 bg-muted rounded" />
+              <div className="h-4 w-full bg-muted rounded" />
+              <div className="h-4 w-5/6 bg-muted rounded" />
+              <div className="h-4 w-2/3 bg-muted rounded" />
+            </div>
+            <div className="glass-card rounded-xl p-6 space-y-3">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="h-8 w-full bg-muted rounded" />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     );

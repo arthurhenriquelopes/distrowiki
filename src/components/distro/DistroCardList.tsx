@@ -2,12 +2,13 @@ import { Distro } from "@/types";
 import { Link } from "react-router-dom";
 import ScoreBadge from "@/components/ScoreBadge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Calendar, Cpu, HardDrive, Rocket, Info, Trophy, RefreshCw, Clock } from "lucide-react";
+import { Calendar, Cpu, HardDrive, Rocket, Info, Trophy, RefreshCw, Clock, Eye } from "lucide-react";
 import { DesktopEnvBadge } from "@/components/DesktopEnvBadge";
 import { calculatePerformanceScore } from "@/utils/scoreCalculation";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { MetricBar } from "@/components/comparison/MetricBar";
 import { useTranslation } from "react-i18next";
+import { usePrefetchDistro } from "@/hooks/useDistroDetail";
 
 interface DistroCardListProps {
   distro: Distro;
@@ -15,6 +16,7 @@ interface DistroCardListProps {
   onSelectToggle?: () => void;
   showCheckbox?: boolean;
   showSpecs?: boolean;
+  onQuickPeek?: (distro: Distro) => void;
 }
 
 const DistroCardList = ({
@@ -23,8 +25,10 @@ const DistroCardList = ({
   onSelectToggle,
   showCheckbox = true,
   showSpecs = true,
+  onQuickPeek,
 }: DistroCardListProps) => {
   const { t } = useTranslation();
+  const prefetchDistro = usePrefetchDistro();
   const formatFamily = (family: string): string => {
     if (
       family.toLowerCase().includes("independente") ||
@@ -40,11 +44,26 @@ const DistroCardList = ({
     distro.idleRamUsage || distro.cpuScore || distro.ioScore;
 
   return (
-    <div className="relative bg-card border border-border rounded-xl p-5 card-hover group h-full flex flex-col">
+    <div
+      className="relative glass-card rounded-xl p-5 hover-lift group h-full flex flex-col"
+      onMouseEnter={() => prefetchDistro(distro.id)}
+      onFocus={() => prefetchDistro(distro.id)}
+    >
       {showCheckbox && onSelectToggle && (
         <div className="absolute top-4 right-4 z-10" onClick={(e) => e.stopPropagation()}>
           <Checkbox checked={isSelected} onCheckedChange={onSelectToggle} className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground border-primary/50" />
         </div>
+      )}
+
+      {/* Quick Peek button */}
+      {onQuickPeek && (
+        <button
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); onQuickPeek(distro); }}
+          className="absolute top-4 right-12 z-10 p-1.5 rounded-lg bg-muted/80 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all opacity-0 group-hover:opacity-100"
+          title="Quick peek"
+        >
+          <Eye className="w-4 h-4" />
+        </button>
       )}
 
       <Link to={`/distro/${distro.id}`} className="flex flex-col h-full">

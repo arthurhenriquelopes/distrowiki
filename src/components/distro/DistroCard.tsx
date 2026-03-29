@@ -10,6 +10,7 @@ interface DistroCardProps {
   showCheckbox?: boolean;
   showSpecs?: boolean;
   viewMode?: "list" | "grid" | "terminal";
+  onQuickPeek?: (distro: Distro) => void;
 }
 
 const DistroCard = ({
@@ -19,6 +20,7 @@ const DistroCard = ({
   showCheckbox = true,
   showSpecs = true,
   viewMode = "list",
+  onQuickPeek,
 }: DistroCardProps) => {
   if (viewMode === "terminal") {
     return (
@@ -49,6 +51,7 @@ const DistroCard = ({
       onSelectToggle={onSelectToggle}
       showCheckbox={showCheckbox}
       showSpecs={showSpecs}
+      onQuickPeek={onQuickPeek}
     />
   );
 };

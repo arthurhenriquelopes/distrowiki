@@ -55,8 +55,8 @@ jobs:
           
       - name: 🎭 Instalar Playwright (para Scrapling StealthyFetcher)
         run: |
-          playwright install chromium
-          playwright install-deps chromium
+          python -m playwright install chromium
+          python -m playwright install-deps chromium
           
       - name: 🔍 Scraping diário de metadados
         env:

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import DistroCard from "@/components/distro/DistroCard";
@@ -15,6 +15,8 @@ import { Link } from "react-router-dom";
 import { GitCompare, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { SEO } from "@/components/SEO";
+import QuickPeekModal from "@/components/distro/QuickPeekModal";
+import type { Distro } from "@/types";
 
 const Catalog = () => {
   const { selectedDistros, addDistro, removeDistro, isSelected } = useComparison();
@@ -28,6 +30,11 @@ const Catalog = () => {
 
   // use custom hook to fetch distros
   const { distros, loading, error } = useDistros();
+  const [peekDistro, setPeekDistro] = useState<Distro | null>(null);
+
+  const handleQuickPeek = useCallback((distro: Distro) => {
+    setPeekDistro(distro);
+  }, []);
 
   const families = Array.from(new Set(distros.map((d) => d.family)));
   const allDEs = Array.from(
@@ -273,8 +280,13 @@ const Catalog = () => {
               }`}
           >
             {filteredAndSortedDistros.length > 0 ? (
-              filteredAndSortedDistros.map((distro) => (
-                <motion.div key={distro.id}>
+              filteredAndSortedDistros.map((distro, index) => (
+                <motion.div
+                  key={distro.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: Math.min(index * 0.03, 0.6) }}
+                >
                   <DistroCard
                     distro={distro}
                     isSelected={isSelected(distro.id)}
@@ -282,6 +294,7 @@ const Catalog = () => {
                     showCheckbox={true}
                     showSpecs={showSpecs}
                     viewMode={viewMode}
+                    onQuickPeek={handleQuickPeek}
                   />
                 </motion.div>
               ))
@@ -313,6 +326,13 @@ const Catalog = () => {
           )}
         </>
       )}
+
+      {/* Quick Peek Modal */}
+      <QuickPeekModal
+        distro={peekDistro}
+        isOpen={!!peekDistro}
+        onClose={() => setPeekDistro(null)}
+      />
     </div>
   );
 };
