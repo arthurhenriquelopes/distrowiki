@@ -32,5 +32,6 @@ export const DistroSelect = ({ value, onValueChange, distros, excludeId, label, 
           ))}
       </SelectContent>
     </Select>
-  </div>
-);
+    </div>
+  );
+};
