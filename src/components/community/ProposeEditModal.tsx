@@ -15,12 +15,22 @@ import {
 } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
 
+import { useTranslation } from 'react-i18next'
+
 interface ProposeEditModalProps {
     isOpen: boolean
     onClose: () => void
     distroName: string
     // Optional: fields available?
 }
+
+export function ProposeEditModal({ isOpen, onClose, distroName }: ProposeEditModalProps) {
+    const { t } = useTranslation()
+    const { user, openLoginModal } = useAuth()
+    const [field, setField] = useState('')
+    const [newValue, setNewValue] = useState('')
+    const [loading, setLoading] = useState(false)
+    const { toast } = useToast()
 
     const EDITABLE_FIELDS = [
         { value: 'description', label: t('features.edit.modal.fields.description') },
@@ -33,6 +43,8 @@ interface ProposeEditModalProps {
         { value: 'desktop', label: t('features.edit.modal.fields.desktop') },
         { value: 'requirements', label: t('features.edit.modal.fields.requirements') },
     ]
+
+    if (!isOpen) return null
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
