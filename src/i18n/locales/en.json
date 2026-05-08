@@ -250,7 +250,9 @@
             "title": "Screenshot Gallery"
         },
         "hardware": {
-            "title": "Recommended Hardware"
+            "title": "Recommended Hardware",
+            "ssd": "SATA/NVMe SSD",
+            "ram": "RAM Memory"
         },
         "edit": {
             "title": "Propose Edit",
@@ -281,6 +283,15 @@
             }
         },
         "reviews": {
+            "title": "Community Reviews",
+            "noReviews": "No reviews yet. Be the first!",
+            "writeReview": "Write a review"
+        },
+        "gaming": {
+            "ready": "Ready for Gaming",
+            "description": "Drivers and Steam support included."
+        }
+    },
     "comparison": {
         "title": "Distro Comparison",
         "comparing": "Comparing {{count}} distributions side by side",

@@ -384,7 +384,9 @@
             "title": "Galeria de Screenshots"
         },
         "hardware": {
-            "title": "Hardware Recomendado"
+            "title": "Hardware Recomendado",
+            "ssd": "SSD SATA/NVMe",
+            "ram": "Memória RAM"
         },
         "edit": {
             "title": "Sugerir Edição",
@@ -422,12 +424,8 @@
         "gaming": {
             "ready": "Pronto para Jogos",
             "description": "Drivers e suporte Steam inclusos."
-        },
-        "hardware": {
-            "title": "Hardware Recomendado",
-            "ssd": "SSD SATA/NVMe",
-            "ram": "Memória RAM"
-        },
+        }
+    },
         "edit": "Sugerir Edição"
     }
 }
