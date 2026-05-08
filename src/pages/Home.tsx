@@ -22,7 +22,7 @@ const Home = () => {
   const { replaceSelection } = useComparison();
   const [distro1, setDistro1] = useState<string>("");
   const [distro2, setDistro2] = useState<string>("");
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { STATS, BENEFITS, HOW_IT_WORKS_STEPS } = useHomeContent();
 
   const { distros, loading } = useDistros();
@@ -95,11 +95,11 @@ const Home = () => {
           variants={stagger}
         >
           <motion.h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold flex flex-col items-center justify-center gap-0" variants={fadeIn}>
-            <div className="relative -mb-16 md:-mb-24 z-10">
+            <div className="relative -mb-8 sm:-mb-16 md:-mb-24 z-10">
               <img
                 src="/newlogo.png"
                 alt="DistroWiki Logo"
-                className="h-[18vh] sm:h-[22vh] md:h-[30vh] lg:h-[32vh] w-auto object-contain relative z-10 translate-y-2 md:translate-y-4"
+                className="h-[18vh] sm:h-[22vh] md:h-[30vh] lg:h-[32vh] w-auto object-contain relative z-10 translate-y-1 sm:translate-y-2 md:translate-y-4"
               />
             </div>
             <div className="flex items-baseline z-20">
@@ -117,21 +117,21 @@ const Home = () => {
               {t("home.description")}
             </motion.p>
 
-            <motion.div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center items-center pt-0 px-4 sm:px-0" variants={fadeIn}>
-              <Link to="/catalogo">
-                <Button size="lg" className="h-12 px-8 text-lg font-semibold transition-colors duration-300">
+            <motion.div className="flex flex-col sm:flex-row gap-4 sm:gap-4 justify-center items-center pt-6 sm:pt-0 px-4 sm:px-0 w-full max-w-sm mx-auto sm:max-w-none" variants={fadeIn}>
+              <Link to="/catalogo" className="w-full sm:w-auto">
+                <Button size="lg" className="w-full h-12 px-8 text-lg font-bold transition-colors duration-300">
                   {t("home.exploreCatalog")}
                 </Button>
               </Link>
-              <Link to="/quiz">
-                <Button variant="outline" size="lg" className="h-12 px-8 text-lg font-semibold">
+              <Link to="/quiz" className="w-full sm:w-auto">
+                <Button variant="outline" size="lg" className="w-full h-12 px-8 text-lg font-bold">
                   {t("quiz.start")}
                 </Button>
               </Link>
               <Button
-                size="default"
+                size="lg"
                 variant="outline"
-                className="w-full sm:w-auto text-sm sm:text-base px-4 sm:px-8 h-10 sm:h-11 border-2"
+                className="w-full sm:w-auto h-12 px-8 text-lg font-bold border-2"
                 onClick={() => document.getElementById('compare-section')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 {t("home.compareNow")}
@@ -269,7 +269,7 @@ const Home = () => {
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                     {/* Ranking Badge */}
-                    <div className={`absolute top-0 right-0 p-3 rounded-bl-xl font-bold flex flex-col items-center justify-center min-w-[50px] shadow-sm z-10 ${index === 0 ? 'bg-yellow-500/10 text-yellow-600 border-l border-b border-yellow-500/20' :
+                    <div className={`absolute top-0 right-0 p-3 rounded-none font-bold flex flex-col items-center justify-center min-w-[50px] shadow-sm z-10 ${index === 0 ? 'bg-yellow-500/10 text-yellow-600 border-l border-b border-yellow-500/20' :
                       index === 1 ? 'bg-slate-300/10 text-slate-500 border-l border-b border-slate-300/20' :
                         'bg-amber-600/10 text-amber-700 border-l border-b border-amber-600/20'
                       }`}>
@@ -283,7 +283,7 @@ const Home = () => {
                         <img
                           src={distro.logo}
                           alt={`${distro.name} logo`}
-                          className="w-16 h-16 object-contain relative z-10 drop-shadow-md group-hover:drop-  transition-colors"
+                          className="w-16 h-16 object-contain relative z-10 drop-shadow-md group-hover:drop-shadow-none transition-colors"
                         />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -322,8 +322,8 @@ const Home = () => {
                           {distro.category || "Desktop"}
                         </span>
                         {distro.lastRelease && (
-                          <span className="text-xs px-2.5 py-1 rounded-none bg-muted text-muted-foreground border border-border">
-                            Updated: {new Date(distro.lastRelease).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}
+                          <span className="text-xs px-2.5 py-1 rounded-none bg-background/50 text-primary border border-primary/20 font-bold uppercase tracking-tighter">
+                            {t("catalog.card.updatedAt")}: {new Date(distro.lastRelease).toLocaleDateString(i18n.language, { month: 'short', year: 'numeric' })}
                           </span>
                         )}
                       </div>

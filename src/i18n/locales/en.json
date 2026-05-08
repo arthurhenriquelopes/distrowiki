@@ -25,7 +25,8 @@
             "secondDistro": "Second Distro",
             "selectFirst": "Select first Linux distribution to compare",
             "selectSecond": "Select second Linux distribution to compare",
-            "compareButton": "Compare Distros"
+            "compareButton": "Compare Distros",
+            "placeholder": "Choose a distro..."
         },
         "featured": "Featured Distributions",
         "benefits": {
@@ -141,17 +142,14 @@
                 }
             },
             "howWeScore": {
-                "title": "How we score",
-                "intro": "The performance score is calculated based on three main metrics:",
-                "ram": "Idle RAM usage - the lower, the better for machines with limited resources.",
-                "cpu": "Processor performance score measured via standardized benchmark.",
-                "io": "Disk read/write speed, important for boot and package installation.",
-                "disclaimer": "⚠️ Important: Scores are just a metric and should not be the only factor in your decision. Also consider community, documentation, ease of use, and your specific use cases.",
-                "performance": "<strong>Performance (30%):</strong> Idle RAM, CPU and I/O benchmarks",
-                "stability": "<strong>Stability (25%):</strong> Critical bug frequency, LTS support",
-                "usability": "<strong>Usability (20%):</strong> Ease of installation and configuration",
-                "community": "<strong>Community (15%):</strong> Size, activity, and support quality",
-                "updates": "<strong>Updates (10%):</strong> Update frequency and package versions"
+                "title": "How we calculate the Score",
+                "intro": "Our system combines DistroWatch data with technical metrics to create a fair and transparent score:",
+                "rank": "Popularity on DistroWatch (55% weight) - the lower the rank, the higher the base score",
+                "ram": "Idle memory usage - lighter distros earn more points",
+                "cpu": "Processor performance benchmark",
+                "io": "Disk read/write speed",
+                "fresh": "Distros with recent releases are valued",
+                "disclaimer": "⚠️ Important: The score is a reference, not an absolute truth. The best distro is the one that meets your specific needs."
             },
             "limitations": {
                 "title": "Limitations and Transparency",
@@ -170,6 +168,7 @@
                 "typescript": "Type safety",
                 "vite": "Build & Dev Server",
                 "tailwind": "Styling",
+                "rust": "Backend logic & Performance",
                 "framer": "Animations",
                 "vercel": "Hosting"
             }
@@ -235,7 +234,9 @@
             "sortScore": "Score (highest)",
             "sortName": "Name (A-Z)",
             "sortRelease": "Release (recent)",
-            "clearAll": "Clear filters"
+            "clearAll": "Clear filters",
+            "showSpecs": "Show Specs",
+            "hideSpecs": "Hide Specs"
         },
         "card": {
             "rolling": "Rolling Release",
@@ -244,6 +245,42 @@
             "dateUnavailable": "Date unavailable"
         }
     },
+    "features": {
+        "gallery": {
+            "title": "Screenshot Gallery"
+        },
+        "hardware": {
+            "title": "Recommended Hardware"
+        },
+        "edit": {
+            "title": "Propose Edit",
+            "modal": {
+                "title": "Propose Edit",
+                "field": "Field",
+                "selectField": "Select field to edit",
+                "newValue": "New Value",
+                "placeholder": "Type the correct information...",
+                "cancel": "Cancel",
+                "submit": "Submit Proposal",
+                "submitting": "Submitting...",
+                "successTitle": "Proposal sent!",
+                "successDesc": "Your suggestion will be reviewed by an admin.",
+                "errorTitle": "Error submitting",
+                "errorDesc": "Please try again later.",
+                "fields": {
+                    "description": "Description",
+                    "homepage": "Official Website",
+                    "logo": "Logo URL",
+                    "based_on": "Based on",
+                    "category": "Category",
+                    "origin": "Origin",
+                    "architecture": "Architecture",
+                    "desktop": "Desktop Environment",
+                    "requirements": "System Requirements"
+                }
+            }
+        },
+        "reviews": {
     "comparison": {
         "title": "Distro Comparison",
         "comparing": "Comparing {{count}} distributions side by side",

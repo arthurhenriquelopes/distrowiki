@@ -76,6 +76,7 @@ const About = () => {
   const techStack = [
     { name: "React", description: t("about.techStack.items.react") },
     { name: "TypeScript", description: t("about.techStack.items.typescript") },
+    { name: "Rust", description: t("about.techStack.items.rust") },
     { name: "Vite", description: t("about.techStack.items.vite") },
     { name: "Tailwind CSS", description: t("about.techStack.items.tailwind") },
     { name: "Framer Motion", description: t("about.techStack.items.framer") },
@@ -155,36 +156,35 @@ const About = () => {
       {/* How It Works */}
       <section className="mb-16">
         <div className="bg-card border border-border rounded-none p-8 max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold mb-6">Como Calculamos o Score</h2>
+          <h2 className="text-2xl font-bold mb-6">{t("about.methodology.howWeScore.title")}</h2>
           <div className="space-y-4 text-muted-foreground">
             <p>
-              Nosso sistema combina <strong>dados do DistroWatch</strong> com <strong>métricas técnicas</strong> para criar uma pontuação justa e transparente:
+              {t("about.methodology.howWeScore.intro")}
             </p>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
-                <span className="bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded text-sm font-mono">RANK</span>
-                <span>Popularidade no DistroWatch (55% do peso) - quanto menor o rank, maior a pontuação base</span>
+                <span className="bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded-none text-sm font-mono">RANK</span>
+                <span>{t("about.methodology.howWeScore.rank")}</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="bg-primary/20 text-primary px-2 py-1 rounded text-sm font-mono">RAM</span>
-                <span>Uso de memória em idle - distros mais leves ganham mais pontos</span>
+                <span className="bg-primary/20 text-primary px-2 py-1 rounded-none text-sm font-mono">RAM</span>
+                <span>{t("about.methodology.howWeScore.ram")}</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="bg-primary/20 text-primary px-2 py-1 rounded text-sm font-mono">CPU</span>
-                <span>Benchmark de desempenho do processador</span>
+                <span className="bg-primary/20 text-primary px-2 py-1 rounded-none text-sm font-mono">CPU</span>
+                <span>{t("about.methodology.howWeScore.cpu")}</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="bg-primary/20 text-primary px-2 py-1 rounded text-sm font-mono">I/O</span>
-                <span>Velocidade de leitura/escrita em disco</span>
+                <span className="bg-primary/20 text-primary px-2 py-1 rounded-none text-sm font-mono">I/O</span>
+                <span>{t("about.methodology.howWeScore.io")}</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="bg-green-500/20 text-green-500 px-2 py-1 rounded text-sm font-mono">FRESH</span>
-                <span>Distros com lançamentos recentes são valorizadas</span>
+                <span className="bg-green-500/20 text-green-500 px-2 py-1 rounded-none text-sm font-mono">FRESH</span>
+                <span>{t("about.methodology.howWeScore.fresh")}</span>
               </li>
             </ul>
             <p className="text-sm bg-warning/10 border border-warning/20 rounded-none p-4 mt-4">
-              <strong className="text-warning">⚠️ Importante:</strong> O score é uma referência, não uma verdade absoluta.
-              A melhor distro é aquela que atende suas necessidades específicas.
+              {t("about.methodology.howWeScore.disclaimer")}
             </p>
           </div>
         </div>

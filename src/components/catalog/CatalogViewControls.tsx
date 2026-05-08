@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, LayoutGrid, LayoutList, Terminal } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface CatalogViewControlsProps {
   showSpecs: boolean;
@@ -14,6 +15,8 @@ const CatalogViewControls = ({
   viewMode,
   setViewMode,
 }: CatalogViewControlsProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="flex items-center gap-3">
       <Button
@@ -24,7 +27,7 @@ const CatalogViewControls = ({
       >
         {showSpecs ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
         <span className="hidden sm:inline">
-          {showSpecs ? "Ocultar" : "Mostrar"} Specs
+          {showSpecs ? t("catalog.filters.hideSpecs") : t("catalog.filters.showSpecs")}
         </span>
       </Button>
 

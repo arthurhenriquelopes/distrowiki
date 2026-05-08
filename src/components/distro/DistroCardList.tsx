@@ -31,10 +31,20 @@ const DistroCardList = ({
   const prefetchDistro = usePrefetchDistro();
 
   const formatDate = (dateStr: string | undefined) => {
-    if (!dateStr) return t('catalog.card.dateUnavailable');
+    if (!dateStr || dateStr === "N/A") return t('catalog.card.dateUnavailable');
     const date = new Date(dateStr);
-    if (isNaN(date.getTime())) return t('catalog.card.dateUnavailable');
-    return `${t('catalog.card.updatedAt')} ${date.toLocaleDateString(i18n.language)}`;
+    if (isNaN(date.getTime()) || date.getTime() === 0) return t('catalog.card.dateUnavailable');
+    
+    try {
+      const formattedDate = date.toLocaleDateString(i18n.language, { 
+        month: 'short', 
+        year: 'numeric' 
+      });
+      if (formattedDate.toLowerCase().includes("invalid")) return t('catalog.card.dateUnavailable');
+      return `${t('catalog.card.updatedAt')} ${formattedDate}`;
+    } catch (e) {
+      return t('catalog.card.dateUnavailable');
+    }
   };
   const formatFamily = (family: string): string => {
     if (
@@ -242,7 +252,7 @@ const DistroCardList = ({
         )}
 
         <div className="flex items-center justify-between gap-3 mt-auto pt-3 border-t border-border">
-          <div className="flex items-center text-[10px] text-foreground font-bold gap-1.5 min-w-0 bg-muted px-2 py-1 border border-border">
+          <div className="flex items-center text-[10px] text-primary font-bold gap-1.5 min-w-0 bg-background/50 px-2 py-1 border border-primary/20">
             <Clock className="w-3 h-3 flex-shrink-0" />
             <span className="truncate uppercase tracking-tighter">
               {formatDate(distro.lastRelease)}

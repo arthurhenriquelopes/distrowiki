@@ -25,7 +25,8 @@
             "secondDistro": "Segunda Distro",
             "selectFirst": "Selecionar primeira distribuição Linux para comparar",
             "selectSecond": "Selecionar segunda distribuição Linux para comparar",
-            "compareButton": "Comparar Distros"
+            "compareButton": "Comparar Distros",
+            "placeholder": "Escolha uma distro..."
         },
         "featured": "Distribuições em Destaque",
         "benefits": {
@@ -141,17 +142,14 @@
                 }
             },
             "howWeScore": {
-                "title": "Como pontuamos",
-                "intro": "O score de performance é calculado com base em três métricas principais:",
-                "ram": "Uso de memória RAM em idle - quanto menor, melhor para máquinas com recursos limitados.",
-                "cpu": "Score de desempenho do processador medido via benchmark padronizado.",
-                "io": "Velocidade de leitura/escrita em disco, importante para boot e instalação de pacotes.",
-                "disclaimer": "⚠️ Importante: Os scores são apenas uma métrica e não devem ser o único fator na sua decisão. Considere também a comunidade, documentação, facilidade de uso e seus casos de uso específicos.",
-                "performance": "<strong>Desempenho (30%):</strong> RAM idle, CPU e I/O benchmarks",
-                "stability": "<strong>Estabilidade (25%):</strong> Frequência de bugs críticos, suporte LTS",
-                "usability": "<strong>Usabilidade (20%):</strong> Facilidade de instalação e configuração",
-                "community": "<strong>Comunidade (15%):</strong> Tamanho, atividade e qualidade do suporte",
-                "updates": "<strong>Atualização (10%):</strong> Frequência de updates e versões de pacotes"
+                "title": "Como Calculamos o Score",
+                "intro": "Nosso sistema combina dados do DistroWatch com métricas técnicas para criar uma pontuação justa e transparente:",
+                "rank": "Popularity on DistroWatch (55% do peso) - quanto menor o rank, maior a pontuação base",
+                "ram": "Uso de memória em idle - distros mais leves ganham mais pontos",
+                "cpu": "Benchmark de desempenho do processador",
+                "io": "Velocidade de leitura/escrita em disco",
+                "fresh": "Distros com lançamentos recentes são valorizadas",
+                "disclaimer": "⚠️ Importante: O score é uma referência, não uma verdade absoluta. A melhor distro é aquela que atende suas necessidades específicas."
             },
             "limitations": {
                 "title": "Limitações e Transparência",
@@ -170,6 +168,7 @@
                 "typescript": "Tipagem segura",
                 "vite": "Build & Dev Server",
                 "tailwind": "Estilização",
+                "rust": "Backend & Performance",
                 "framer": "Animações",
                 "vercel": "Hospedagem"
             }
@@ -236,7 +235,9 @@
             "sortScore": "Score (maior)",
             "sortName": "Nome (A-Z)",
             "sortRelease": "Lançamento (recente)",
-            "clearAll": "Limpar filtros"
+            "clearAll": "Limpar filtros",
+            "showSpecs": "Mostrar Specs",
+            "hideSpecs": "Esconder Specs"
         },
         "card": {
             "rolling": "Rolling Release",
@@ -381,6 +382,37 @@
         },
         "gallery": {
             "title": "Galeria de Screenshots"
+        },
+        "hardware": {
+            "title": "Hardware Recomendado"
+        },
+        "edit": {
+            "title": "Sugerir Edição",
+            "modal": {
+                "title": "Sugerir Edição",
+                "field": "Campo",
+                "selectField": "Selecione o campo para editar",
+                "newValue": "Novo Valor",
+                "placeholder": "Digite a informação correta...",
+                "cancel": "Cancelar",
+                "submit": "Enviar Sugestão",
+                "submitting": "Enviando...",
+                "successTitle": "Proposta enviada!",
+                "successDesc": "Sua sugestão será revisada por um administrador.",
+                "errorTitle": "Erro ao enviar",
+                "errorDesc": "Tente novamente mais tarde.",
+                "fields": {
+                    "description": "Descrição",
+                    "homepage": "Website Oficial",
+                    "logo": "URL do Logo",
+                    "based_on": "Baseado em",
+                    "category": "Categoria",
+                    "origin": "Origem",
+                    "architecture": "Arquitetura",
+                    "desktop": "Ambiente Desktop",
+                    "requirements": "Requisitos de Sistema"
+                }
+            }
         },
         "reviews": {
             "title": "Avaliações da Comunidade",

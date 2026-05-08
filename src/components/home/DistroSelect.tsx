@@ -1,4 +1,5 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useTranslation } from "react-i18next";
 
 interface DistroSelectProps {
   value: string;
@@ -9,13 +10,15 @@ interface DistroSelectProps {
   ariaLabel: string;
 }
 
-export const DistroSelect = ({ value, onValueChange, distros, excludeId, label, ariaLabel }: DistroSelectProps) => (
-  <div>
-    <label className="block text-sm font-medium mb-2 text-foreground">{label}</label>
-    <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger className="h-12 bg-background border-2 border-border hover:border-primary transition-colors" aria-label={ariaLabel}>
-        <SelectValue placeholder="Escolha uma distro..." />
-      </SelectTrigger>
+export const DistroSelect = ({ value, onValueChange, distros, excludeId, label, ariaLabel }: DistroSelectProps) => {
+  const { t } = useTranslation();
+  return (
+    <div>
+      <label className="block text-sm font-medium mb-2 text-foreground">{label}</label>
+      <Select value={value} onValueChange={onValueChange}>
+        <SelectTrigger className="h-12 bg-background border-2 border-border hover:border-primary transition-colors" aria-label={ariaLabel}>
+          <SelectValue placeholder={t("home.quickCompare.placeholder")} />
+        </SelectTrigger>
       <SelectContent className="max-h-[300px]">
         {distros
           .filter(d => d.id !== excludeId)

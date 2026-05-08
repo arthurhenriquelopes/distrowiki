@@ -22,26 +22,17 @@ interface ProposeEditModalProps {
     // Optional: fields available?
 }
 
-const EDITABLE_FIELDS = [
-    { value: 'description', label: 'Descrição' },
-    { value: 'homepage', label: 'Website Oficial' },
-    { value: 'logo', label: 'URL do Logo' },
-    { value: 'based_on', label: 'Baseado em' },
-    { value: 'category', label: 'Categoria' },
-    { value: 'origin', label: 'Origem' },
-    { value: 'architecture', label: 'Arquitetura' },
-    { value: 'desktop', label: 'Ambiente Desktop' },
-    { value: 'requirements', label: 'Requisitos de Sistema' },
-]
-
-export function ProposeEditModal({ isOpen, onClose, distroName }: ProposeEditModalProps) {
-    const { user, openLoginModal } = useAuth()
-    const [field, setField] = useState('')
-    const [newValue, setNewValue] = useState('')
-    const [loading, setLoading] = useState(false)
-    const { toast } = useToast()
-
-    if (!isOpen) return null
+    const EDITABLE_FIELDS = [
+        { value: 'description', label: t('features.edit.modal.fields.description') },
+        { value: 'homepage', label: t('features.edit.modal.fields.homepage') },
+        { value: 'logo', label: t('features.edit.modal.fields.logo') },
+        { value: 'based_on', label: t('features.edit.modal.fields.based_on') },
+        { value: 'category', label: t('features.edit.modal.fields.category') },
+        { value: 'origin', label: t('features.edit.modal.fields.origin') },
+        { value: 'architecture', label: t('features.edit.modal.fields.architecture') },
+        { value: 'desktop', label: t('features.edit.modal.fields.desktop') },
+        { value: 'requirements', label: t('features.edit.modal.fields.requirements') },
+    ]
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -66,16 +57,16 @@ export function ProposeEditModal({ isOpen, onClose, distroName }: ProposeEditMod
             if (!res.ok) throw new Error("Failed to submit")
 
             toast({
-                title: "Proposta enviada!",
-                description: "Sua sugestão será revisada por um administrador.",
+                title: t('features.edit.modal.successTitle'),
+                description: t('features.edit.modal.successDesc'),
             })
             onClose()
             setField('')
             setNewValue('')
         } catch (error) {
             toast({
-                title: "Erro ao enviar",
-                description: "Tente novamente mais tarde.",
+                title: t('features.edit.modal.errorTitle'),
+                description: t('features.edit.modal.errorDesc'),
                 variant: "destructive"
             })
         } finally {
@@ -87,7 +78,7 @@ export function ProposeEditModal({ isOpen, onClose, distroName }: ProposeEditMod
         <div className="fixed inset-0 bg-black/50  -sm z-50 flex items-center justify-center p-4">
             <div className="bg-card w-full max-w-md rounded-none border border-border   animate-in fade-in zoom-in duration-200">
                 <div className="flex items-center justify-between p-6 border-b border-border">
-                    <h2 className="text-xl font-semibold">Sugerir Edição</h2>
+                    <h2 className="text-xl font-semibold">{t('features.edit.modal.title')}</h2>
                     <button onClick={onClose} className="text-muted-foreground hover:text-foreground">
                         <X size={20} />
                     </button>
@@ -95,10 +86,10 @@ export function ProposeEditModal({ isOpen, onClose, distroName }: ProposeEditMod
 
                 <form onSubmit={handleSubmit} className="p-6 space-y-4">
                     <div className="space-y-2">
-                        <Label>Campo</Label>
+                        <Label>{t('features.edit.modal.field')}</Label>
                         <Select onValueChange={setField} required>
                             <SelectTrigger>
-                                <SelectValue placeholder="Selecione o campo para editar" />
+                                <SelectValue placeholder={t('features.edit.modal.selectField')} />
                             </SelectTrigger>
                             <SelectContent>
                                 {EDITABLE_FIELDS.map(f => (
@@ -109,20 +100,19 @@ export function ProposeEditModal({ isOpen, onClose, distroName }: ProposeEditMod
                     </div>
 
                     <div className="space-y-2">
-                        <Label>Novo Valor</Label>
-                        <Textarea
+                        <Label>{t('features.edit.modal.newValue')}</Label>
+                        <Input
                             value={newValue}
                             onChange={(e) => setNewValue(e.target.value)}
-                            placeholder="Digite a informação correta..."
-                            className="resize-none h-32"
+                            placeholder={t('features.edit.modal.placeholder')}
                             required
                         />
                     </div>
 
                     <div className="flex justify-end gap-2 pt-2">
-                        <Button type="button" variant="ghost" onClick={onClose}>Cancelar</Button>
+                        <Button type="button" variant="ghost" onClick={onClose}>{t('features.edit.modal.cancel')}</Button>
                         <Button type="submit" disabled={loading}>
-                            {loading ? 'Enviando...' : 'Enviar Sugestão'}
+                            {loading ? t('features.edit.modal.submitting') : t('features.edit.modal.submit')}
                         </Button>
                     </div>
                 </form>

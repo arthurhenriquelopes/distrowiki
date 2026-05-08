@@ -61,8 +61,8 @@ const CatalogFilters = ({
       </div>
 
       {/* Selects Compactos */}
-      <div className="flex flex-wrap gap-3">
-        <div className="min-w-[140px] max-w-[200px] flex-1">
+      <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3">
+        <div className="w-full sm:w-auto sm:min-w-[140px] sm:max-w-[200px]">
           <label className="text-xs font-medium mb-1.5 block text-muted-foreground">
             {t("catalog.filters.family")}
           </label>
@@ -84,7 +84,7 @@ const CatalogFilters = ({
           </Select>
         </div>
 
-        <div className="min-w-[140px] max-w-[200px] flex-1">
+        <div className="w-full sm:w-auto sm:min-w-[140px] sm:max-w-[200px]">
           <label className="text-xs font-medium mb-1.5 block text-muted-foreground">
             {t("catalog.filters.de")}
           </label>
@@ -106,7 +106,7 @@ const CatalogFilters = ({
           </Select>
         </div>
 
-        <div className="min-w-[140px] max-w-[200px] flex-1">
+        <div className="w-full sm:w-auto sm:min-w-[140px] sm:max-w-[200px]">
           <label className="text-xs font-medium mb-1.5 block text-muted-foreground">
             {t("catalog.filters.sortBy")}
           </label>

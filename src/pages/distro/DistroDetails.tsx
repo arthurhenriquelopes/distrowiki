@@ -242,7 +242,7 @@ const DistroDetails = () => {
 
               <Button variant="outline" className="w-full gap-2" onClick={() => setIsEditModalOpen(true)}>
                 <Edit3 className="w-4 h-4" />
-                Sugerir Edição
+                {t("features.edit.title")}
               </Button>
 
               <ProposeEditModal
@@ -332,11 +332,6 @@ const DistroDetails = () => {
               )}
 
               <ScreenshotGallery distro={distro} />
-
-              <section className="bg-card border border-border rounded-none p-6">
-                  <h3 className="text-xl font-bold mb-4">{t('features.terminal.title')}</h3>
-                  <TerminalSim distro={distro} />
-              </section>
             </TabsContent>
 
             {/* Performance */}
