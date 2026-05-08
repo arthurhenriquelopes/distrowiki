@@ -300,7 +300,7 @@ const Catalog = () => {
               ))
             ) : (
               <div className="col-span-full py-16 text-center">
-                <div className="w-24 h-24 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <div className="w-24 h-24 bg-muted/50 rounded-none flex items-center justify-center mx-auto mb-6">
                   <AlertCircle className="w-10 h-10 text-muted-foreground" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">{t("catalog.noResultsTitle")}</h3>
@@ -317,7 +317,7 @@ const Catalog = () => {
           {selectedDistros.length >= 2 && (
             <motion.div className="fixed bottom-8 right-8 z-50">
               <Link to={`/comparacao/${selectedDistros.map(d => d.id).join('+')}`}>
-                <Button size="lg" className="shadow-2xl gap-2">
+                <Button size="lg" className="  gap-2">
                   <GitCompare className="w-5 h-5" />
                   {t("catalog.compare", { count: selectedDistros.length })}
                 </Button>

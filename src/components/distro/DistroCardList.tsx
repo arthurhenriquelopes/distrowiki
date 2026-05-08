@@ -27,8 +27,15 @@ const DistroCardList = ({
   showSpecs = true,
   onQuickPeek,
 }: DistroCardListProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const prefetchDistro = usePrefetchDistro();
+
+  const formatDate = (dateStr: string | undefined) => {
+    if (!dateStr) return t('catalog.card.dateUnavailable');
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return t('catalog.card.dateUnavailable');
+    return `${t('catalog.card.updatedAt')} ${date.toLocaleDateString(i18n.language)}`;
+  };
   const formatFamily = (family: string): string => {
     if (
       family.toLowerCase().includes("independente") ||
@@ -45,13 +52,13 @@ const DistroCardList = ({
 
   return (
     <div
-      className="relative glass-card rounded-xl p-5 hover-lift group h-full flex flex-col"
+      className="relative glass-card p-5 group h-full flex flex-col border border-border"
       onMouseEnter={() => prefetchDistro(distro.id)}
       onFocus={() => prefetchDistro(distro.id)}
     >
       {showCheckbox && onSelectToggle && (
         <div className="absolute top-4 right-4 z-10" onClick={(e) => e.stopPropagation()}>
-          <Checkbox checked={isSelected} onCheckedChange={onSelectToggle} className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground border-primary/50" />
+          <Checkbox checked={isSelected} onCheckedChange={onSelectToggle} className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground border-primary/50 rounded-none" />
         </div>
       )}
 
@@ -59,7 +66,7 @@ const DistroCardList = ({
       {onQuickPeek && (
         <button
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); onQuickPeek(distro); }}
-          className="absolute top-4 right-12 z-10 p-1.5 rounded-lg bg-muted/80 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all opacity-0 group-hover:opacity-100"
+          className="absolute top-4 right-12 z-10 p-1.5 bg-muted text-foreground hover:bg-primary hover:text-primary-foreground transition-colors opacity-0 group-hover:opacity-100 border border-border"
           title="Quick peek"
         >
           <Eye className="w-4 h-4" />
@@ -74,7 +81,7 @@ const DistroCardList = ({
             width={64}
             height={64}
             loading="lazy"
-            className="w-16 h-16 object-contain flex-shrink-0"
+            className="w-16 h-16 object-contain flex-shrink-0 grayscale group-hover:grayscale-0 transition-colors"
             onError={(e) => {
               e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
                 distro.name
@@ -88,11 +95,11 @@ const DistroCardList = ({
               </h3>
               {(distro.popularityRank || distro.ranking) && (distro.popularityRank || distro.ranking) <= 100 && (
                 <span
-                  className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold ${(distro.popularityRank || distro.ranking) <= 10
-                    ? 'bg-yellow-500/20 text-yellow-400'
+                  className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-bold border ${(distro.popularityRank || distro.ranking) <= 10
+                    ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'
                     : (distro.popularityRank || distro.ranking) <= 30
-                      ? 'bg-emerald-500/20 text-emerald-400'
-                      : 'bg-primary/20 text-primary'
+                      ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
+                      : 'bg-primary/10 text-primary border-primary/20'
                     }`}
                   title="DistroWatch Ranking"
                 >
@@ -101,13 +108,13 @@ const DistroCardList = ({
                 </span>
               )}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground font-mono">
               {formatFamily(distro.family)}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 mb-3 text-xs text-muted-foreground">
+        <div className="flex items-center gap-3 mb-3 text-xs text-muted-foreground font-mono">
           {distro.category && (
             <div className="flex items-center gap-1">
               <Rocket className="w-3.5 h-3.5" />
@@ -134,10 +141,10 @@ const DistroCardList = ({
         {distro.desktopEnvironments && distro.desktopEnvironments.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-3">
             {distro.desktopEnvironments.slice(0, 3).map((de) => (
-              <DesktopEnvBadge key={de} name={de} size="sm" />
+              <DesktopEnvBadge key={de} name={de} size="sm" className="rounded-none border-border" />
             ))}
             {distro.desktopEnvironments.length > 3 && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-medium bg-muted/50 text-muted-foreground border border-border/50">
+              <span className="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-muted text-muted-foreground border border-border">
                 +{distro.desktopEnvironments.length - 3}
               </span>
             )}
@@ -226,7 +233,7 @@ const DistroCardList = ({
                 <span className="text-xs text-muted-foreground">
                   {t("comparison.sections.requirements")}
                 </span>
-                <span className="text-xs font-medium">
+                <span className="text-xs font-bold text-foreground">
                   {distro.requirements}
                 </span>
               </div>
@@ -235,21 +242,19 @@ const DistroCardList = ({
         )}
 
         <div className="flex items-center justify-between gap-3 mt-auto pt-3 border-t border-border">
-          <div className="flex items-center text-xs text-muted-foreground gap-1.5 min-w-0">
-            <Clock className="w-3.5 h-3.5 flex-shrink-0" />
-            <span className="truncate">
-              {distro.lastRelease
-                ? `${t('catalog.card.updatedAt')} ${new Date(distro.lastRelease).toLocaleDateString()}`
-                : t('catalog.card.dateUnavailable')}
+          <div className="flex items-center text-[10px] text-foreground font-bold gap-1.5 min-w-0 bg-muted px-2 py-1 border border-border">
+            <Clock className="w-3 h-3 flex-shrink-0" />
+            <span className="truncate uppercase tracking-tighter">
+              {formatDate(distro.lastRelease)}
             </span>
           </div>
 
           <div className="flex-shrink-0">
             <ScoreBadge score={calculatePerformanceScore(distro)} size="sm" />
           </div>
-        </div>
-      </Link>
-    </div>
+          </div>
+        </Link>
+      </div>
   );
 };
 

@@ -192,7 +192,7 @@ export const DesktopEnvBadge = ({
   return (
     <span
       className={cn(
-        "inline-flex items-center font-medium rounded-lg border transition-colors duration-200",
+        "inline-flex items-center font-medium rounded-none border transition-colors duration-200",
         config.bg,
         config.text,
         config.border,

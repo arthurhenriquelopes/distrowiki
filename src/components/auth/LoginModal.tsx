@@ -60,10 +60,10 @@ export function LoginModal() {
 
     return (
         <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black/60  -sm z-50 flex items-center justify-center p-4"
             onClick={handleBackdropClick}
         >
-            <div className="bg-card w-full max-w-md rounded-2xl border border-border shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <div className="bg-card w-full max-w-md rounded-none border border-border   animate-in fade-in zoom-in-95 duration-200">
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-border">
                     <h2 className="text-xl font-semibold bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent">
@@ -71,7 +71,7 @@ export function LoginModal() {
                     </h2>
                     <button
                         onClick={closeLoginModal}
-                        className="text-muted-foreground hover:text-foreground p-1 rounded-lg hover:bg-muted transition-colors"
+                        className="text-muted-foreground hover:text-foreground p-1 rounded-none hover:bg-muted transition-colors"
                     >
                         <X size={20} />
                     </button>
@@ -81,7 +81,7 @@ export function LoginModal() {
                 <form onSubmit={handleAuth} className="p-6 space-y-4">
                     {/* Error Alert */}
                     {error && (
-                        <div className="bg-red-500/10 text-red-400 text-sm p-4 rounded-lg border border-red-500/20 flex items-start gap-2">
+                        <div className="bg-red-500/10 text-red-400 text-sm p-4 rounded-none border border-red-500/20 flex items-start gap-2">
                             <X className="w-4 h-4 mt-0.5 flex-shrink-0" />
                             <span>{error}</span>
                         </div>
@@ -89,7 +89,7 @@ export function LoginModal() {
 
                     {/* Success Alert */}
                     {success && (
-                        <div className="bg-green-500/10 text-green-400 text-sm p-4 rounded-lg border border-green-500/20">
+                        <div className="bg-green-500/10 text-green-400 text-sm p-4 rounded-none border border-green-500/20">
                             {success}
                         </div>
                     )}
@@ -105,7 +105,7 @@ export function LoginModal() {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full bg-background border border-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                            className="w-full bg-background border border-border rounded-none px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-colors"
                             placeholder="seu@email.com"
                             autoComplete="email"
                             required
@@ -124,7 +124,7 @@ export function LoginModal() {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full bg-background border border-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                            className="w-full bg-background border border-border rounded-none px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-colors"
                             placeholder="••••••••"
                             autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
                             minLength={6}
@@ -137,7 +137,7 @@ export function LoginModal() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 rounded-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                         {loading ? (
                             <>

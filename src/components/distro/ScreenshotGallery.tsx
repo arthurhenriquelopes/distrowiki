@@ -20,7 +20,7 @@ const ScreenshotGallery = ({ distro }: ScreenshotGalleryProps) => {
   return (
     <div className="my-8">
       <h3 className="text-2xl font-bold mb-4">{t('features.gallery.title')}</h3>
-      <div className="rounded-xl overflow-hidden border border-border bg-card shadow-sm">
+      <div className="rounded-none overflow-hidden border border-border bg-card shadow-sm">
         <div className="aspect-video w-full bg-muted relative">
             <img 
                 src={selectedImage.src} 
@@ -34,7 +34,7 @@ const ScreenshotGallery = ({ distro }: ScreenshotGalleryProps) => {
                 <button 
                     key={idx}
                     onClick={() => setSelectedImage(img)}
-                    className={`relative rounded-lg overflow-hidden w-24 h-16 flex-shrink-0 border-2 transition-all ${selectedImage.src === img.src ? 'border-primary ring-2 ring-primary/20' : 'border-transparent opacity-70 hover:opacity-100'}`}
+                    className={`relative rounded-none overflow-hidden w-24 h-16 flex-shrink-0 border-2 transition-colors ${selectedImage.src === img.src ? 'border-primary ring-2 ring-primary/20' : 'border-transparent opacity-70 hover:opacity-100'}`}
                 >
                     <img src={img.src} alt={img.alt} className="w-full h-full object-cover" />
                 </button>

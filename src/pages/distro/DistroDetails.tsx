@@ -61,18 +61,18 @@ const DistroDetails = () => {
     return (
       <div className="container mx-auto px-4 py-12 min-h-screen animate-pulse">
         {/* Back button skeleton */}
-        <div className="h-9 w-32 bg-muted rounded-lg mb-6" />
+        <div className="h-9 w-32 bg-muted rounded-none mb-6" />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Sidebar skeleton */}
           <div className="lg:col-span-1 space-y-4">
-            <div className="glass-card rounded-xl p-6 flex flex-col items-center gap-4">
-              <div className="w-24 h-24 bg-muted rounded-xl" />
+            <div className="glass-card rounded-none p-6 flex flex-col items-center gap-4">
+              <div className="w-24 h-24 bg-muted rounded-none" />
               <div className="h-6 w-40 bg-muted rounded" />
               <div className="h-4 w-24 bg-muted rounded" />
-              <div className="h-12 w-20 bg-muted rounded-full mt-2" />
+              <div className="h-12 w-20 bg-muted rounded-none mt-2" />
             </div>
-            <div className="glass-card rounded-xl p-4 space-y-3">
+            <div className="glass-card rounded-none p-4 space-y-3">
               {[...Array(4)].map((_, i) => (
                 <div key={i} className="flex justify-between">
                   <div className="h-4 w-20 bg-muted rounded" />
@@ -86,16 +86,16 @@ const DistroDetails = () => {
           <div className="lg:col-span-2 space-y-6">
             <div className="flex gap-2">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-10 w-28 bg-muted rounded-lg" />
+                <div key={i} className="h-10 w-28 bg-muted rounded-none" />
               ))}
             </div>
-            <div className="glass-card rounded-xl p-6 space-y-4">
+            <div className="glass-card rounded-none p-6 space-y-4">
               <div className="h-5 w-3/4 bg-muted rounded" />
               <div className="h-4 w-full bg-muted rounded" />
               <div className="h-4 w-5/6 bg-muted rounded" />
               <div className="h-4 w-2/3 bg-muted rounded" />
             </div>
-            <div className="glass-card rounded-xl p-6 space-y-3">
+            <div className="glass-card rounded-none p-6 space-y-3">
               {[...Array(3)].map((_, i) => (
                 <div key={i} className="h-8 w-full bg-muted rounded" />
               ))}
@@ -201,7 +201,7 @@ const DistroDetails = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <div className="bg-card border border-border rounded-xl p-6 flex flex-col items-center text-center shadow-sm">
+          <div className="bg-card border border-border rounded-none p-6 flex flex-col items-center text-center shadow-sm">
             <img
               src={`/logos/${distro.id || id}.svg`}
               alt={`${distro.name} logo`}
@@ -299,7 +299,7 @@ const DistroDetails = () => {
 
             {/* Overview */}
             <TabsContent value="overview" className="space-y-8 animate-fade-in">
-              <div className="bg-card border border-border rounded-xl p-6">
+              <div className="bg-card border border-border rounded-none p-6">
                 <h2 className="text-2xl font-bold mb-4">{t("distroDetails.overview.about", { name: distro.name })}</h2>
                 <p className="text-muted-foreground leading-relaxed mb-6">
                   {distro.summary || distro.description || t("distroDetails.overview.noDescription")}
@@ -321,7 +321,7 @@ const DistroDetails = () => {
               </div>
 
               {(distro.desktopEnvironments || distro.desktop_environments) && (distro.desktopEnvironments || distro.desktop_environments).length > 0 && (
-                <div className="bg-card border border-border rounded-xl p-6">
+                <div className="bg-card border border-border rounded-none p-6">
                   <h3 className="text-xl font-bold mb-4">{t("distroDetails.overview.desktopEnv")}</h3>
                   <div className="flex flex-wrap gap-2">
                     {(distro.desktopEnvironments || distro.desktop_environments).map((de: string) => (
@@ -333,7 +333,7 @@ const DistroDetails = () => {
 
               <ScreenshotGallery distro={distro} />
 
-              <section className="bg-card border border-border rounded-xl p-6">
+              <section className="bg-card border border-border rounded-none p-6">
                   <h3 className="text-xl font-bold mb-4">{t('features.terminal.title')}</h3>
                   <TerminalSim distro={distro} />
               </section>
@@ -341,7 +341,7 @@ const DistroDetails = () => {
 
             {/* Performance */}
             <TabsContent value="performance" className="space-y-6 animate-fade-in">
-              <div className="bg-card border border-border rounded-xl p-6">
+              <div className="bg-card border border-border rounded-none p-6">
                 <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
                   <Zap className="w-6 h-6 text-yellow-500" />
                   {t("comparison.sections.performance")}
@@ -409,7 +409,7 @@ const DistroDetails = () => {
 
             {/* Specs */}
             <TabsContent value="specs" className="space-y-6 animate-fade-in">
-              <div className="bg-card border border-border rounded-xl p-6">
+              <div className="bg-card border border-border rounded-none p-6">
                 <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
                   <Cpu className="w-6 h-6 text-primary" />
                   {t("distroDetails.specs.title")}
@@ -417,13 +417,13 @@ const DistroDetails = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {/* Based On */}
-                  <div className="bg-muted/30 rounded-lg p-4">
+                  <div className="bg-muted/30 rounded-none p-4">
                     <p className="text-sm text-muted-foreground mb-1">Baseado em</p>
                     <p className="text-lg font-semibold">{distro.based_on || distro.family || "Independente"}</p>
                   </div>
 
               {/* Release Type */}
-              <div className="bg-muted/30 rounded-lg p-4">
+              <div className="bg-muted/30 rounded-none p-4">
                 <p className="text-sm text-muted-foreground mb-1">Tipo de Release</p>
                 <p className="text-lg font-semibold">
                   <Badge variant={(distro.release_type || distro.releaseModel || "").toLowerCase().includes('rolling') ? 'default' : 'secondary'}>
@@ -437,19 +437,19 @@ const DistroDetails = () => {
               </div>
 
                   {/* Init System */}
-                  <div className="bg-muted/30 rounded-lg p-4">
+                  <div className="bg-muted/30 rounded-none p-4">
                     <p className="text-sm text-muted-foreground mb-1">Sistema de Init</p>
                     <p className="text-lg font-semibold">{distro.init_system || "systemd"}</p>
                   </div>
 
                   {/* Package Manager */}
-                  <div className="bg-muted/30 rounded-lg p-4">
+                  <div className="bg-muted/30 rounded-none p-4">
                     <p className="text-sm text-muted-foreground mb-1">Gerenciador de Pacotes</p>
                     <p className="text-lg font-semibold">{distro.package_management || distro.package_manager || "N/A"}</p>
                   </div>
 
                   {/* Architecture */}
-                  <div className="bg-muted/30 rounded-lg p-4">
+                  <div className="bg-muted/30 rounded-none p-4">
                     <p className="text-sm text-muted-foreground mb-1">Arquiteturas</p>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {(Array.isArray(distro.architecture) ? distro.architecture : [distro.architecture || "x86_64"]).map((arch: string) => (
@@ -459,7 +459,7 @@ const DistroDetails = () => {
                   </div>
 
                   {/* File Systems */}
-                  <div className="bg-muted/30 rounded-lg p-4">
+                  <div className="bg-muted/30 rounded-none p-4">
                     <p className="text-sm text-muted-foreground mb-1">Sistemas de Arquivos</p>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {(distro.file_systems?.length ? distro.file_systems : ["ext4"]).map((fs: string) => (
@@ -469,37 +469,37 @@ const DistroDetails = () => {
                   </div>
 
                   {/* Category */}
-                  <div className="bg-muted/30 rounded-lg p-4">
+                  <div className="bg-muted/30 rounded-none p-4">
                     <p className="text-sm text-muted-foreground mb-1">Categoria</p>
                     <p className="text-lg font-semibold">{distro.category || "Desktop"}</p>
                   </div>
 
                   {/* Requirements */}
-                  <div className="bg-muted/30 rounded-lg p-4">
+                  <div className="bg-muted/30 rounded-none p-4">
                     <p className="text-sm text-muted-foreground mb-1">Requisitos</p>
                     <p className="text-lg font-semibold">{distro.requirements || "Médio"}</p>
                   </div>
 
                   {/* Image Size */}
-                  <div className="bg-muted/30 rounded-lg p-4">
+                  <div className="bg-muted/30 rounded-none p-4">
                     <p className="text-sm text-muted-foreground mb-1">Tamanho da ISO</p>
                     <p className="text-lg font-semibold">{distro.image_size ? `${distro.image_size} GB` : "N/A"}</p>
                   </div>
 
                   {/* Office Suite */}
-                  <div className="bg-muted/30 rounded-lg p-4">
+                  <div className="bg-muted/30 rounded-none p-4">
                     <p className="text-sm text-muted-foreground mb-1">Suite Office</p>
                     <p className="text-lg font-semibold">{distro.office_suite || distro.office_manager || "N/A"}</p>
                   </div>
 
                   {/* First Release */}
-                  <div className="bg-muted/30 rounded-lg p-4">
+                  <div className="bg-muted/30 rounded-none p-4">
                     <p className="text-sm text-muted-foreground mb-1">Ano de Lançamento</p>
                     <p className="text-lg font-semibold">{distro.release_year || "N/A"}</p>
                   </div>
 
                   {/* Latest Release */}
-                  <div className="bg-muted/30 rounded-lg p-4">
+                  <div className="bg-muted/30 rounded-none p-4">
                     <p className="text-sm text-muted-foreground mb-1">Última Versão</p>
                     <p className="text-lg font-semibold">{distro.latest_release_date || distro.lastRelease || "N/A"}</p>
                   </div>
@@ -509,7 +509,7 @@ const DistroDetails = () => {
 
             {/* Links */}
             <TabsContent value="links" className="space-y-6 animate-fade-in">
-              <div className="bg-card border border-border rounded-xl p-6">
+              <div className="bg-card border border-border rounded-none p-6">
                 <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
                   <ExternalLink className="w-6 h-6 text-primary" />
                   {t("distroDetails.links.title")}
@@ -522,10 +522,10 @@ const DistroDetails = () => {
                       href={distro.homepage}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-primary/10 border border-transparent hover:border-primary/30 smooth-transition group"
+                      className="flex items-center justify-between p-4 bg-muted/50 rounded-none hover:bg-primary/10 border border-transparent hover:border-primary/30 smooth-transition group"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-none bg-primary/10 flex items-center justify-center">
                           <ExternalLink className="w-5 h-5 text-primary" />
                         </div>
                         <div>
@@ -542,10 +542,10 @@ const DistroDetails = () => {
                     href={`https://distrowatch.com/table.php?distribution=${distro.id || distro.name?.toLowerCase()}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-orange-500/10 border border-transparent hover:border-orange-500/30 smooth-transition group"
+                    className="flex items-center justify-between p-4 bg-muted/50 rounded-none hover:bg-orange-500/10 border border-transparent hover:border-orange-500/30 smooth-transition group"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-none bg-orange-500/10 flex items-center justify-center">
                         <span className="text-orange-500 font-bold text-sm">DW</span>
                       </div>
                       <div>
@@ -561,10 +561,10 @@ const DistroDetails = () => {
                     href={`https://en.wikipedia.org/wiki/${encodeURIComponent(distro.name)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-blue-500/10 border border-transparent hover:border-blue-500/30 smooth-transition group"
+                    className="flex items-center justify-between p-4 bg-muted/50 rounded-none hover:bg-blue-500/10 border border-transparent hover:border-blue-500/30 smooth-transition group"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-none bg-blue-500/10 flex items-center justify-center">
                         <span className="text-blue-500 font-bold text-sm">W</span>
                       </div>
                       <div>
@@ -581,10 +581,10 @@ const DistroDetails = () => {
                       href={`${distro.homepage}/download`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-green-500/10 border border-transparent hover:border-green-500/30 smooth-transition group"
+                      className="flex items-center justify-between p-4 bg-muted/50 rounded-none hover:bg-green-500/10 border border-transparent hover:border-green-500/30 smooth-transition group"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-none bg-green-500/10 flex items-center justify-center">
                           <HardDrive className="w-5 h-5 text-green-500" />
                         </div>
                         <div>
@@ -601,7 +601,7 @@ const DistroDetails = () => {
 
             {/* Reviews */}
             <TabsContent value="reviews" className="mt-6 animate-fade-in">
-                <div className="bg-card border border-border rounded-xl p-8 text-center space-y-4">
+                <div className="bg-card border border-border rounded-none p-8 text-center space-y-4">
                     <div className="flex justify-center gap-1 text-yellow-500 mb-2">
                         {[1,2,3,4,5].map(i => <Star key={i} className="w-6 h-6 fill-current opacity-20" />)}
                     </div>

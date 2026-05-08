@@ -6,9 +6,9 @@ interface ScoreBadgeProps {
 const ScoreBadge = ({ score, size = "md" }: ScoreBadgeProps) => {
   const getScoreColor = (score: number) => {
     if (score === 0) return "bg-secondary text-secondary-foreground";
-    if (score > 80) return "bg-green-600 text-white";
-    if (score > 60) return "bg-yellow-500 text-white";
-    return "bg-red-600 text-white";
+    if (score > 80) return "bg-success text-success-foreground";
+    if (score > 60) return "bg-warning text-warning-foreground";
+    return "bg-destructive text-destructive-foreground";
   };
 
   const sizeClasses = {
@@ -19,9 +19,9 @@ const ScoreBadge = ({ score, size = "md" }: ScoreBadgeProps) => {
 
   return (
     <div
-      className={`inline-flex items-center justify-center font-bold rounded-lg ${getScoreColor(
+      className={`inline-flex items-center justify-center font-bold ${getScoreColor(
         score
-      )} ${sizeClasses[size]} smooth-transition`}
+      )} ${sizeClasses[size]} smooth-transition border border-white/10`}
     >
       {score.toFixed(1)}
     </div>

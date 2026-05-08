@@ -23,7 +23,9 @@ const DistroCardGrid = ({
 
   return (
     <div
-      className="relative glass-card rounded-xl p-4 hover-lift group flex flex-col h-[200px]"
+      className={`relative p-4 group flex flex-col h-[200px] border border-border ${
+        isSelected ? "ring-2 ring-primary" : ""
+      }`}
       onMouseEnter={() => prefetchDistro(distro.id)}
       onFocus={() => prefetchDistro(distro.id)}
     >
@@ -59,7 +61,7 @@ const DistroCardGrid = ({
           <ScoreBadge score={calculatePerformanceScore(distro)} size="sm" />
           {(distro.popularityRank || distro.ranking) && (distro.popularityRank || distro.ranking) <= 50 && (
             <span
-              className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold ${(distro.popularityRank || distro.ranking) <= 10
+              className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-bold ${(distro.popularityRank || distro.ranking) <= 10
                   ? 'bg-yellow-500/20 text-yellow-400'
                   : (distro.popularityRank || distro.ranking) <= 30
                     ? 'bg-emerald-500/20 text-emerald-400'

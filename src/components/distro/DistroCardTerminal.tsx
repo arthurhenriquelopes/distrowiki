@@ -56,7 +56,7 @@ const DistroCardTerminal = ({
 
   return (
     <div
-      className={`relative ${getTerminalTheme(distro.name)} border-2 ${getTerminalColor()} rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 ${
+      className={`relative ${getTerminalTheme(distro.name)} border-2 ${getTerminalColor()} overflow-hidden   transition-colors duration-300 ${
         isSelected ? "ring-2 ring-primary" : ""
       }`}
     >
@@ -64,9 +64,9 @@ const DistroCardTerminal = ({
       <div className="bg-gray-800/50 border-b border-gray-700/50 px-3 py-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
-            <div className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors cursor-pointer" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-400 transition-colors cursor-pointer" />
-            <div className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-400 transition-colors cursor-pointer" />
+            <div className="w-3 h-3 bg-red-500 hover:bg-red-400 transition-colors cursor-pointer" />
+            <div className="w-3 h-3 bg-yellow-500 hover:bg-yellow-400 transition-colors cursor-pointer" />
+            <div className="w-3 h-3 bg-green-500 hover:bg-green-400 transition-colors cursor-pointer" />
           </div>
           <Terminal className="w-3.5 h-3.5 text-gray-400 ml-2" />
           <span className="text-xs text-gray-400 font-mono">{distro.id}@distrowiki</span>
@@ -78,7 +78,7 @@ const DistroCardTerminal = ({
                 e.preventDefault();
                 onSelectToggle();
               }}
-              className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-colors ${
+              className={`w-4 h-4 border-2 flex items-center justify-center transition-colors ${
                 isSelected
                   ? "bg-primary border-primary"
                   : "border-gray-500 hover:border-gray-400"

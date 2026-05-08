@@ -59,10 +59,10 @@ export const MetricBar = memo(({
         {isBest && <Trophy className="w-3.5 h-3.5 text-green-500" />}
       </div>
       {value && (
-        <div className="w-full bg-muted/50 rounded-full h-2 overflow-hidden">
+        <div className="w-full bg-muted/50 rounded-none h-2 overflow-hidden">
           <div
             className={cn(
-              "h-2 rounded-full",
+              "h-2 rounded-none",
               isBest ? "bg-green-500" : "bg-primary/70"
             )}
             style={{

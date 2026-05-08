@@ -115,7 +115,7 @@ export function ComparisonRadarChart({ distros }: ComparisonRadarChartProps) {
     });
 
     return (
-        <div className="w-full bg-card/50 border border-border rounded-xl p-4 md:p-6">
+        <div className="w-full bg-card/50 border border-border rounded-none p-4 md:p-6">
             <h3 className="text-lg font-semibold text-center mb-4">Resumo Visual</h3>
 
             <div className="h-[300px] md:h-[350px]">

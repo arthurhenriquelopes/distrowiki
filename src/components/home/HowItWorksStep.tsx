@@ -19,12 +19,12 @@ export const HowItWorksStep = ({ icon: Icon, step, title, description, index }: 
     transition={{ delay: index * 0.15 }}
     className="relative"
   >
-    <Card className="text-center bg-card/50 backdrop-blur-sm border-border/50 card-hover h-full hover:border-primary/30 transition-all duration-300">
+    <Card className="text-center bg-card/50  -sm border-border/50 card-hover h-full hover:border-primary/30 transition-colors duration-300">
       <CardContent className="p-8">
         <div className="flex items-center justify-center mb-6">
           <div className="relative">
-            <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl"></div>
-            <div className="relative bg-gradient-to-br from-primary to-primary-hover text-primary-foreground w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shadow-lg">
+            <div className="absolute inset-0 bg-primary/20 rounded-none blur-xl"></div>
+            <div className="relative bg-gradient-to-br from-primary to-primary-hover text-primary-foreground w-16 h-16 rounded-none flex items-center justify-center text-2xl font-bold  ">
               {step}
             </div>
           </div>

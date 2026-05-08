@@ -24,7 +24,7 @@ const Header = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95   supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/" className="smooth-transition hover:opacity-80">
           <Logo />
@@ -59,7 +59,7 @@ const Header = () => {
             <div className="flex items-center gap-2">
               <Link
                 to="/admin/dashboard"
-                className="text-muted-foreground hover:text-foreground p-2 rounded-lg hover:bg-muted transition-colors"
+                className="text-muted-foreground hover:text-foreground p-2 rounded-none hover:bg-muted transition-colors"
                 title="Painel Admin"
               >
                 <UserIcon className="h-5 w-5" />
@@ -87,7 +87,7 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-border bg-background/95 backdrop-blur animate-fade-in">
+        <div className="md:hidden border-t border-border bg-background/95   animate-fade-in">
           <nav className="container mx-auto flex flex-col space-y-4 px-4 py-6">
             {navLinks.map((link) => (
               <Link

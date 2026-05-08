@@ -131,7 +131,7 @@ const Dashboard = () => {
                                 </div>
                             </CardHeader>
                             <CardContent>
-                                <div className="bg-muted/30 p-4 rounded-md font-mono text-sm mb-4 whitespace-pre-wrap">
+                                <div className="bg-muted/30 p-4 rounded-none font-mono text-sm mb-4 whitespace-pre-wrap">
                                     {edit.new_value}
                                 </div>
                                 <div className="flex justify-end gap-2">

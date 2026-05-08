@@ -113,7 +113,7 @@ const About = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
       >
-        <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-background border border-primary/20 rounded-2xl p-8 max-w-4xl mx-auto text-center">
+        <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-background border border-primary/20 rounded-none p-8 max-w-4xl mx-auto text-center">
           <Zap className="w-12 h-12 text-primary mx-auto mb-4" />
           <h2 className="text-3xl font-bold mb-4">{t("about.mission.title")}</h2>
           <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
@@ -142,7 +142,7 @@ const About = () => {
         >
           {features.map((item) => (
             <motion.div key={item.title} variants={fadeIn}>
-              <div className="bg-card border border-border rounded-xl p-6 h-full hover:border-primary/30 transition-all duration-300">
+              <div className="bg-card border border-border rounded-none p-6 h-full hover:border-primary/30 transition-colors duration-300">
                 <item.icon className="w-10 h-10 text-primary mb-4" />
                 <h3 className="text-lg font-bold mb-2">{item.title}</h3>
                 <p className="text-sm text-muted-foreground">{item.description}</p>
@@ -154,7 +154,7 @@ const About = () => {
 
       {/* How It Works */}
       <section className="mb-16">
-        <div className="bg-card border border-border rounded-xl p-8 max-w-4xl mx-auto">
+        <div className="bg-card border border-border rounded-none p-8 max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold mb-6">Como Calculamos o Score</h2>
           <div className="space-y-4 text-muted-foreground">
             <p>
@@ -182,7 +182,7 @@ const About = () => {
                 <span>Distros com lançamentos recentes são valorizadas</span>
               </li>
             </ul>
-            <p className="text-sm bg-warning/10 border border-warning/20 rounded-lg p-4 mt-4">
+            <p className="text-sm bg-warning/10 border border-warning/20 rounded-none p-4 mt-4">
               <strong className="text-warning">⚠️ Importante:</strong> O score é uma referência, não uma verdade absoluta.
               A melhor distro é aquela que atende suas necessidades específicas.
             </p>
@@ -197,7 +197,7 @@ const About = () => {
           {techStack.map((tech) => (
             <div
               key={tech.name}
-              className="bg-card border border-border rounded-lg px-4 py-2 hover:border-primary/30 transition-colors"
+              className="bg-card border border-border rounded-none px-4 py-2 hover:border-primary/30 transition-colors"
             >
               <span className="font-medium">{tech.name}</span>
               <span className="text-muted-foreground text-sm ml-2">• {tech.description}</span>
@@ -208,7 +208,7 @@ const About = () => {
 
       {/* Contribute */}
       <section className="mb-16">
-        <div className="bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 rounded-2xl p-12 text-center max-w-4xl mx-auto">
+        <div className="bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 rounded-none p-12 text-center max-w-4xl mx-auto">
           <Github className="w-16 h-16 text-primary mx-auto mb-6" />
           <h2 className="text-3xl font-bold mb-4">{t("about.contribute.title")}</h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">

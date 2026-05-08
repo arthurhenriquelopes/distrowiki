@@ -45,7 +45,7 @@ const CatalogFilters = ({
   const { t } = useTranslation();
 
   return (
-    <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 mb-8 animate-slide-up">
+    <div className="bg-card/50  -sm border border-border rounded-none p-6 mb-8 animate-slide-up">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <SlidersHorizontal className="w-5 h-5 text-primary" />

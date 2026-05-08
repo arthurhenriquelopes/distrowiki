@@ -130,7 +130,7 @@ const Comparison = () => {
     return (
       <div className="container mx-auto px-4 py-20 min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <div className="animate-spin rounded-none h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-muted-foreground">{t('comparison.loading')}</p>
         </div>
       </div>
@@ -273,7 +273,7 @@ const Comparison = () => {
 
       {/* Cards de Distro - Header Sticky */}
       <motion.div
-        className="sticky top-16 z-40 -mx-4 px-4 sm:mx-0 sm:px-4 py-4 bg-background/80 backdrop-blur-xl border-b border-border/50 mb-6"
+        className="sticky top-16 z-40 -mx-4 px-4 sm:mx-0 sm:px-4 py-4 bg-background/80  -xl border-b border-border/50 mb-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
@@ -292,9 +292,9 @@ const Comparison = () => {
               <motion.div
                 key={distro.id}
                 className={cn(
-                  "relative rounded-xl p-2 sm:p-4 border transition-all duration-300 min-w-0",
+                  "relative rounded-none p-2 sm:p-4 border transition-colors duration-300 min-w-0",
                   isWinner
-                    ? "bg-gradient-to-br from-primary/15 via-primary/5 to-transparent border-primary ring-2 ring-primary/30 shadow-xl shadow-primary/20"
+                    ? "bg-gradient-to-br from-primary/15 via-primary/5 to-transparent border-primary ring-2 ring-primary/30   shadow-primary/20"
                     : "bg-card/30 border-border/40 opacity-80 hover:opacity-100 hover:border-border"
                 )}
                 whileHover={{ scale: 1.01 }}
@@ -304,11 +304,11 @@ const Comparison = () => {
                 {isWinner && (
                   <div className="absolute -top-2 left-1/2 -translate-x-1/2 z-10">
                     {/* Mobile: só ícone */}
-                    <span className="sm:hidden inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary text-primary-foreground shadow-lg">
+                    <span className="sm:hidden inline-flex items-center justify-center w-5 h-5 rounded-none bg-primary text-primary-foreground  ">
                       <Trophy className="w-3 h-3" />
                     </span>
                     {/* Desktop: ícone + texto */}
-                    <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-xs font-medium shadow-lg">
+                    <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-none bg-primary text-primary-foreground text-xs font-medium  ">
                       <Trophy className="w-3 h-3" />
                       {t('comparison.best')}
                     </span>
@@ -327,7 +327,7 @@ const Comparison = () => {
                       navigate('/comparacao', { replace: true });
                     }
                   }}
-                  className="absolute top-1 right-1 sm:top-2 sm:right-2 p-0.5 sm:p-1 rounded-full bg-background/80 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors z-10"
+                  className="absolute top-1 right-1 sm:top-2 sm:right-2 p-0.5 sm:p-1 rounded-none bg-background/80 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors z-10"
                   aria-label={`Remover ${distro.name}`}
                 >
                   <X className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
@@ -338,7 +338,7 @@ const Comparison = () => {
                   <img
                     src={distro.logo || `/logos/${distro.id}.svg`}
                     alt={distro.name}
-                    className="w-10 h-10 object-contain rounded-lg"
+                    className="w-10 h-10 object-contain rounded-none"
                     onError={(e) => {
                       e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(distro.name)}&background=random&size=40`;
                     }}
@@ -353,12 +353,12 @@ const Comparison = () => {
 
                 {/* Desktop: Layout condicional (expandido/compacto/screenshot) */}
                 <div className={cn(
-                  "hidden sm:flex flex-col items-center text-center transition-all duration-300 ease-out overflow-hidden",
+                  "hidden sm:flex flex-col items-center text-center transition-colors duration-300 ease-out overflow-hidden",
                   isCompact ? "py-1" : "py-2"
                 )}>
                   {showDesktop && !isCompact ? (
                     /* Modo Screenshot Desktop */
-                    <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-muted/50">
+                    <div className="relative w-full aspect-video rounded-none overflow-hidden bg-muted/50">
                       <img
                         src={`/logos/desktop/${distro.id}.png`}
                         alt={`${distro.name} Desktop`}
@@ -380,14 +380,14 @@ const Comparison = () => {
                     /* Modo Normal (expandido/compacto) */
                     <>
                       <div className={cn(
-                        "flex items-center gap-3 transition-all duration-300",
+                        "flex items-center gap-3 transition-colors duration-300",
                         isCompact ? "flex-row" : "flex-col"
                       )}>
                         <img
                           src={distro.logo || `/logos/${distro.id}.svg`}
                           alt={distro.name}
                           className={cn(
-                            "object-contain rounded-lg transition-all duration-300",
+                            "object-contain rounded-none transition-colors duration-300",
                             isCompact ? "w-8 h-8" : "w-14 h-14 mb-2"
                           )}
                           onError={(e) => {
@@ -395,11 +395,11 @@ const Comparison = () => {
                           }}
                         />
                         <div className={cn(
-                          "transition-all duration-300",
+                          "transition-colors duration-300",
                           isCompact ? "text-left" : "text-center w-full"
                         )}>
                           <h2 className={cn(
-                            "font-bold truncate transition-all duration-300",
+                            "font-bold truncate transition-colors duration-300",
                             isCompact ? "text-sm" : "text-base w-full px-1"
                           )}>{isCompact ? shortName : distro.name}</h2>
                           {!isCompact && (
@@ -734,7 +734,7 @@ const ComparisonSection = ({
   return (
     <motion.div
       className={cn(
-        "rounded-xl border overflow-hidden",
+        "rounded-none border overflow-hidden",
         highlight
           ? "bg-gradient-to-br from-primary/5 via-transparent to-transparent border-primary/20"
           : "bg-card/30 border-border/50"

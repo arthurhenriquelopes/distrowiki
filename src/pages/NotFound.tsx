@@ -30,7 +30,7 @@ const NotFound = () => {
         transition={{ duration: 0.5 }}
       >
         <div className="relative flex items-center justify-center mb-8 h-[300px]">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/10 rounded-none blur-[120px] pointer-events-none"></div>
           <motion.h1
             className="text-[140px] md:text-[180px] font-bold gradient-text absolute z-0 leading-none"
             initial={{ opacity: 0, scale: 0.8 }}

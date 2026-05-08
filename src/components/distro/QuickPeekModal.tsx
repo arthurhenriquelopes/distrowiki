@@ -30,7 +30,7 @@ const QuickPeekModal = ({ distro, isOpen, onClose }: QuickPeekModalProps) => {
         <>
           {/* Backdrop */}
           <motion.div
-            className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
+            className="fixed inset-0 z-50 bg-black/40  -sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -45,11 +45,11 @@ const QuickPeekModal = ({ distro, isOpen, onClose }: QuickPeekModalProps) => {
             exit={{ opacity: 0, scale: 0.9, x: "-50%", y: "-50%" }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
           >
-            <div className="glass-card rounded-2xl p-6 shadow-2xl">
+            <div className="glass-card rounded-none p-6  ">
               {/* Close button */}
               <button
                 onClick={onClose}
-                className="absolute top-3 right-3 p-1.5 rounded-full bg-muted/80 hover:bg-destructive/20 hover:text-destructive transition-colors"
+                className="absolute top-3 right-3 p-1.5 rounded-none bg-muted/80 hover:bg-destructive/20 hover:text-destructive transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -59,7 +59,7 @@ const QuickPeekModal = ({ distro, isOpen, onClose }: QuickPeekModalProps) => {
                 <img
                   src={`/logos/${distro.id}.svg`}
                   alt={distro.name}
-                  className="w-16 h-16 object-contain rounded-xl"
+                  className="w-16 h-16 object-contain rounded-none"
                   onError={(e) => {
                     e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(distro.name)}&background=random&size=64`;
                   }}

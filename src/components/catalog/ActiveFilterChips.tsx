@@ -34,7 +34,7 @@ const ActiveFilterChips = ({
           <span className="text-sm">{filter.label}</span>
           <button
             onClick={() => onRemove(filter.id)}
-            className="ml-0.5 rounded-full hover:bg-primary/30 p-0.5 transition-colors"
+            className="ml-0.5 rounded-none hover:bg-primary/30 p-0.5 transition-colors"
             aria-label={`Remover filtro ${filter.label}`}
           >
             <X className="w-3 h-3" />

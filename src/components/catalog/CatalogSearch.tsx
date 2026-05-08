@@ -25,7 +25,7 @@ const CatalogSearch = ({
         placeholder={t("catalog.search.placeholder")}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="pl-12 pr-32 h-12 text-base bg-background/50 backdrop-blur-sm border-border focus-visible:ring-primary"
+        className="pl-12 pr-32 h-12 text-base bg-background/50  -sm border-border focus-visible:ring-primary"
       />
       <div className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">
         {resultCount === totalCount ? (

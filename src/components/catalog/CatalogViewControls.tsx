@@ -32,7 +32,7 @@ const CatalogViewControls = ({
       <div className="w-px h-6 bg-border" />
 
       {/* Toggle View Mode - Agora toggle group conectado */}
-      <div className="flex border border-border rounded-md overflow-hidden">
+      <div className="flex border border-border rounded-none overflow-hidden">
         <Button
           variant={viewMode === "list" ? "secondary" : "ghost"}
           size="sm"

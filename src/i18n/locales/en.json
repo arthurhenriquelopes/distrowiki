@@ -343,5 +343,23 @@
         "langCode": "en",
         "descriptionNA": "Description not available.",
         "dateNA": "Date not available"
+    },
+    "quiz": {
+        "title": "Find Your Ideal Distro",
+        "subtitle": "Answer a few questions and we'll tell you which Linux to install.",
+        "start": "Start Quiz",
+        "next": "Next",
+        "result": "Your Result",
+        "retake": "Retake Quiz",
+        "questions": {
+            "experience": "What is your level of computer experience?",
+            "hardware": "How is your computer hardware?",
+            "usage": "What will you use Linux for?",
+            "release": "How do you prefer to receive updates?",
+            "interface": "What visual style do you prefer?",
+            "family": "Do you have a preference for any base?",
+            "purpose": "What will be the main focus of use?",
+            "apps": "How do you prefer to install programs?"
+        }
     }
 }

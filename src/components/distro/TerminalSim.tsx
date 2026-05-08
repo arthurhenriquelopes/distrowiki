@@ -66,7 +66,7 @@ VERSION_ID="2024"`;
   };
 
   return (
-    <div className="bg-black/90 text-green-400 font-mono p-4 rounded-lg border border-gray-800 shadow-xl w-full max-w-3xl mx-auto my-8">
+    <div className="bg-black/90 text-green-400 font-mono p-4 rounded-none border border-gray-800   w-full max-w-3xl mx-auto my-8">
         <div className="flex items-center gap-2 mb-4 border-b border-gray-800 pb-2 text-gray-500">
             <TerminalIcon className="w-4 h-4" />
             <span className="text-xs">bash — 80x24</span>

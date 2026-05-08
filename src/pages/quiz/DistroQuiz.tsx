@@ -211,7 +211,7 @@ const DistroQuiz = () => {
             <motion.div 
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="w-20 h-20 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mx-auto"
+              className="w-20 h-20 bg-green-500/20 text-green-500 rounded-none flex items-center justify-center mx-auto"
             >
               <CheckCircle2 className="w-10 h-10" />
             </motion.div>
@@ -228,11 +228,11 @@ const DistroQuiz = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
-                className={`relative p-6 rounded-xl border-2 cursor-pointer transition-all hover:shadow-lg ${idx === 0 ? 'border-primary bg-primary/5' : 'border-border bg-card'}`}
+                className={`relative p-6 rounded-none border-2 cursor-pointer transition-colors hover:  ${idx === 0 ? 'border-primary bg-primary/5' : 'border-border bg-card'}`}
                 onClick={() => navigate(`/distro/${distro.id}`)}
               >
                 {idx === 0 && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-none">
                     {distro.matchScore >= 6 ? "Match Perfeito" : "Melhor Opção"}
                   </span>
                 )}
@@ -292,7 +292,7 @@ const DistroQuiz = () => {
         {questions.map((_, idx) => (
           <div 
             key={idx} 
-            className={`h-2 flex-1 rounded-full transition-all duration-500 ${idx <= step ? 'bg-primary' : 'bg-muted'}`}
+            className={`h-2 flex-1 rounded-none transition-colors duration-500 ${idx <= step ? 'bg-primary' : 'bg-muted'}`}
           />
         ))}
       </div>
@@ -325,7 +325,7 @@ const DistroQuiz = () => {
                       </div>
                     )}
                   </div>
-                  <ArrowRight className="ml-auto w-5 h-5 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-primary" />
+                  <ArrowRight className="ml-auto w-5 h-5 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-colors text-primary" />
                 </Button>
               ))}
             </div>

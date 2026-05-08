@@ -7,14 +7,14 @@ interface DistroCardSkeletonProps {
 const DistroCardSkeleton = ({ viewMode = "list" }: DistroCardSkeletonProps) => {
   if (viewMode === "terminal") {
     return (
-      <div className="bg-[#0d1117] border-2 border-gray-500 rounded-lg overflow-hidden animate-pulse">
+      <div className="bg-[#0d1117] border-2 border-gray-500 rounded-none overflow-hidden animate-pulse">
         {/* Terminal Header */}
         <div className="bg-gray-800/50 border-b border-gray-700/50 px-3 py-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="flex gap-1.5">
-              <Skeleton className="w-3 h-3 rounded-full" />
-              <Skeleton className="w-3 h-3 rounded-full" />
-              <Skeleton className="w-3 h-3 rounded-full" />
+              <Skeleton className="w-3 h-3 rounded-none" />
+              <Skeleton className="w-3 h-3 rounded-none" />
+              <Skeleton className="w-3 h-3 rounded-none" />
             </div>
             <Skeleton className="h-3 w-32 ml-2" />
           </div>
@@ -34,19 +34,19 @@ const DistroCardSkeleton = ({ viewMode = "list" }: DistroCardSkeletonProps) => {
 
   if (viewMode === "grid") {
     return (
-      <div className="bg-card border border-border rounded-xl p-4 h-full flex flex-col items-center">
-        <Skeleton className="w-16 h-16 rounded-lg mb-3" />
+      <div className="bg-card border border-border rounded-none p-4 h-full flex flex-col items-center">
+        <Skeleton className="w-16 h-16 rounded-none mb-3" />
         <Skeleton className="h-4 w-24 mb-2" />
         <Skeleton className="h-3 w-16 mb-3" />
-        <Skeleton className="h-6 w-12 rounded-full" />
+        <Skeleton className="h-6 w-12 rounded-none" />
       </div>
     );
   }
 
   return (
-    <div className="bg-card border border-border rounded-lg p-6 animate-pulse">
+    <div className="bg-card border border-border rounded-none p-6 animate-pulse">
       <div className="flex items-start gap-4 mb-4">
-        <Skeleton className="w-16 h-16 rounded-lg flex-shrink-0" />
+        <Skeleton className="w-16 h-16 rounded-none flex-shrink-0" />
         <div className="flex-1 space-y-2">
           <Skeleton className="h-5 w-32" />
           <Skeleton className="h-3 w-24" />
@@ -61,8 +61,8 @@ const DistroCardSkeleton = ({ viewMode = "list" }: DistroCardSkeletonProps) => {
 
       {/* Desktop Environment Badges */}
       <div className="flex gap-1.5 mb-3">
-        <Skeleton className="h-6 w-16 rounded-md" />
-        <Skeleton className="h-6 w-20 rounded-md" />
+        <Skeleton className="h-6 w-16 rounded-none" />
+        <Skeleton className="h-6 w-20 rounded-none" />
       </div>
 
       {/* Performance Bars */}
@@ -73,7 +73,7 @@ const DistroCardSkeleton = ({ viewMode = "list" }: DistroCardSkeletonProps) => {
             <Skeleton className="h-3 w-16" />
             <Skeleton className="h-3 w-12" />
           </div>
-          <Skeleton className="h-1.5 w-full rounded-full" />
+          <Skeleton className="h-1.5 w-full rounded-none" />
         </div>
 
         {/* CPU */}
@@ -82,7 +82,7 @@ const DistroCardSkeleton = ({ viewMode = "list" }: DistroCardSkeletonProps) => {
             <Skeleton className="h-3 w-20" />
             <Skeleton className="h-3 w-8" />
           </div>
-          <Skeleton className="h-1.5 w-full rounded-full" />
+          <Skeleton className="h-1.5 w-full rounded-none" />
         </div>
 
         {/* I/O */}
@@ -91,13 +91,13 @@ const DistroCardSkeleton = ({ viewMode = "list" }: DistroCardSkeletonProps) => {
             <Skeleton className="h-3 w-16" />
             <Skeleton className="h-3 w-8" />
           </div>
-          <Skeleton className="h-1.5 w-full rounded-full" />
+          <Skeleton className="h-1.5 w-full rounded-none" />
         </div>
       </div>
 
       <div className="flex items-center justify-between pt-4 border-t border-border">
         <Skeleton className="h-3 w-24" />
-        <Skeleton className="h-6 w-12 rounded-full" />
+        <Skeleton className="h-6 w-12 rounded-none" />
       </div>
     </div>
   );

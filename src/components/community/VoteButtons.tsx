@@ -125,8 +125,8 @@ export function VoteButtons({
     }
 
     const containerClass = layout === 'horizontal'
-        ? 'flex items-center gap-1 bg-card/50 rounded-lg px-2 py-1 border border-border/50'
-        : 'flex flex-col items-center bg-card/50 rounded-lg p-2 border border-border/50'
+        ? 'flex items-center gap-1 bg-card/50 rounded-none px-2 py-1 border border-border/50'
+        : 'flex flex-col items-center bg-card/50 rounded-none p-2 border border-border/50'
 
     return (
         <div className={containerClass} onClick={(e) => e.preventDefault()}>
@@ -137,8 +137,8 @@ export function VoteButtons({
                     handleVote(1)
                 }}
                 className={cn(
-                    "p-1 rounded-md transition-all duration-200",
-                    "hover:bg-green-500/15 hover:scale-110",
+                    "p-1 rounded-none transition-colors duration-200",
+                    "hover:bg-green-500/15  ",
                     userVote === 1
                         ? "text-green-500 bg-green-500/10"
                         : "text-muted-foreground hover:text-green-500"
@@ -165,8 +165,8 @@ export function VoteButtons({
                     handleVote(-1)
                 }}
                 className={cn(
-                    "p-1 rounded-md transition-all duration-200",
-                    "hover:bg-red-500/15 hover:scale-110",
+                    "p-1 rounded-none transition-colors duration-200",
+                    "hover:bg-red-500/15  ",
                     userVote === -1
                         ? "text-red-500 bg-red-500/10"
                         : "text-muted-foreground hover:text-red-500"
