@@ -57,6 +57,13 @@ const DistroCardList = ({
     return t("distro.base.basedOn", { base: baseName.charAt(0).toUpperCase() + baseName.slice(1) });
   };
 
+  const formatRequirement = (req: string | undefined): string => {
+    if (!req) return "";
+    const key = `requirementsLevel.${req}`;
+    const translated = t(key);
+    return translated === key ? req : translated;
+  };
+
   const hasPerformanceData =
     distro.idleRamUsage || distro.cpuScore || distro.ioScore;
 
@@ -244,7 +251,7 @@ const DistroCardList = ({
                   {t("comparison.sections.requirements")}
                 </span>
                 <span className="text-xs font-bold text-foreground">
-                  {distro.requirements}
+                  {formatRequirement(distro.requirements)}
                 </span>
               </div>
             )}

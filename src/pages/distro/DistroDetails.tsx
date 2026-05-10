@@ -139,6 +139,13 @@ const DistroDetails = () => {
                         distro.name.toLowerCase().includes('pop') ||
                         distro.name.toLowerCase().includes('bazzite');
 
+  const formatRequirement = (req: string | undefined): string => {
+    if (!req) return "";
+    const key = `requirementsLevel.${req}`;
+    const translated = t(key);
+    return translated === key ? req : translated;
+  };
+
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -472,7 +479,7 @@ const DistroDetails = () => {
                   {/* Requirements */}
                   <div className="bg-muted/30 rounded-none p-4">
                     <p className="text-sm text-muted-foreground mb-1">Requisitos</p>
-                    <p className="text-lg font-semibold">{distro.requirements || "Médio"}</p>
+                    <p className="text-lg font-semibold">{formatRequirement(distro.requirements) || "Médio"}</p>
                   </div>
 
                   {/* Image Size */}

@@ -126,6 +126,13 @@ const Comparison = () => {
   // Usar helpers utilitários
   const performanceAvailable = hasPerformanceData(selectedDistros);
 
+  const formatRequirement = (req: string | undefined): string => {
+    if (!req) return "";
+    const key = `requirementsLevel.${req}`;
+    const translated = t(key);
+    return translated === key ? req : translated;
+  };
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-20 min-h-screen flex items-center justify-center">
@@ -527,7 +534,7 @@ const Comparison = () => {
               <ComparisonRow label={t('comparison.sections.requirements')}>
                 {selectedDistros.map((distro) => (
                   <span key={distro.id} className="text-sm font-medium text-center block">
-                    {distro.requirements || "N/A"}
+                    {formatRequirement(distro.requirements) || "N/A"}
                   </span>
                 ))}
               </ComparisonRow>

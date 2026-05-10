@@ -338,6 +338,14 @@
         "backHome": "Volver a la página de inicio",
         "pathAttempted": "Ruta intentada:"
     },
+    "requirementsLevel": {
+        "Alto": "Alto",
+        "Médio": "Medio",
+        "Baixo": "Bajo",
+        "Muito Baixo": "Muy Bajo",
+        "Baixo/Médio": "Bajo/Medio",
+        "Médio/Alto": "Medio/Alto"
+    },
     "common": {
         "na": "N/A",
         "langCode": "es",

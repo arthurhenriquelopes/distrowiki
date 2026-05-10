@@ -386,6 +386,14 @@
         "backHome": "Back to home page",
         "pathAttempted": "Path attempted:"
     },
+    "requirementsLevel": {
+        "Alto": "High",
+        "Médio": "Medium",
+        "Baixo": "Low",
+        "Muito Baixo": "Very Low",
+        "Baixo/Médio": "Low/Medium",
+        "Médio/Alto": "Medium/High"
+    },
     "common": {
         "na": "N/A",
         "langCode": "en",

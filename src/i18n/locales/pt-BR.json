@@ -343,6 +343,14 @@
         "backHome": "Voltar para a página inicial",
         "pathAttempted": "Caminho tentado:"
     },
+    "requirementsLevel": {
+        "Alto": "Alto",
+        "Médio": "Médio",
+        "Baixo": "Baixo",
+        "Muito Baixo": "Muito Baixo",
+        "Baixo/Médio": "Baixo/Médio",
+        "Médio/Alto": "Médio/Alto"
+    },
     "common": {
         "loading": "Carregando...",
         "na": "N/A",
