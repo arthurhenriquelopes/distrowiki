@@ -173,9 +173,14 @@ export const DesktopEnvBadge = ({
   showIcon = true,
   className 
 }: DesktopEnvBadgeProps) => {
+  const { t } = useTranslation();
   const key = name.toLowerCase();
   const config = desktopEnvConfig[key] || defaultConfig;
-  const displayName = config.label || name;
+  
+  let displayName = config.label || name;
+  if (key === 'none' || displayName === 'Nenhum') {
+    displayName = t('comparison.noDesktopEnv') || 'Nenhum';
+  }
   
   const sizeClasses = {
     sm: "px-2 py-0.5 text-xs gap-1",

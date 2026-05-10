@@ -343,5 +343,11 @@
         "langCode": "es",
         "descriptionNA": "Descripción no disponible.",
         "dateNA": "Fecha no disponible"
+    },
+    "distro": {
+        "base": {
+            "independent": "Base Independiente",
+            "basedOn": "Basado en {{base}}"
+        }
     }
 }

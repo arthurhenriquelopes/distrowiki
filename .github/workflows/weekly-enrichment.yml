@@ -1,7 +1,10 @@
 # DistroWiki - Weekly Full Enrichment
-# Enriquecimento COMPLETO semanal (performance + metadados pesados)
+# Enriquecimento COMPLETO semanal (scraping + metadados textuais)
 # Roda todo domingo às 6h UTC (3h Brasília)
-# Complementa o daily-enrichment.yml que roda o scraping leve diário
+# 
+# NOTA: Dados de PERFORMANCE (CPU, I/O, RAM) agora vêm do módulo
+# static_performance_data.py (determinístico), NÃO mais do LLM.
+# O enriquecimento via API agora foca apenas em campos textuais.
 
 name: Weekly Full Enrichment
 
@@ -20,14 +23,14 @@ on:
         type: choice
         options:
           - dates          # Só datas de release (via DistroWatch scraping)
-          - performance    # Só métricas de performance (via API)
-          - all            # Tudo (datas + performance)
+          - textual        # Só campos textuais (description, category, requirements)
+          - all            # Tudo (datas + textuais)
 
 jobs:
   enrich-dates:
     name: 📅 Scraping Completo de Datas
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.enrichment_type != 'performance' }}
+    if: ${{ github.event.inputs.enrichment_type != 'textual' }}
     timeout-minutes: 90
     
     steps:
@@ -42,7 +45,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: arthurhenriquelopes/distrowiki-api
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.API_REPO_PAT }}
           
       - name: 🐍 Setup Python
         uses: actions/setup-python@v5
@@ -76,24 +79,27 @@ jobs:
           echo "✅ Scraping semanal de datas concluído!"
           echo "Data: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
 
-  enrich-performance:
-    name: 🤖 Métricas de Performance
+  enrich-textual:
+    name: 📝 Campos Textuais (LLM)
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.enrichment_type == 'performance' || github.event.inputs.enrichment_type == 'all' || github.event_name == 'schedule' }}
+    if: ${{ github.event.inputs.enrichment_type == 'textual' || github.event.inputs.enrichment_type == 'all' || github.event_name == 'schedule' }}
     
     steps:
       - name: 📋 Log início
         run: |
-          echo "🤖 Iniciando enriquecimento de performance"
+          echo "📝 Iniciando enriquecimento de campos textuais"
+          echo "Campos: Description, Category, Desktop, Requirements"
+          echo "⚠️  Performance (CPU/IO/RAM) NÃO é mais enriquecida via LLM"
           
-      - name: 🤖 Atualizar métricas em batches
+      - name: 📝 Atualizar campos textuais em batches
         run: |
+          # Apenas campos textuais - performance vem de static_performance_data.py
           for offset in 0 5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95; do
-            echo "🤖 Batch offset=$offset..."
+            echo "📝 Batch offset=$offset..."
             curl -s -X POST "${{ secrets.API_BASE_URL }}/enrich-sheets/batch" \
               -H "Content-Type: application/json" \
               -H "X-API-Key: ${{ secrets.API_KEY }}" \
-              -d "{\"offset\": $offset, \"limit\": 5, \"fields\": [\"CPU Score\", \"I/O Score\"]}" || true
+              -d "{\"offset\": $offset, \"limit\": 5, \"fields\": [\"Description\", \"Category\", \"Desktop Environment\", \"Requirements\"]}" || true
             sleep 3
           done
           
@@ -106,7 +112,7 @@ jobs:
   summary:
     name: 📊 Resumo Final
     runs-on: ubuntu-latest
-    needs: [enrich-dates, enrich-performance]
+    needs: [enrich-dates, enrich-textual]
     if: always()
     
     steps:
@@ -116,4 +122,7 @@ jobs:
           echo "✅ Enriquecimento semanal concluído!"
           echo "========================================"
           echo "Data: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-          echo "Jobs: dates=${{ needs.enrich-dates.result }}, perf=${{ needs.enrich-performance.result }}"
+          echo "Jobs: dates=${{ needs.enrich-dates.result }}, textual=${{ needs.enrich-textual.result }}"
+          echo ""
+          echo "ℹ️  Performance (CPU/IO/RAM) é determinística via static_performance_data.py"
+          echo "ℹ️  Não depende mais de LLM para scores numéricos"

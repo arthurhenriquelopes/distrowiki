@@ -161,8 +161,7 @@ export function ComparisonRadarChart({ distros }: ComparisonRadarChartProps) {
                                 padding: '8px 12px'
                             }}
                             labelStyle={{ color: '#fff', fontWeight: 'bold', marginBottom: 4 }}
-                            itemStyle={{ color: '#9ca3af', fontSize: 12 }}
-                            formatter={(value: number) => [`${Math.round(value)} pontos`, '']}
+                            formatter={(value: number, name: string) => [`${Math.round(value)} pontos`, name]}
                         />
                     </RadarChart>
                 </ResponsiveContainer>

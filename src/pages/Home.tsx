@@ -256,7 +256,7 @@ const Home = () => {
             </>
           ) : (
             distros
-              .map(d => ({ ...d, calculatedScore: calculatePerformanceScore(d) }))
+              .map(d => ({ ...d, calculatedScore: calculatePerformanceScore(d) ?? 0 }))
               .sort((a, b) => b.calculatedScore - a.calculatedScore)
               .slice(0, 3)
               .map((distro, index) => (

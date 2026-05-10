@@ -392,6 +392,12 @@
         "descriptionNA": "Description not available.",
         "dateNA": "Date not available"
     },
+    "distro": {
+        "base": {
+            "independent": "Independent Base",
+            "basedOn": "Based on {{base}}"
+        }
+    },
     "quiz": {
         "title": "Find Your Ideal Distro",
         "subtitle": "Answer a few questions and we'll tell you which Linux to install.",

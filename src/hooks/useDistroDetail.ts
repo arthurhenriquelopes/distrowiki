@@ -19,7 +19,7 @@ async function fetchDistroById(id: string) {
     ...normalized,
     package_manager: data.package_management || data.package_manager,
     office_manager: data.office_suite,
-    rating: calculatePerformanceScore(normalized),
+    rating: calculatePerformanceScore(normalized) ?? 0,
   };
 }
 
