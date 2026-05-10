@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "../ui/button";
 import Logo from "../Logo";
-import { ThemeToggle } from "../theme-toggle";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useAuth } from "../../contexts/AuthContext";
 import { User as UserIcon, LogOut } from "lucide-react";
@@ -53,7 +52,6 @@ const Header = () => {
             <Github className="h-5 w-5" />
           </a>
           <LanguageSwitcher />
-          <ThemeToggle />
 
           {user ? (
             <div className="flex items-center gap-2">
@@ -114,7 +112,7 @@ const Header = () => {
             </a>
             <div className="flex items-center gap-2 pt-2">
               <LanguageSwitcher />
-              <ThemeToggle />
+
             </div>
             <div className="pt-2 border-t border-border">
               {user ? (
