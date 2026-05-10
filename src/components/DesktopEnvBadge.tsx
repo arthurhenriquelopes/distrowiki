@@ -167,27 +167,27 @@ interface DesktopEnvBadgeProps {
   className?: string;
 }
 
-export const DesktopEnvBadge = ({ 
-  name, 
-  size = "md", 
+export const DesktopEnvBadge = ({
+  name,
+  size = "md",
   showIcon = true,
-  className 
+  className
 }: DesktopEnvBadgeProps) => {
   const { t } = useTranslation();
   const key = name.toLowerCase();
   const config = desktopEnvConfig[key] || defaultConfig;
-  
+
   let displayName = config.label || name;
   if (key === 'none' || displayName === 'Nenhum') {
     displayName = t('comparison.noDesktopEnv') || 'Nenhum';
   }
-  
+
   const sizeClasses = {
     sm: "px-2 py-0.5 text-xs gap-1",
     md: "px-3 py-1.5 text-sm gap-2",
     lg: "px-4 py-2 text-base gap-2.5"
   };
-  
+
   const iconSizes = {
     sm: "w-3 h-3",
     md: "w-4 h-4",
@@ -206,8 +206,8 @@ export const DesktopEnvBadge = ({
       )}
     >
       {showIcon && config.icon && (
-        <img 
-          src={config.icon} 
+        <img
+          src={config.icon}
           alt={displayName}
           className={cn(iconSizes[size], "object-contain")}
           onError={(e) => {
@@ -228,14 +228,14 @@ interface DesktopEnvListProps {
   className?: string;
 }
 
-export const DesktopEnvList = ({ 
-  environments, 
+export const DesktopEnvList = ({
+  environments,
   size = "md",
   centered = false,
-  className 
+  className
 }: DesktopEnvListProps) => {
   const { t } = useTranslation();
-  
+
   if (!environments || environments.length === 0) {
     return (
       <span className="text-sm text-muted-foreground italic">
@@ -243,7 +243,7 @@ export const DesktopEnvList = ({
       </span>
     );
   }
-  
+
   return (
     <div className={cn(
       "flex flex-wrap gap-2",
